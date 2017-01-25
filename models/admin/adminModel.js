@@ -4,6 +4,7 @@ var debug = require("debug")("adminModel");
 var dbBase=require(path.join(__dirname,"../dbBase"));
 var pool = require(path.join(__dirname, "../dbPool"));
 var stateCode=require(path.join(__dirname, "../../stateCode"));
+var config=require(path.join(__dirname,"../../config"));
 
 var adminModel = function() {};
 
@@ -52,8 +53,11 @@ fn.login = function(obj, func) {
 	this.getUser(obj.name, function(data) {
 		debug("登录验证");
 
-		if (data.opRes.password === obj.password) {
-			func(stateCode.success());
+		let pas=crypto.createHmac("sha256",config.crypto.hash)
+									.update(obj.password)
+									.digest("hex");
+		if (data.opRes.password === pas) {
+			func(stateCode.success({opRes:data.opRes}));
 		} else {
 			func(stateCode.fail());
 		}
@@ -62,12 +66,15 @@ fn.login = function(obj, func) {
 
 /**
  * 用户密码修改
- * @param  {[type]} obj  [description]
+ * @param  {[object]} obj  [用户帐号密码]
  * @param  {[type]} func [description]
  * @return {[type]}      [description]
  */
 fn.modifyPassword = function(obj, func) {
 	var self=this;
+	let pas=crypto.createHmac("sha256",config.crypto.hash)
+									.update(obj.password)
+									.digest("hex");
 	self.updateOneRecord("users",{
 		password:obj.password
 	},{

@@ -22,14 +22,17 @@ var fn = dbBase.prototype;
  	@result={
  		state:xx,
  		info:"",
+ 		opRes:{xxx},
  		other:...
  	}	
  */
 fn.insert = function(tableName, obj, func) {
-	if (!obj && !tableName) {
+
+	if (!(obj && tableName)) {
 		func(stateCode.parMiss());
 		return;
 	}
+	debug(obj);
 	pool.getConnection(function(err, con) {
 		if (err) {
 			debug(err);
@@ -57,7 +60,7 @@ fn.insert = function(tableName, obj, func) {
 		debug(sql);
 
 		con.query(sql, relVal, function(err, data) {
-			// debug(as);
+			debug("基本插入");
 			con.release();
 			if (err) {
 				debug(err);

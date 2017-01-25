@@ -1,9 +1,15 @@
+
 var express=require("express");
 var app=express();
 var path=require("path");
 
 var debug=require("debug")("app");
 
+// 路由
+var baseLoginCheck=require("./router/baseLogin");
+var adminRouter=require("./router/admin/admin");
+
+//环境选择
 switch (app.get('env')) {
 	case "development":
 		{
@@ -19,13 +25,12 @@ switch (app.get('env')) {
 		}
 }
 
-
 // 中间件
 var cookieParser=require("cookie-parser");
 
 var bodyParser=require("body-parser");
 var urlencoed=bodyParser.urlencoded({
-	extended:false
+	extended:true
 });
 var jsonParser=bodyParser.json();
 
@@ -53,29 +58,14 @@ app.use(jsonParser);
 
 app.set("port",3000);
 
-debug("end");
+//登录过滤
+app.use(baseLoginCheck);
 
-app.get("/",function(req,res,next){
-		var userModel=new require(path.join(__dirname,"models/admin/adminModel"));
-		userModel=new userModel;
+app.use(/^\/admin\/api*/,adminRouter);
 
-		userModel.login({name:"admin",password:"123456"},
-		//登录
-		function(data){
-		debug(data);
-		if(data.state==200){
-			res.render("admin/",{str:"我是 str"});			
-		}else{
-			res.send("登录失败");
-		}
-		// // 登录成功获取验证信息
-		// userModel.getUser("admin", 
-		// function(result) {
-		// 	// console.log(result);
-		// });	
-
-	});	
-	// res.send("hello world !!!");
+//404 
+app.all("*",function(req,res,next){
+	res.send("404 Not Found ");
 });
 
 app.listen(app.get("port"),function(){

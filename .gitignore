@@ -84,4 +84,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-HRL_FW
+HEL_FW
+
+public/admin/node_modules

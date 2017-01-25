@@ -10,9 +10,17 @@ const stateCode={
 		state:400,
 		info:"操作失败"
 	},
+	notLogin:{
+		state:401,
+		info:"未登录"
+	},
+	loginFail:{
+		state:402,
+		info:"登录失败"
+	},
 	// 参数错误 State:0xx
 	parMiss:{
-		state:001,
+		state:"001",
 		info:"参数不完整"
 	},
 	//数据库错误 State:1xx;
@@ -23,7 +31,7 @@ const stateCode={
 	sqlFail:{
 		state:102,
 		info:"sql操作失败"
-	},
+	}
 }
 
 var stateCodeFunc=function(){}

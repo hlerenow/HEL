@@ -1,0 +1,34 @@
+{
+  "name": "hel-f-w",
+  "version": "1.0.0",
+  "description": "hel博客前台页面",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.6.1",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.1.2",
+    "eslint-loader": "^1.6.1",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",    
+    "html-webpack-plugin": "^2.24.1",
+    "webpack": "^1.14.0",
+    "vue-loader": "^9.4.0",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "style-loader": "^0.13.1" 
+  },
+  "dependencies": {
+    "element-ui": "^1.0.0",    
+    "vue": "^2.1.10",
+    "es6-promise": "^4.0.5",
+    "vue-cookie": "^1.1.3",
+    "vue-router": "^2.0.1",
+    "vuex": "^2.0.0" 
+  }
+}

@@ -6,6 +6,9 @@ var config={
 		"user":"root",
 		"dbPassword":"595806119",
 		"dbPort":"3306"
+	},
+	"crypto":{
+		hash:"123456"
 	}
 };
 
