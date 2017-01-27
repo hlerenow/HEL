@@ -32,31 +32,56 @@ fn.insert = function(tableName, obj, func) {
 		func(stateCode.parMiss());
 		return;
 	}
+
+	debug(obj);
+
+	pool.getConnection(function(err, con) {
+		if (err) {
+			debug(err);
+			func(stateCode.notConectDb());
+			return;
+		}
+
+		//生成sql语句,和对应的值的数组
+		var {sql,val}=until.getInsertSqlStr(tableName,obj);
+
+		debug(sql);
+
+		con.query(sql, val, function(err, data) {
+			debug("基本插入");
+			con.release();
+			if (err) {
+				debug(err);
+				func(stateCode.sqlFail());
+			} else {
+				func(stateCode.success({opRes:data,insertId:data.insertId}));
+			}
+		});
+	})
+};
+
+/**
+ * 添加有事物处理
+ * @param  {[type]} tableName [description]
+ * @param  {[type]} objArry   [description]
+ * @param  {[type]} func      [description]
+ * @return {[type]}           [description]
+ */
+fn.insertMulti=function(tableName,objArry,func){
+	if (!(obj && tableName)) {
+		func(stateCode.parMiss());
+		return;
+	}
 	debug(obj);
 	pool.getConnection(function(err, con) {
 		if (err) {
 			debug(err);
 			func(stateCode.notConectDb());
-		}
-		var sql = "insert into "+tableName+" (";
-		var val = "values(";
-		var relVal = [];
-
-		for (let i in obj) {
-			sql += i + ",";
-			val += "?,";
-			relVal.push(obj[i]);
+			return;
 		}
 
-		sql = sql.split("");
-		sql.splice(-1, 1, ") ");
-		sql = sql.join("");
+		var sql=until.getInsertSqlStr(tableName,objArry[0]);
 
-		val = val.split("");
-		val.splice(-1, 1, ") ;");
-		val = val.join("");
-
-		sql += val;
 		debug(sql);
 
 		con.query(sql, relVal, function(err, data) {
@@ -70,7 +95,7 @@ fn.insert = function(tableName, obj, func) {
 			}
 		});
 	})
-};
+}
 
 /**
  * 只用于更新一条数据的某些字段

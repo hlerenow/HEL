@@ -30,8 +30,49 @@ const until={
 		return "";
 	},
 	//获取str里面的图片,音乐视频，文件等url
-	getMediaUrl:function(str){
-		return "";
+	getMediaUrlInHTML:function(str){
+
+		var result=[];
+		var temp={};
+		//先匹配图片音乐视频
+		
+		var rex=/<(audio|img|video)[^(>)]*src=("|')([^("|')]+)("|')/ig;
+
+		temp=rex.exec(str);
+
+		while(temp){
+			let alt=temp[0].match(/alt=("|')([^("|')])+("|')/);
+				alt=alt?alt[1]:"";
+
+			let mObj={
+				type:temp[1],
+				url:temp[3],
+				alt:alt
+			};
+
+			result.push(mObj);
+
+			temp=rex.exec(str);
+		};
+
+		//匹配文章中的其他附件
+		
+		rex=/<a[^(>)]*href=("|')([^("|')]+\.([^("|')]+))("|')[^(>|<)]*>([^(>|<)]+)</ig;
+		temp=rex.exec(str);
+
+		while(temp){
+			let mObj={
+				type:temp[3],
+				url:temp[2],
+				alt:temp[5]
+			};
+
+			result.push(mObj);
+
+			temp=rex.exec(str);
+		};
+
+		return result;		
 	},
 	getCharsByNumber:function(str,num){
 		if(!str){
@@ -43,6 +84,30 @@ const until={
 		}else{
 			return str.split("").slice(0,num).join("");
 		}
+	},
+	getInsertSqlStr:function(tableName,obj){
+		
+		var sql = "insert into "+tableName+" (";
+		var val = "values(";
+		var relVal = [];
+
+		for (let i in obj) {
+			sql += i + ",";
+			val += "?,";
+			relVal.push(obj[i]);
+		}
+
+		sql = sql.split("");
+		sql.splice(-1, 1, ") ");
+		sql = sql.join("");
+
+		val = val.split("");
+		val.splice(-1, 1, ") ;");
+		val = val.join("");
+
+		sql += val;	
+
+		return {sql:sql,val:relVal};
 	}
 };
 
