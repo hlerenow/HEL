@@ -42,18 +42,44 @@ router.post("/modify",function(req,res,next){
 	let exObj={
 		authorId:req.session.uid,
 		type:"post",
-		created:nowSecondInt,
-		modified:nowSecondInt,
-		attachment:JSON.stringify(until.getMediaUrlInHTML(req.body.content)),
-		excerpt:until.getCharsByNumber(req.body.content,50)
+		modified:nowSecondInt
 	};
 
+	let moreField={};
+	if(req.body.content){
+		moreField['attachment']=JSON.stringify(until.getMediaUrlInHTML(req.body.content));
+		moreField['excerpt']=until.getCharsByNumber(req.body.content,50)
+	}
+
 	let resObj=until.mergeObj(req.body,exObj);
+		resObj=until.mergeObj(exObj,moreField);
+
 	debug(resObj);
-	em.insertEassy(resObj,function(result){
-		debug("插入文章");
+	em.modifyEassy(resObj,function(result){
+		debug("修改文章");
 		res.send(result);
 	});
+
+});
+
+router.post("/delete",function(req,res,next){
+	let em=new eassyModel;
+	debug("删除文章");
+
+
+	let exObj={
+		authorId:req.session.uid,
+		type:"post"
+	};
+
+	if(req.session.role=="admin"){
+		em.deleteEassy(req.body.eid,function(result){
+			res.json(result);
+		});
+
+	}else{
+		res.json(stateCode.notAuthority());
+	}
 
 });
 

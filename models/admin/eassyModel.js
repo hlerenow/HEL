@@ -20,17 +20,19 @@ fn.insertEassy=function(obj,func){
 	var self=this;
 
 		//检验必要的字段
-		var dataField=['title','content','created','modified','authorId','status','thumbnail','excerpt','type','attachment'];
+		var dataField=['title','content','created','modified','authorId','status','thumbnail','belongCatalog','excerpt','type','attachment'];
 		
 		var resObj={};
 		for(let i=0;i<dataField.length;i++){
 			let filed=dataField[i];
-				resObj[filed]=obj[filed];			
+			if(obj[filed]){
+				resObj[filed]=obj[filed];
+			}
 		}
 		
 		debug(resObj);
 
-		if(until.isEmptyObj(resObj)||until.objLength(resObj)!=dataField.length){
+		if(until.isEmptyObj(resObj)||until.objLength(resObj)<dataField.length){
 			debug("参数错误");
 			func(stateCode.parMiss());
 			return;
@@ -45,7 +47,7 @@ fn.insertEassy=function(obj,func){
 		self.insert("eassy",resObj,function(result){
 			debug("插入文章");
 			if(result.state===200){
-				cataLog=cataLog.split(",");
+				cataLog=cataLog.split("&");
 				objArry=[];
 				for(let i=0;i<cataLog.length;i++){
 					objArry.push({
@@ -61,7 +63,7 @@ fn.insertEassy=function(obj,func){
 						func(result);
 					}else{
 						//文章所属目录插入失败
-						func(stateCode.sqlInsertFail());						
+						func(stateCode.sqlInsertFail({moreInfo:"文章目录插入失败"}));
 					}
 				});
 
@@ -87,41 +89,61 @@ fn.modifyEassy=function(obj,func){
 	var self=this;
 
 		//检验必要的字段
-		var dataField=['eid','title','content','created','modified','authorId','status','thumbnail','excerpt','type','attachment'];
+		var dataField=['eid','title','content','modified','belongCatalog','authorId','status','thumbnail','excerpt','type','attachment'];
 		
 		var resObj={};
+		debug(obj);
 		for(let i=0;i<dataField.length;i++){
+
 			let filed=dataField[i];
-				resObj[filed]=obj[filed];			
-		}
-		
+				if(obj[filed]){
+					resObj[filed]=obj[filed];					
+				}
+		}	
+
 		debug(resObj);
 
-		if(until.isEmptyObj(resObj)||until.objLength(resObj)!=dataField.length){
+		if(until.isEmptyObj(resObj)||!resObj.eid||!resObj.authorId){
 			debug("参数错误");
 			func(stateCode.parMiss());
 			return;
 		};
 
-		let cataLog=resObj.belongCatalog;
+		let cataLog=[];
+		if(resObj.belongCatalog){
+			cataLog=resObj.belongCatalog.split("&");			
+		}
+
 		let eid=resObj.eid;
+		let authorId=resObj.authorId;
+
+ 		debug(resObj.belongCatalog);
 
 		delete resObj.belongCatalog;
+		delete resObj.authorId;
+		delete resObj.eid;
 		//数据校验 end
 		
 		//插入数据库,并且调用回调函数
-		self.updateOneRecord("eassy",resObj,{eid:eid},function(result){
+		self.updateOneRecord("eassy",resObj,{eid:eid,authorId:authorId},function(result){
 			debug("插入文章");
 			if(result.state===200){
-				//删除旧的文章所属目录
-				self.query("delete from table where type='postCatalog' and nid=?;",[eid],function(result){
-					cataLog=cataLog.split(",");
+
+				//检查是否需要修改文章所属目录
+				
+				if(!cataLog.length){
+					func(result);					
+					return;
+				}
+
+				//删除旧的文章所属目录				
+				self.query("delete from relationships where type='postCatalog' and nid=?;",[eid],function(result){
 					objArry=[];
 					for(let i=0;i<cataLog.length;i++){
 						objArry.push({
 							type:"postCatalog",
 							mid:cataLog[i],
-							nid:result.insertId
+							nid:eid
 						});						
 					}
 
@@ -131,7 +153,7 @@ fn.modifyEassy=function(obj,func){
 							func(result);
 						}else{
 							//文章所属目录插入失败
-							func(stateCode.sqlInsertFail());						
+							func(stateCode.sqlInsertFail({moreInfo:"文章目录插入失败"}));						
 						}
 					});					
 				});
@@ -140,7 +162,32 @@ fn.modifyEassy=function(obj,func){
 		});
 };
 
+/**
+ * 删除博文
+ * @param  {[type]} obj  [description]
+ * @param  {[type]} func [description]
+ * @return {[type]}      [description]
+ */
+fn.deleteEassy=function(eid,func){
+	var self=this;
+	//删除博文
+	debug(eid);
 
+	this.query("delete from relationships where type='postCatalog' and nid=?;",[eid],function(result){
+		if(result.state==200){
+			self.query("delete from eassy where eid = ?;",[eid],function(result){
+				if(result.state===200){
+					func(result);					
+				}else{
+					func(stateCode.sqlDeleteFail({moreInfo:"文章删除失败"}));										
+				}
+			});
+		}else{
+			func(stateCode.sqlDeleteFail({moreInfo:"文章所属目录删除失败"}));
+		}
+	});
+
+}
 
 module.exports=exports=eassyModel;
 

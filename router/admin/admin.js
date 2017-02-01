@@ -7,6 +7,11 @@ var stateCode = require(path.join(__dirname, "../../stateCode"));
 //博文路由
 var eassyRouter=require(path.join(__dirname,"./eassy"));
 
+//分类目录路由
+var catalogRouter=require(path.join(__dirname,"./catalog"));
+
+
+
 router.post("/login", function(req, res, next) {
 	var userModel = new require(path.join(__dirname, "../../models/admin/adminModel"));
 	userModel = new userModel;
@@ -26,7 +31,8 @@ router.post("/login", function(req, res, next) {
 				
 				req.session.loginState = 1;
 				req.session.uid = data.opRes.uid;
-				req.session.uid = data.opRes.name;
+				req.session.name = data.opRes.name;
+				req.session.role = data.opRes.role;
 				
 				res.send(stateCode.success());
 			} else {
@@ -42,5 +48,8 @@ router.post("/login", function(req, res, next) {
 
 //博文api
 router.use(/^\/eassy*/,eassyRouter);
+
+//分类目录api
+router.use(/^\/catalog*/,catalogRouter);
 
 module.exports = exports = router;

@@ -39,6 +39,14 @@ const stateCode={
 	sqlQueryFail:{
 		state:104,
 		info:"sql查询失败"
+	},
+	sqlDeleteFail:{
+		state:105,
+		info:"sql删除失败"
+	},
+	notAuthority:{
+		state:600,
+		info:"用户没有操作权限"
 	}
 }
 

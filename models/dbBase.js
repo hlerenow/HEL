@@ -29,14 +29,15 @@ fn.query = function(sql,val, func) {
 
 		debug(sql);
 
-		con.query(sql, val,function(err, data) {
+		con.query(sql, val,function(err, data,fields) {
 			debug("基本查询");
 			con.release();
 			if (err) {
 				debug(err);
 				func(stateCode.sqlQueryFail());
 			} else {
-				func(stateCode.success({opRes:data}),field);
+				let field
+				func(stateCode.success({opRes:data}),fields);
 			}
 		});
 	})
@@ -162,7 +163,6 @@ fn.insertMulti=function(tableName,objArry,func){
 
 				if (err) {
 					debug(err);
-
 				} else {
 					sqlSuccessState++;
 					
@@ -173,9 +173,9 @@ fn.insertMulti=function(tableName,objArry,func){
 					con.release();
 					debug("成功条数%d条",sqlSuccessState);						
 					func(stateCode.success({opRes:data,insertId:data.insertId}));
-				}else{
+				}else if(sqlInsertState===sqlQueryLength){
 					con.release();
-					debug("成功条数%d条",sqlSuccessState);
+					debug("成功条数%d条,未成功%d",sqlSuccessState,sqlInsertState-sqlSuccessState);
 					func(stateCode.sqlFail());					
 				}
 
@@ -215,16 +215,15 @@ fn.updateOneRecord = function(tableName, obj, condition, func) {
 			value.push(obj[i]);
 		}
 
-		sql=sql.split().splice(-1,1," ").join();
+		sql=until.replaceStrEnd(sql,1," ");
 
 		if(!until.isEmptyObj(condition)){
-			sql+="where";
+			sql+="where ";
 			for(let i in condition){
-				sql+=i+"=? and";
+				sql+=i+"=? and ";
 				value.push(condition[i]);
 			}
-			sql=sql.split().splice(-3,3,"");
-
+			sql=until.replaceStrEnd(sql,4," ;");
 		}else{
 			sql+=";";
 		}
@@ -235,7 +234,7 @@ fn.updateOneRecord = function(tableName, obj, condition, func) {
 				debug(err);
 				func(stateCode.sqlFail());
 			}else{
-				func(stateCode.sucess({opRes:result}));
+				func(stateCode.success({opRes:result}));
 			}
 		});
 	});

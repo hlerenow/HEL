@@ -126,6 +126,13 @@ const until={
 		}
 
 		return {sql:sql,val:val};
+	},
+	//将字符串str从尾部开始count个字符串替换为newStr
+	replaceStrEnd:function(str,count,newStr){
+		str=str.split("");
+		newStr=newStr||"";
+		str.splice(-count,count,newStr);
+		return str.join("");
 	}
 };
 
