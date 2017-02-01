@@ -31,6 +31,14 @@ const stateCode={
 	sqlFail:{
 		state:102,
 		info:"sql操作失败"
+	},
+	sqlInsertFail:{
+		state:103,
+		info:"sql插入失败"
+	},
+	sqlQueryFail:{
+		state:104,
+		info:"sql查询失败"
 	}
 }
 

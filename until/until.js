@@ -108,6 +108,24 @@ const until={
 		sql += val;	
 
 		return {sql:sql,val:relVal};
+	},
+	getQuerySqlStr:function(tableName,fieldArry,condition){
+		var sql="select ??  from ?? ";
+		var val=[tableName];
+			val=val.concat(fieldArry);
+		if(!until.isEmptyObj(condition)){
+			sql+="where ";
+			for(let i in condition){
+				if(!condition[i].conStr){
+					condition[i].conStr="";
+				}
+				sql+=condition[i].conStr+" "+ i+"=? ";
+				val.push(condition[i].val);
+			}
+
+		}
+
+		return {sql:sql,val:val};
 	}
 };
 

@@ -20,7 +20,7 @@ router.post("/post",function(req,res,next){
 		type:"post",
 		created:nowSecondInt,
 		modified:nowSecondInt,
-		attachment:Json.stringify(until.getMediaUrlInHTML(req.body.content)),
+		attachment:JSON.stringify(until.getMediaUrlInHTML(req.body.content)),
 		excerpt:until.getCharsByNumber(req.body.content,50)
 	};
 
@@ -28,9 +28,9 @@ router.post("/post",function(req,res,next){
 	debug(resObj);
 	em.insertEassy(resObj,function(result){
 		debug("插入文章");
-		res.send(result);
+		delete result.opRes;
+		res.json(result);
 	});
-
 });
 
 /**
@@ -44,7 +44,7 @@ router.post("/modify",function(req,res,next){
 		type:"post",
 		created:nowSecondInt,
 		modified:nowSecondInt,
-		attachment:Json.stringify(until.getMediaUrlInHTML(req.body.content)),
+		attachment:JSON.stringify(until.getMediaUrlInHTML(req.body.content)),
 		excerpt:until.getCharsByNumber(req.body.content,50)
 	};
 
