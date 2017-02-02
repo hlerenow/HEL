@@ -44,6 +44,10 @@ const stateCode={
 		state:105,
 		info:"sql删除失败"
 	},
+	sqlUpdateFail:{
+		state:106,
+		info:"sql更新失败"
+	},
 	notAuthority:{
 		state:600,
 		info:"用户没有操作权限"

@@ -76,7 +76,6 @@ router.post("/delete",function(req,res,next){
 		em.deleteEassy(req.body.eid,function(result){
 			res.json(result);
 		});
-
 	}else{
 		res.json(stateCode.notAuthority());
 	}
