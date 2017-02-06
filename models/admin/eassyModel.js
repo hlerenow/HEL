@@ -129,6 +129,7 @@ fn.modifyEassy = function(obj, func) {
 
 			//删除旧的文章所属目录				
 			self.query("delete from relationships where type='postCatalog' and nid=?;", [eid], function(result) {
+				//新的目录数组
 				objArry = [];
 				for (let i = 0; i < cataLog.length; i++) {
 					objArry.push({

@@ -2,9 +2,8 @@ var debug = require("debug")("dbBase");
 var path = require("path");
 var stateCode = require(path.join(__dirname, "../stateCode"));
 var pool = require(path.join(__dirname, "dbPool"));
-var until=require(path.join(__dirname,"../until/until"));
-var dbBase = function() {
-};
+var until = require(path.join(__dirname, "../until/until"));
+var dbBase = function() {};
 var fn = dbBase.prototype;
 
 /**
@@ -14,7 +13,7 @@ var fn = dbBase.prototype;
  * @param  {[type]} func [description]
  * @return {[type]}      [description]
  */
-fn.query = function(sql,val, func) {
+fn.query = function(sql, val, func) {
 
 	if (!sql) {
 		func(stateCode.parMiss());
@@ -29,15 +28,16 @@ fn.query = function(sql,val, func) {
 
 		debug(sql);
 
-		con.query(sql, val,function(err, data,fields) {
+		con.query(sql, val, function(err, data, fields) {
 			debug("基本查询");
 			con.release();
 			if (err) {
 				debug(err);
 				func(stateCode.sqlQueryFail());
 			} else {
-				let field
-				func(stateCode.success({opRes:data}),fields);
+				func(stateCode.success({
+					opRes: data
+				}), fields);
 			}
 		});
 	})
@@ -50,7 +50,7 @@ fn.query = function(sql,val, func) {
  * @param  {[type]} func    [description]
  * @return {[type]}         [description]
  */
-fn.queryM=function(sql,valArry,func){
+fn.queryM = function(sql, valArry, func) {
 	if (!sql) {
 		func(stateCode.parMiss());
 		return;
@@ -63,11 +63,11 @@ fn.queryM=function(sql,valArry,func){
 			return;
 		}
 
-		con.query(sql,valArry,function(err,result,field){
+		con.query(sql, valArry, function(err, result, field) {
 			con.release();
-			func(err,result,field);
+			func(err, result, field);
 		});
-	});	
+	});
 
 }
 
@@ -109,7 +109,10 @@ fn.insert = function(tableName, obj, func) {
 		}
 
 		//生成sql语句,和对应的值的数组
-		var {sql,val}=until.getInsertSqlStr(tableName,obj);
+		var {
+			sql,
+			val
+		} = until.getInsertSqlStr(tableName, obj);
 
 		debug(sql);
 
@@ -120,21 +123,24 @@ fn.insert = function(tableName, obj, func) {
 				debug(err);
 				func(stateCode.sqlFail());
 			} else {
-				func(stateCode.success({opRes:data,insertId:data.insertId}));
+				func(stateCode.success({
+					opRes: data,
+					insertId: data.insertId
+				}));
 			}
 		});
 	})
 };
 
 /**
- * 插入多条记录(同一记录)
+ * 插入多条记录(同一表)
  * (暂时没有添加有事务处理,后期将添加回滚程序实现，不依赖数据库)
  * @param  {[type]} tableName [description]
  * @param  {[type]} objArry   [description]
  * @param  {[type]} func      [description]
  * @return {[type]}           [description]
  */
-fn.insertMulti=function(tableName,objArry,func){
+fn.insertMulti = function(tableName, objArry, func) {
 	if (!(objArry && tableName)) {
 		func(stateCode.parMiss());
 		return;
@@ -148,13 +154,16 @@ fn.insertMulti=function(tableName,objArry,func){
 			return;
 		}
 
-		var sqlQueryLength=objArry.length;
-		var sqlInsertState=0;
-		var sqlSuccessState=0;			
+		var sqlQueryLength = objArry.length;
+		var sqlInsertState = 0;
+		var sqlSuccessState = 0;
 
-		for(let i=0;i<sqlQueryLength;i++){
+		for (let i = 0; i < sqlQueryLength; i++) {
 
-			let {sql,val}=until.getInsertSqlStr(tableName,objArry[i]);
+			let {
+				sql,
+				val
+			} = until.getInsertSqlStr(tableName, objArry[i]);
 			debug(sql);
 
 			con.query(sql, val, function(err, data) {
@@ -165,23 +174,27 @@ fn.insertMulti=function(tableName,objArry,func){
 					debug(err);
 				} else {
 					sqlSuccessState++;
-					
+
 				}
 
 				//说明全部插入完毕了并且都成功
-				if(sqlInsertState===sqlQueryLength&&sqlSuccessState===sqlQueryLength){
+				if (sqlInsertState === sqlQueryLength && sqlSuccessState === sqlQueryLength) {
 					con.release();
-					debug("成功条数%d条",sqlSuccessState);						
-					func(stateCode.success({opRes:data,insertId:data.insertId}));
-				}else if(sqlInsertState===sqlQueryLength){
+					debug("成功条数%d条", sqlSuccessState);
+					func(stateCode.success({
+						opRes: data,
+						insertId: data.insertId
+					}));
+				} else if (sqlInsertState === sqlQueryLength) {
 					con.release();
-					debug("成功条数%d条,未成功%d",sqlSuccessState,sqlInsertState-sqlSuccessState);
-					func(stateCode.sqlFail());					
+					debug("成功条数%d条,未成功%d", sqlSuccessState, sqlInsertState - sqlSuccessState);
+					func(stateCode.sqlFail({
+						successCount: sqlSuccessState,
+						failCount: sqlInsertState - sqlSuccessState
+					}));
 				}
 
-
-
-			});			
+			});
 		}
 
 	})
@@ -208,37 +221,91 @@ fn.updateOneRecord = function(tableName, obj, condition, func) {
 			return;
 		}
 
-		var sql="update "+tableName+" set ";
-		var value=[];
-		for(let i in obj){
-			sql+=i+"=?,";
+		var sql = "update " + tableName + " set ";
+		var value = [];
+		for (let i in obj) {
+			sql += i + "=?,";
 			value.push(obj[i]);
 		}
 
-		sql=until.replaceStrEnd(sql,1," ");
+		sql = until.replaceStrEnd(sql, 1, " ");
 
-		if(!until.isEmptyObj(condition)){
-			sql+="where ";
-			for(let i in condition){
-				sql+=i+"=? and ";
+		if (!until.isEmptyObj(condition)) {
+			sql += "where ";
+			for (let i in condition) {
+				sql += i + "=? and ";
 				value.push(condition[i]);
 			}
-			sql=until.replaceStrEnd(sql,4," ;");
-		}else{
-			sql+=";";
+			sql = until.replaceStrEnd(sql, 4, " ;");
+		} else {
+			sql += ";";
 		}
 		debug(sql);
-		con.query(sql,value,function(err,result){
+		con.query(sql, value, function(err, result) {
 			con.release();
-			if(err){
+			if (err) {
 				debug(err);
 				func(stateCode.sqlFail());
-			}else{
-				func(stateCode.success({opRes:result}));
+			} else {
+				func(stateCode.success({
+					opRes: result
+				}));
 			}
 		});
 	});
 }
+
+/**
+ * 删除同一表多条记录，通过主键选择(估计没啥用)
+ * @param  {[string]} tableName     [description]
+ * @param  {[string]} id            [description]
+ * @param  {[array]} conditionArry [description]
+ * @param  {[callback]} func          [description]
+ * @return {[type]}               [description]
+ */
+fn.deleteMultiById = function(tableName, id, conditionArry, func) {
+	let sucessState = 0;
+	let totalState = 0;
+	let self = this;
+
+	pool.getConnection(function(err, con) {
+		if (err) {
+			debug(err);
+			func(stateCode.notConectDb());
+			return;
+		}
+
+		Object.keys(conditionArry).forEach(function(key) {
+			let sqlTemp = "delete from " + tableName + " where " + id + "  in ? ;";
+			con.query(sqlTemp, [conditionArry[key]], function(err, result) {
+				totalState++;
+				if (err) {
+					debug(err);
+				} else {
+					sucessState++;
+				}
+
+				//说明全部插入完毕了并且都成功
+				if (sucessState === totalState && sucessState === conditionArry.length) {
+					con.release();
+					debug("成功条数%d条", sucessState);
+					func(stateCode.success());
+				} else if (totalState === conditionArry.length) {
+					con.release();
+					debug("成功条数%d条,未成功%d", sucessState, totalState - sucessState);
+					func(stateCode.sqlFail({
+						successCount: sucessState,
+						failCount: totalState - sucessState
+					}));
+				}
+
+			});
+		});
+
+
+
+	});
+};
 
 /**
  * 用于 替换mysql 自带的功能函数 replace ，

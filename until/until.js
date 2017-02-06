@@ -145,6 +145,17 @@ const until={
 
 		return resObj;
 
+	},
+	jsonParse:function(jsonStr){
+		let res;
+		debug(jsonStr);
+		try{
+			res=JSON.parse(jsonStr);
+		}catch(e){
+			debug(e);
+			res=undefined;
+		}
+		return res;
 	}
 };
 

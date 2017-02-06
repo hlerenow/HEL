@@ -10,7 +10,11 @@ var eassyRouter=require(path.join(__dirname,"./eassy"));
 //分类目录路由
 var catalogRouter=require(path.join(__dirname,"./catalog"));
 
+//文件上传路由
+var fileRouter=require(path.join(__dirname,"./file"));
 
+//option 路由
+var fileRouter=require(path.join(__dirname,"./option"));
 
 router.post("/login", function(req, res, next) {
 	var userModel = new require(path.join(__dirname, "../../models/admin/adminModel"));
@@ -46,10 +50,22 @@ router.post("/login", function(req, res, next) {
 	// res.send("hello world !!!");
 });
 
+router.get("/logout",function(req,res,next){
+	req.session={};
+	res.json(stateCode.success({moreInfo:"退出登录成功"}));
+});
+
 //博文api
 router.use(/^\/eassy*/,eassyRouter);
 
 //分类目录api
 router.use(/^\/catalog*/,catalogRouter);
+
+//文件上传api
+router.use(/^\/file*/,fileRouter);
+
+//option api
+router.use(/^\/option*/,fileRouter);
+
 
 module.exports = exports = router;

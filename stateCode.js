@@ -48,9 +48,21 @@ const stateCode={
 		state:106,
 		info:"sql更新失败"
 	},
+	sqlNotFound:{
+		state:107,
+		info:"sql查找结果为空"
+	},
 	notAuthority:{
 		state:600,
 		info:"用户没有操作权限"
+	},
+	fileUploadFail:{
+		state:700,
+		info:"文件上传失败"
+	},
+	jsonParseFail:{
+		state:800,
+		info:"json字符串解析失败"
 	}
 }
 

@@ -31,7 +31,7 @@ fn.createCatalog = function(obj, func) {
 			func(stateCode.sqlInsertFail());
 		}
 	})
-}
+};
 
 fn.modifyCatalog = function(obj, func) {
 	if (!obj.mid) {
