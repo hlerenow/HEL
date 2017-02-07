@@ -38,9 +38,9 @@ router.post("/login", function(req, res, next) {
 				req.session.name = data.opRes.name;
 				req.session.role = data.opRes.role;
 				
-				res.send(stateCode.success());
+				res.send(stateCode.success({moreInfo:"登录成功"}));
 			} else {
-				res.send(stateCode.loginFail());
+				res.send(data);
 			}
 		});
 	}else{

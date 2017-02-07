@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "forever start -o out.log  -e ferr.log -w app.js"
   },
   "author": "",
   "license": "MIT",
@@ -16,7 +16,8 @@
     "debug": "^2.6.0",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "node-cmd": "^1.2.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

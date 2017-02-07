@@ -1,14 +1,14 @@
 var path = require("path");
 var crypto = require("crypto");
 var debug = require("debug")("adminModel");
-var dbBase=require(path.join(__dirname,"../dbBase"));
+var dbBase = require(path.join(__dirname, "../dbBase"));
 var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode=require(path.join(__dirname, "../../stateCode"));
-var config=require(path.join(__dirname,"../../config"));
+var stateCode = require(path.join(__dirname, "../../stateCode"));
+var config = require(path.join(__dirname, "../../config"));
 
 var adminModel = function() {};
 
-var fn = adminModel.prototype=dbBase.prototype;
+var fn = adminModel.prototype = dbBase.prototype;
 
 /**
  * [获取用户基本信息]
@@ -30,12 +30,15 @@ fn.getUser = function(userName, func) {
 			con.release();
 			if (!err) {
 				if (data && data.length > 0) {
-					func(stateCode.success({opRes:data[0]}));
+					func(stateCode.success({
+						opRes: data[0]
+					}));
 				} else {
-					func(stateCode.sqlFail());
+					func(stateCode.sqlNotFound());
 				}
 			} else {
-				debug(err)
+				debug(err);
+				func(stateCode.sqlFail());
 			}
 		});
 	}, func);
@@ -50,17 +53,27 @@ fn.getUser = function(userName, func) {
 fn.login = function(obj, func) {
 	var self = this;
 
-	this.getUser(obj.name, function(data) {
+	this.getUser(obj.name, function(result) {
 		debug("登录验证");
+		console.log(result);
+		if (result.state == 200) {
 
-		let pas=crypto.createHmac("sha256",config.crypto.hash)
-									.update(obj.password)
-									.digest("hex");
-		if (data.opRes.password === pas) {
-			func(stateCode.success({opRes:data.opRes}));
-		} else {
-			func(stateCode.fail());
+			let pas = crypto.createHmac("sha256", config.crypto.hash)
+				.update(obj.password)
+				.digest("hex");
+			if (result.opRes.password === pas) {
+				func(stateCode.success({
+					opRes: result.opRes
+				}));
+			} else {
+				func(stateCode.loginFail());
+			}
+		}else if(result.state===107){
+				func(stateCode.loginFailUserNotExit());
+		} else{
+			func(state.sysError());
 		}
+
 	});
 }
 
@@ -71,15 +84,15 @@ fn.login = function(obj, func) {
  * @return {[type]}      [description]
  */
 fn.modifyPassword = function(obj, func) {
-	var self=this;
-	let pas=crypto.createHmac("sha256",config.crypto.hash)
-									.update(obj.password)
-									.digest("hex");
-	self.updateOneRecord("users",{
-		password:obj.password
-	},{
-		name:obj.name
-	},func);
+	var self = this;
+	let pas = crypto.createHmac("sha256", config.crypto.hash)
+		.update(obj.password)
+		.digest("hex");
+	self.updateOneRecord("users", {
+		password: obj.password
+	}, {
+		name: obj.name
+	}, func);
 }
 
 module.exports = exports = adminModel;

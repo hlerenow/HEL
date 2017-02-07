@@ -1,23 +1,21 @@
 <template>
 <div id="loginBox">
   <form id="login">
-    <h3  class="text-center login_title">HEL-blog</h3>
+    <h3  class="text-center login_title Blue">HEL-blog</h3>
     <div class="login_body">
       <div class="login__input--con">
-        <el-input placeholder="用户名" v-model="input3">
+        <el-input placeholder="用户名" v-model.trim="username">
           <template slot="prepend">用户名</template>
         </el-input>
       </div>
       <div class="login__input--con">
-        <el-input placeholder="密码" type="password" v-model="input3">
+        <el-input placeholder="密码" type="password" v-model.trim="password">
           <template slot="prepend">密&nbsp;码</template>
         </el-input>
       </div>      
-      <div class="form-group">
-        <div class="col-sm-offset-9 col-sm-2">
-          <button type="submit" @click.prevent="login" class="btn btn-success pull-right clearfix">登&nbsp;&nbsp;录</button>
-        </div>
-      </div>
+          <el-button @click.prevent="login"  class="login__submit" type="primary submit" >
+            登&nbsp;&nbsp;录
+          </el-button>
     </div>
   </form>
 </div>
@@ -38,8 +36,17 @@
       }
     },
     methods: {
-      login:function(){      
-
+      login: function() {
+        console.log("我是登陆");
+        this.$http.post("admin/api/login", {
+          username: this.username,
+          password: this.password
+        }).
+        then(function(res) {
+          console.log(res);
+        },function(res){
+          console.log(res);          
+        });
       }
     },
     computed:{
@@ -81,13 +88,14 @@
     text-align: center;
     margin: 0 0 21px;
     padding: 20px 0;
-    background-color: #5cb85c;
+    background-color: #20A0FF;
     color: white;
     font-weight:bolder;
   }
   
   .login_body{
       padding: 0 20px;
+      margin-bottom:20px;
   }
   .line{
     width: 100%;
@@ -101,16 +109,30 @@
     width: 100%;
   }
 
+  .login_body{
+    overflow: hidden;
+  }
   .login__input--con{
-  margin-bottom: 10px;
+     margin-bottom: 10px;
   }
 
-  .el-input__inner{
+  .login__submit{
+    display: block;
+    float: right;
+  }
+
+
+/*element ui */
+  .el-input__inner,.el-button{
     border-radius: 2px;
   } 
 
   .el-input-group__prepend{
     border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
+  }
+
+  .el-button--success{
+    background-color: #5cb85c;
   }
 </style>

@@ -16,8 +16,13 @@ const stateCode={
 	},
 	loginFail:{
 		state:402,
-		info:"登录失败"
+		info:"登录失败,密码错误"
 	},
+	loginFailUserNotExit:{
+		state:403,
+		inf0:"用户名不存在"
+	},
+
 	// 参数错误 State:0xx
 	parMiss:{
 		state:"001",
@@ -63,6 +68,10 @@ const stateCode={
 	jsonParseFail:{
 		state:800,
 		info:"json字符串解析失败"
+	},
+	sysError:{
+		state:900,
+		info:"系统错误"
 	}
 }
 
