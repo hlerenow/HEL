@@ -20,7 +20,7 @@ const stateCode={
 	},
 	loginFailUserNotExit:{
 		state:403,
-		inf0:"用户名不存在"
+		info:"用户名不存在"
 	},
 
 	// 参数错误 State:0xx

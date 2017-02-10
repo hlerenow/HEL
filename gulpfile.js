@@ -11,6 +11,8 @@ var appIndex = path.join(__dirname, "public/admin/src/index.js");
 var webpackBulidPath=path.join(__dirname,"public/admin");
 
 var reloadTimer=null;
+var reloadTimerWebpack=null;
+
 
 gulp.task("bowserSync", function() {
 	var files = [
@@ -63,7 +65,7 @@ gulp.task("webpack",function() {
 			.pipe(webpackStream(webpackConfig))
 			.pipe(gulp.dest(webpackBulidPath));
 	}catch(e){
-		console.log("erro");
+		console.log(e);
 	}
 });
 
@@ -74,15 +76,34 @@ gulp.task("app_run",function(){
 })
 
 gulp.task("watch_webpack",["webpack","bowserSync"],function(){
-	gulp.watch(path.join(webpackBulidPath,"src/*"),['webpack']);
+	gulp.watch(path.join(webpackBulidPath,"src/**")).on("change",function(cb){
+			clearTimeout(reloadTimerWebpack);
+			reloadTimerWebpack=null;
+			console.log("wepack 文件改变");
+			reloadTimerWebpack=setTimeout(function(){
+				console.log("运行webpack");
+				cmd.get("gulp webpack",function(data){
+					console.log(data);
+					console.log("webpack end ");
+				});
+			},1000);
+	});
 });
 
-gulp.task("wacth_webpack_node",["webpack",],function(){
-	cmd.get("node app",function(data){
-		console.log(data);
-	});
-	gulp.watch(path.join(webpackBulidPath,"src/*"),['webpack']);
-});
+// gulp.task("wacth_webpack_node",["webpack",],function(){
+// 	cmd.get("node app",function(data){
+// 		console.log(data);
+// 	});
+// 	gulp.watch(path.join(webpackBulidPath,"src/**/*")).on("change",function(cb){
+// 			clearTimeout(reloadTimerWebpack);
+// 			reloadTimerWebpack=null;
+// 			console.log("wepack 文件改变");
+// 			reloadTimerWebpack=setTimeout(function(){
+// 				console.log("运行webpack");
+// 				cmd.run("gulp webpack");
+// 			},1000);
+// 	});
+// });
 
 gulp.task("default", ["nodemon"],function(){
 	// gulp.watch(path.join(webpackBulidPath,"src/*"),['webpack']);

@@ -1,99 +1,68 @@
 <template>
-<div class="headBar row" >
-	<div class="headBar__logo col-md-2">
-		<h3 class="headBar__logo--title">
-			襄企联盟	
-		</h3>
-	</div>
-	<ul class="nav navbar  navbar-dufault nav-pills col-md-10 headBar__body" role="tablist">		
-		<li>
-			<a href="#">退出</a>
-		</li>
-		<li role="presentation " class="dropdown">
-			<a class="dropdown-toggle text-muted" data-toggle="dropdown" href="#">
-				设置 <span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu text-center" role="menu">
-				<li><a href="#">密码修改</a></li>
-			</ul>
-		</li>
-		<li >
-			<a >用户{{username}}</a>
-		</li>
+<el-menu  theme="dark" default-active="1" class="el-menu-top" mode="horizontal" @select="handleSelect">
+  <el-menu-item index="icon-hel">HEL</el-menu-item>
+  <el-menu-item index="1"><i class="el-icon-message"></i>0</el-menu-item>
+  <el-submenu class="addPlus" index="newAdd">
+    <template slot="title"><i class="el-icon-plus"></i>新建</template>
+    <el-menu-item index="newAdd-1">文章</el-menu-item>
+    <el-menu-item index="newAdd-2">文件</el-menu-item>
+    <el-menu-item index="newAdd-3">页面</el-menu-item>
+    <el-menu-item index="newAdd-4">链接</el-menu-item>
+  </el-submenu>  
+  <el-submenu index="4" id="user--info">
+    <template slot="title">你好，{{nickname}}</template>
+    <el-menu-item index="4-1">修改个人资料</el-menu-item>
+    <el-menu-item index="4-2">退出</el-menu-item>
+  </el-submenu>
 
-
-	</ul>	
-</div>
+</el-menu>
 </template>
-<script type="text/javascript">
-	export default {
-		data (){
-			return {
-				now:1
-			}
-		},
-		props:[
-			"username"
-		]
-	}
+
+<script>
+  export default {
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    },
+    props:['username','mail','nickname']
+  }
 </script>
-<style type="text/css" >
-	.headBar{
-		background-color: #363b3f;
-	}
-	.headBar__logo{
-		color: white;
-		overflow: auto;
-		border-bottom: 1px solid #26292c;
-	}
-	.headBar__logo--title{
-		padding-left: 10px;
-		margin-bottom: 9px;
-	}
-	.headBar .nav{
-		display: block;
-		height: 56px;
-		padding-bottom: 0;
-		background-color: #363b3f;
-		margin-bottom: 0;
-	}
-	
-	.headBar__body{
-		border: none;
-		padding-right: 0;		
-	}
 
-	.headBar__body > li{
-		float: right;
-		height: 100%;
-	}
-	.headBar__body > li,.headBar__body > li > a{
-		line-height: 2;
-		font-size: 18px;
-		display: block;
-		height: 100%;
-		color: white;
-	}
-	.headBar__body > li > a:hover,.headBar__body > li > a:focus{
-		background-color: #1e1f1e;
-		color: white;
-	}
+<style type="text/css">
 
-	.nav .open>a, .nav .open>a:hover, .nav .open>a:focus{
-		background-color: #1e1f1e;
-		color: white;			
-	}
-	.dropdown.open > a:hover,.dropdown.open > a:focus{
-	
-	}
-	.dropdown.open > a{
-		border-radius: 0px;
-	}
-	.row > div{
-		padding-left: 0;
-		padding-right: 0;
-	}
-	.panel{
-	    margin-top: 0px;
-  	}
+  .el-menu-top .addPlus{
+    padding: 0;
+  }
+  .el-menu-top .el-icon-plus{
+    margin: 0 5px;
+  }
+
+  .el-menu-top .el-submenu__title{
+    padding: 0;
+  }
+  .el-menu-top > li{
+    padding: 0;
+    margin: 0 10px;
+  }
+  #user--info{
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .el-menu-top{
+    display: block;
+    width: 100%;
+  }
+
+  .el-menu-item, 
+  .el-submenu__title {
+    font-size: 12px;
+
+  }
+
+
+
+
 </style>

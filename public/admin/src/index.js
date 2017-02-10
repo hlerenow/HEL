@@ -3,7 +3,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import VueResource from 'vue-resource';
+import Axios from 'axios';
+import VueCookie from 'vue-cookie';
 
 import App from './app';
 import routes from './routes';
@@ -11,27 +12,19 @@ import storeOption from './store';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 
-// var VueCookie = require('vue-cookie');
- // var Cookies=require("Cookies");
-
+// Tell Vue to use the plugin
 Vue.use(Vuex);
 Vue.use(VueRouter);
-Vue.use(VueResource);
 Vue.use(ElementUI);
+Vue.use(VueCookie);
 
-Vue.http.options.root = 'http://localhost:3000';
+Vue.prototype.$http=Axios;
 
-Vue.http.interceptors.push(function(req, next) {
-
-	console.log(req);
-
-  // continue to next interceptor
-  next();
-});
+//Axios 全局设置
+Axios.defaults.baseURL = 'http://localhost:3000/admin/api/';
 
 // // 创建一个路由对象用于管理页面的路由
 const router = new VueRouter({
-  mode: 'hash',
   routes: routes
 });
 

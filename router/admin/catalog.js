@@ -13,6 +13,7 @@ router.post("/create",function(req,res,next){
 	let cm=new catalogModel;
 	if(req.session.role=="admin"){
 		cm.createCatalog(req.body,function(result){
+			delete result.opRes;
 			res.json(result);
 		});
 	}else{
@@ -25,6 +26,8 @@ router.post("/modify",function(req,res,next){
 
 	if(req.session.role=="admin"){
 		cm.modifyCatalog(req.body,function(result){
+			
+			delete result.opRes;			
 			res.json(result);
 		});
 	}else{
@@ -38,6 +41,18 @@ router.post("/delete",function(req,res,next){
 
 	if(req.session.role=="admin"){
 		cm.deleteCatalog({mid:req.body.mid},function(result){
+			res.json(result);
+		});
+	}else{
+		res.json(stateCode.notAuthority());
+	}	
+});
+
+router.post("/get",function(req,res,next){
+	let cm=new catalogModel;
+
+	if(req.session.role=="admin"){
+		cm.getCatalog(function(result){
 			res.json(result);
 		});
 	}else{

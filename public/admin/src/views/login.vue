@@ -4,15 +4,15 @@
     <h3  class="text-center login_title Blue">HEL-blog</h3>
     <div class="login_body">
       <div class="login__input--con">
-        <el-input placeholder="用户名" v-model.trim="username">
+        <el-input v-model.trim="username">
           <template slot="prepend">用户名</template>
         </el-input>
       </div>
       <div class="login__input--con">
-        <el-input placeholder="密码" type="password" v-model.trim="password">
-          <template slot="prepend">密&nbsp;码</template>
+        <el-input type="password" v-model.trim="password">
+          <template slot="prepend">密  码</template>
         </el-input>
-      </div>      
+      </div>     
           <el-button @click.prevent="login"  class="login__submit" type="primary submit" >
             登&nbsp;&nbsp;录
           </el-button>
@@ -30,38 +30,63 @@
   export default {
     data () {
       return {
-        username: '',
-        password: '',
+        username:'',
+        password:'',
         tips:""
       }
     },
     methods: {
       login: function() {
-        console.log("我是登陆");
-        this.$http.post("admin/api/login", {
+        let self=this;
+
+        if(!this.validate){
+            self.$message({
+              message:"用户名或密码不能为空",
+              type:"error",
+              duration:0,
+              showClose:true
+            });
+            return;
+        }
+        this.$http.post("login", {
           username: this.username,
           password: this.password
         }).
         then(function(res) {
-          console.log(res);
+
+          if(res.data.state===200){
+            self.$cookie.set("username",res.data.username);
+            self.$cookie.set("mail",res.data.mail);
+            self.$cookie.set("nickname",res.data.nickname);
+            self.$router.push("main");
+          }else{
+            self.$message({
+              message:res.data.info,
+              type:"error",
+              duration:2000,
+              showClose:true
+            });
+          }
         },function(res){
-          console.log(res);          
+            self.$message({
+              message:"网络错误,请检查网络连接,稍后再试！",
+              type:"error",
+              duration:2000,
+              showClose:true
+            });
         });
       }
     },
     computed:{
-      validateData:function(){
-        if(this.username!=""&&this.password!=""){
+      validate:function(){
+        if(this.username&&this.password)
           return true;
-        }else{
-          alert("请检查用户名或者密码是否正确");
+        else
           return false;
-        }
       }
     },
     mounted:function(){
 
-      console.log("我是login初始化");
     }
   }
 

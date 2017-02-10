@@ -72,4 +72,10 @@ fn.deleteCatalog = function(obj, func) {
 	});
 }
 
+fn.getCatalog=function(func){
+	this.query("select mid,name,slug from meta where type='catalog';",[],function(result){
+		func(result);
+	});
+}
+
 module.exports=exports=catalogModel;

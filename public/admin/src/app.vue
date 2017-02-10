@@ -8,13 +8,11 @@
 <style>
 
   html,body,#app{
-    width: 100%;
-    height: 100%;
     max-width: 100%;
+    height: 100%;
     min-height: 100%;
   }
   html,body{
-    background-color: #f7f7f7;
     overflow-x: hidden;
   }
 /*重置boostrap样式*/

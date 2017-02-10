@@ -1,143 +1,47 @@
 <template>
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-    <div class="panel panel-default" v-for="(topItem,index) in menueItem">
-        <div class="panel-heading" role="tab" :id="'heading'+index">
-          <h4 class="panel-title">
-          <a data-toggle="collapse" :class="{collapsed:index==0}" data-parent="#accordion" :href="'#collapse'+index" :aria-expanded="index==0?true:false" aria-controls="'collapse'+index">
-            {{topItem.name}}
-          </h4>
-        </div>
-        <div :id="'collapse'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'heading'+index">
-          <div class="panel-body">
-            <ul class="nav nav-pills nav-stacked " role="tablist">
-              <li v-for="item in topItem.mitem"  role="presentation">
-                <router-link :to="{name:item.link}">
-                  {{item.name}}                          
-                </router-link>
-              </li>
-            </ul>          
-<!--             <ul class="list-group">
-              <li v-for="item in topItem.mitem" :href="item.link" class="list-group-item"></li>
-            </ul> -->
-          </div>
-        </div>
-    </div> 
-  </div>
+    <el-menu theme="dark" default-active="2" class="el-menu-vertical" @select="handleSelect" :router="true">
+      <el-submenu index="1">
+        <template slot="title"><i class="el-icon-edit"></i>文章</template>
+        <el-menu-item index="1-1">所有文章</el-menu-item>
+        <el-menu-item index="/main/editorEassy">写文章</el-menu-item>
+        <el-menu-item index="/main/catalog/create">分类目录</el-menu-item>
+        <el-menu-item index="1-4">标签</el-menu-item>
+      </el-submenu>
+      <el-submenu index="2">
+        <template slot="title"><i class="el-icon-picture"></i>媒体</template>
+        <el-menu-item index="2-1">媒体库</el-menu-item>
+        <el-menu-item index="2-2">添加</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3">
+        <template slot="title"><i class="el-icon-menu"></i>设置</template>
+        <el-menu-item index="3-1">常规</el-menu-item>
+        <el-menu-item index="3-2">邮件代理</el-menu-item>
+      </el-submenu>
+    </el-menu>
 </template>
 
 <script>
-
-  import {mapState} from 'vuex';
-  import {mapMutations} from 'vuex';
-  var $=require("jquery");
   export default {
-    data () {
-      return {
-        menueItem:[
-          {
-            name:"商品管理",
-            mitem:[
-              {
-                name:"上传商品",
-                link:"upGoods"
-              },
-              {
-                name:"添加商品",
-                link:"login"
-              },
-              {
-                name:"商品管理",
-                link:"upGoods"
-              },
-            ]
-          },
-          {
-            name:"订单管理",
-            mitem:[
-              {
-                name:"订单查询",
-                link:"upGoods"
-              }
-            ]
-          },
-          {
-            name:"店铺设置",
-            mitem:[
-              {
-                name:"店铺广告图设置",
-                link:"upGoods"
-              }
-            ]
-          }
-        ],
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
       }
     }
   }
-
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style type="text/css">
-
-  #accordion{
-      margin-bottom: 0;
+  .el-menu-vertical{
+    border-top-left-radius:0 !important;
+    border-top-right-radius:0 !important;
   }
-
-  .panel{
-    margin-top: 0px !important;
-    border:none;
-  }
-  .panel-heading,.panel-body{
-    border-style: none !important;
-
-  }
-  .panel-heading{
-    height: 40px;
-    background-color: #363b3f !important;
-    color: white !important;
-    border-bottom: 1px solid #26292c !important;
-    border-radius: 0 !important;
-  }
-
-  .panel-heading a{
-    display: block;
-    font-size: 14px;
-    text-decoration: none;
-  }
-
-  .panel-body{
-    padding: 0;
-  }
-
-  .panel-body ul{
-    margin-bottom: 0;
+  .el-menu--horizontal{
     border-radius: 0;
-    background: oldlace;
-    
+  }
+  .el-submenu__title{
+    padding: 0 10px !important;
   }
 
-  .panel-body li,.panel-body a{
-    margin-top: 0 !important;
-    color: white;
-    font-size: 13px;
-    border-radius: 0 !important;
-    border: none;
-    background-color: #26292c;   
-    transition: all .3s ;
-    border-left: 5px solid #26292c !important;
-
+  .el-menu-item{
+    padding:0 20px !important;
   }
-
-  .panel-body a:hover,.panel-body a:focus{
-    background-color: #26292c !important;
-  }
-  .collapse.in {
-  }
-
-  .panel-body ul li:hover{
-    border-left: 5px solid #f54141 !important;
-  }
-
-  .collapse.in{
-  }  
 </style>
