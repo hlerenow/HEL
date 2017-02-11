@@ -57,23 +57,32 @@ fn.modifyCatalog = function(obj, func) {
 	});
 }
 
-fn.deleteCatalog = function(obj, func) {
-	if (!obj.mid) {
+fn.deleteCatalog = function(midArry, func) {
+	if (!midArry) {
 		func(stateCode.parMiss());
 		return;
 	}
+	let sql = "delete from meta where type='catalog' and mid in ( ";
+	let questionMark = [];
+	for (let i = 0; i < midArry.length; i++) {
+		questionMark.push("?");
+	}
 
-	this.query("delete from meta where mid=? ;", [obj.mid], function(result) {
+	sql += questionMark.join() + " ) ;";
+	debug(sql,midArry);	
+	this.query(sql, midArry, function(result) {
 		if (result.state !== 200) {
-			func(stateCode.sqlDeleteFail());
-			return;
+			func(stateCode.sqlDeleteFail({
+				moreInfo: "目录删除失败"
+			}))
+		} else {
+			func(result);
 		}
-		func(result);
-	});
+	});	
 }
 
 fn.getCatalog=function(func){
-	this.query("select mid,name,slug from meta where type='catalog';",[],function(result){
+	this.query("select mid,name,slug,parent from meta where type='catalog';",[],function(result){
 		func(result);
 	});
 }

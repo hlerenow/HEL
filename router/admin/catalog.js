@@ -38,9 +38,15 @@ router.post("/modify",function(req,res,next){
 
 router.post("/delete",function(req,res,next){
 	let cm=new catalogModel;
-
+	let midArry = until.jsonParse(req.body.mids);	
+	if (!midArry) {
+		res.json(stateCode.jsonParseFail());
+		return;
+	}	
+	debug(midArry);
 	if(req.session.role=="admin"){
-		cm.deleteCatalog({mid:req.body.mid},function(result){
+		cm.deleteCatalog(midArry,function(result){
+			delete result.opRes;
 			res.json(result);
 		});
 	}else{

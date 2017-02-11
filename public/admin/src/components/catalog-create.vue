@@ -64,6 +64,8 @@
 				then(function(res){
 					if(res.data.state===200){
 						self.catalogs=self.catalogs.concat(res.data.opRes);
+						self.$bus.$emit("getAllCatalog",res.data.opRes);
+
 					}else{
 			            self.$message({
 			              message:"目录获取失败，服务器错误,请稍后再试！",
@@ -97,13 +99,14 @@
 						};
 						self.catalogs.push(catalogObj);
 						self.clearData();
-						self.$emit("catalog-created",catalogObj);
+						//全局事件触发
+						self.$bus.$emit("catalog-created",catalogObj);
 						self.$message({
 			              message:"目录创建成功",
 			              type:"success",
 			              duration:2000,
 			              showClose:true					
-						})
+						});
 					}else{
 						self.$message({
 			              message:"目录创建失败,请检查相关信息是否填写错误！",
@@ -125,14 +128,52 @@
 				this._name="";
 				this._slug="";
 				this.pCatalogId=0;
+			},
+			getUpdateCatalog:function(rowArry){
+				var res=[];
+				var midArry=[];
+				rowArry.forEach(function(ite){
+					midArry.push(ite.mid);
+				});
+
+				for(var i =0;i<this.catalogs.length;i++){
+					if(midArry.indexOf(this.catalogs[i].mid)<0){
+						res.push(this.catalogs[i]);
+					}
+				}
+				return res;
+			},
+			getCatalogIndex:function(mid){
+				this.catalogs.forEach(function(ite,index){
+					if(ite.mid===mid){
+						return index;
+					}
+
+				})
+				return -1;			
 			}
 		},
 		mounted:function(){
 			//获取已经存在的目录
+			var self=this;
 			this.getAllCatalog();
 			this._name=this.name;
 			this._slug=this.slug;
 			this.pCatalogId=this.mid||0;
+			this.$bus.$on("catalogDelete",function(rowArry){
+				console.log("目录删除事件");
+				self.catalogs=self.getUpdateCatalog(rowArry);
+			});
+			//目录修改监听
+			this.$bus.$on("catalogModify",function(row){
+				var index=self.getCatalogIndex(row.mid);
+				self.catalogs.splice(index,1,{
+					name:row.name,
+					slug:row.slug,
+					parent:row.parent,
+					mid:row.mid
+				});
+			});			
 
 		}
 	}

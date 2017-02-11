@@ -18,7 +18,9 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(VueCookie);
 
+var bus = new Vue();
 Vue.prototype.$http=Axios;
+Vue.prototype.$bus=bus;
 
 //Axios 全局设置
 Axios.defaults.baseURL = 'http://localhost:3000/admin/api/';
@@ -30,6 +32,7 @@ const router = new VueRouter({
 
 // 创建一个 store 对象用于管理应用状态
 const store = new Vuex.Store(storeOption);
+
 
 
 window.__lendApp__ = new Vue({
