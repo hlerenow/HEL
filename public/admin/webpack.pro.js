@@ -7,8 +7,7 @@ module.exports = {
 	entry: {
 		index: path.join(__dirname,"src/index.js"),
 	},
-	watch: true,
-	devtool: '#eval-source-map',
+	devtool: false,
 	output: {
 		path: productionPath,
 		// publicPath: path.join(__dirname, "../public"),
@@ -24,7 +23,6 @@ module.exports = {
 		fallback: [path.join(__dirname, "node_modules")],
 	    alias: {
 	      'src': path.join(__dirname, 'src'),
-	      'assets': path.join(__dirname, 'src/assets'),
 	      'views': path.join(__dirname, 'src/views'),
 	      'routes': path.join(__dirname, 'src/routes'),
 	      'store': path.join(__dirname, 'src/store'),
@@ -76,22 +74,6 @@ module.exports = {
 	            collapseWhitespace: true,    //压缩空格
 	            removeAttributeQuotes: true  //去除属性引用				
 			}
-		}),
-		new webpack.HotModuleReplacementPlugin()//热加载插件
-	]
-	,
-	devServer: {
-        historyApiFallback: true,
-        contentBase: "./",
-        quiet: false, //控制台中不输出打包的信息
-        noInfo: true,
-        hot: true,
-        inline: true,
-        lazy: false,
-        progress: true, //显示打包的进度
-        watchOptions: {
-            aggregateTimeout: 300
-        },
-        port: '8088'
-	} 	
+		})
+	]	
 }

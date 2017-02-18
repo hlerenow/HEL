@@ -23,7 +23,7 @@ Vue.prototype.$http=Axios;
 Vue.prototype.$bus=bus;
 
 //Axios 全局设置
-Axios.defaults.baseURL = 'http://localhost:3000/admin/api/';
+Axios.defaults.baseURL = './api/';
 
 // // 创建一个路由对象用于管理页面的路由
 const router = new VueRouter({
