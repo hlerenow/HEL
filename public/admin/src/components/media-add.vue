@@ -2,7 +2,7 @@
 	<div id="mediaAdd">
 		<h2 class="pageTitle" v-if="pFileListShow">添加媒体</h2>
 		<el-upload
-			action="//localhost:3000/admin/api/file/upload "
+			action="./api/file/upload "
 			type="drag"
 			:multiple="true"
 			:on-success="fileUpSucess"
