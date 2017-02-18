@@ -2,6 +2,7 @@ var webpack = require("webpack");
 var path = require("path");
 var productionPath=path.join(__dirname, "/");
 var HtmlWebpackPlugin=require("html-webpack-plugin");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 	entry: {
@@ -49,7 +50,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				loader: 'style-loader!css-loader'
+				loader: ExtractTextPlugin.extract("style", "css")
 			}, 
 			{
 				test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
@@ -75,6 +76,7 @@ module.exports = {
 			compress: {
 				warnings: false
 			}
-		})
+		}),
+ 		new ExtractTextPlugin("common.css")
 	]	
 }

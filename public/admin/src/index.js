@@ -9,8 +9,8 @@ import VueCookie from 'vue-cookie';
 import App from './app';
 import routes from './routes';
 import storeOption from './store';
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-default/index.css';
 
 // Tell Vue to use the plugin
 Vue.use(Vuex);
