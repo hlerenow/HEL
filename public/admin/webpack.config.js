@@ -7,8 +7,7 @@ module.exports = {
 	entry: {
 		index: path.join(__dirname,"src/index.js"),
 	},
-	watch: true,
-	devtool: '#eval-source-map',
+	devtool: false,
 	output: {
 		path: productionPath,
 		// publicPath: path.join(__dirname, "../public"),
@@ -66,32 +65,16 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new webpack.BannerPlugin("**********Created By HL ;*********\n"),
+		new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
 		new HtmlWebpackPlugin({
 			filename: path.join(__dirname,"index.html"),
 			template: path.join(__dirname , "src/index_tmp.html"),
-			inject: true,
-			minify:{
-	            removeComments: true,        //去注释
-	            collapseWhitespace: true,    //压缩空格
-	            removeAttributeQuotes: true  //去除属性引用				
-			}
+			inject: true
 		}),
-		new webpack.HotModuleReplacementPlugin()//热加载插件
-	]
-	,
-	devServer: {
-        historyApiFallback: true,
-        contentBase: "./",
-        quiet: false, //控制台中不输出打包的信息
-        noInfo: true,
-        hot: true,
-        inline: true,
-        lazy: false,
-        progress: true, //显示打包的进度
-        watchOptions: {
-            aggregateTimeout: 300
-        },
-        port: '8088'
-	} 	
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false
+			}
+		})
+	]	
 }

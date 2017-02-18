@@ -35,6 +35,8 @@ var urlencoed=bodyParser.urlencoded({
 var jsonParser=bodyParser.json();
 
 var session=require("express-session");
+var compression=require("compression");
+
 
 app.engine('html', require('ejs').renderFile);
 app.set("view engine","html");
@@ -52,9 +54,12 @@ app.use(session({
 	saveUninitialized:true
 }));
 
+
 app.use(urlencoed);
 
 app.use(jsonParser);
+
+app.use(compression());
 
 app.set("port",3000);
 
