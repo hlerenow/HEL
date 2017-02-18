@@ -5,12 +5,12 @@
         <el-menu-item index="1-1">所有文章</el-menu-item>
         <el-menu-item index="/main/editorEassy">写文章</el-menu-item>
         <el-menu-item index="/main/catalog/create">分类目录</el-menu-item>
-        <el-menu-item index="1-4">标签</el-menu-item>
+        <!-- <el-menu-item index="1-4">标签</el-menu-item> -->
       </el-submenu>
       <el-submenu index="2">
         <template slot="title"><i class="el-icon-picture"></i>媒体</template>
-        <el-menu-item index="2-1">媒体库</el-menu-item>
-        <el-menu-item index="2-2">添加</el-menu-item>
+        <el-menu-item index="/main/media">媒体库</el-menu-item>
+        <el-menu-item index="/main/mediaAdd">添加</el-menu-item>
       </el-submenu>
       <el-submenu index="3">
         <template slot="title"><i class="el-icon-menu"></i>设置</template>

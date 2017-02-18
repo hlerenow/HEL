@@ -30,9 +30,21 @@ fn.modifyFile=function(){
 
 fn.getFile=function(obj,func){
 	this.query("select * from files where fid=? ;",[obj.fid],function(result){
-			func(result);		
+			func(result);	
 	});
 };
+
+fn.getFileList=function(obj,func){
+	var page=parseInt(obj.page)-1||0,
+		size=parseInt(obj.size)||10;
+		debug(size);
+
+	var sql="select * from files order by created desc limit "+(page*size)+","+size+" ;select count(*) total from files;";
+	this.query(sql,[],function(result){
+		func(result);
+	});
+
+}
 
 fn.deleteFile=function(obj,func){
 	this.query('delete from files where fid=? ;',[obj.fid],function(result){

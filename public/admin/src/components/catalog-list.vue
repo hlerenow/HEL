@@ -187,4 +187,7 @@
 	.el-table table{
 		width: 100% !important;
 	}
+	.el-table__empty-block{
+		width: 100% !important;
+	}
 </style>

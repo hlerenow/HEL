@@ -17,7 +17,7 @@ var fs=require("fs");
 router.post("/upload",function(req,res,next){
 	let fm=new fileModel;
 
-
+	debug("文件上传");
 	if(req.session.role!=='admin'){
 		res.json(stateCode.notAuthority());
 		return;
@@ -68,7 +68,7 @@ router.post("/upload",function(req,res,next){
 					});
 				});
 
-				res.json(result);
+				res.json(stateCode.success({opRes:fileArry}));
 			}
 		});
 	});
@@ -81,8 +81,18 @@ router.post("/delete",function(req,res,next){
 		return;
 	};
 
-	if(req.body.fid){
-		let fileObj={fid:req.body.fid};
+	let fidArry = until.jsonParse(req.body.fids);
+
+	if (!fidArry) {
+		res.json(stateCode.jsonParseFail());
+		return;
+	}
+
+	let allRes=[];
+	let resState=false;
+
+	for(let i=0;i<fidArry.length;i++){
+		let fileObj={fid:fidArry[i]};
 		fm.getFile(fileObj,function(result){
 			if(result.state!==200){
 				res.json(stateCode.sqlFail());
@@ -101,12 +111,36 @@ router.post("/delete",function(req,res,next){
 			});
 
 			fm.deleteFile(fileObj,function(result){
-				res.json(result);
-			});
-		});
+				delete result.opRes;
+				allRes.push(result);
+				if(result.state===200){
+					resState=true;
+				}
 
-	}else{
-		res.json(stateCode.parMiss());
+				if(allRes.length===fidArry.length){
+					if(resState){
+						return res.json(stateCode.success({
+							opRes:allRes
+						}));						
+					}else{
+						return res.json(stateCode.fail({
+							opRes:allRes
+						}));							
+					}
+				}
+			});
+		});			
 	}
+});
+
+router.post("/getList",function(req,res,next){
+	let fm=new fileModel;
+	fm.getFileList({page:req.body.page,size:req.body.size},function(result){
+		if(result.state===200){
+			res.json(result);
+		}else{
+			res.json(stateCode.fail());
+		}
+	});
 });
 module.exports=exports=router;

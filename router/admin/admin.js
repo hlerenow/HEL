@@ -14,7 +14,7 @@ var catalogRouter=require(path.join(__dirname,"./catalog"));
 var fileRouter=require(path.join(__dirname,"./file"));
 
 //option 路由
-var fileRouter=require(path.join(__dirname,"./option"));
+var optionRouter=require(path.join(__dirname,"./option"));
 
 router.post("/login", function(req, res, next) {
 	var userModel = new require(path.join(__dirname, "../../models/admin/adminModel"));
@@ -71,7 +71,7 @@ router.use(/^\/catalog*/,catalogRouter);
 router.use(/^\/file*/,fileRouter);
 
 //option api
-router.use(/^\/option*/,fileRouter);
+router.use(/^\/option*/,optionRouter);
 
 
 module.exports = exports = router;

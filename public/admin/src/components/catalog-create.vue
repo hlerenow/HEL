@@ -4,7 +4,7 @@
 		<el-row :gutter="10">
 		  <el-col :xs="24" :sm="5" :md="3" :lg="3" class="rowTitle">名称</el-col>		
 		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
-		  	<el-input v-model="_name" placeholder=""></el-input>
+		  	<el-input v-model="catalogName" placeholder=""></el-input>
 		  	<p class="tips">
 		  		页面上显示的目录名称		  	
 		  	</p>
@@ -13,7 +13,7 @@
 		<el-row :gutter="10">
 		  <el-col :xs="24" :sm="5" :md="3" :lg="3" class="rowTitle">别名</el-col>		
 		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
-		  	<el-input v-model="_slug" placeholder=""></el-input>
+		  	<el-input v-model="catalogSlug" placeholder=""></el-input>
 		  	<p class="tips">
 		  		“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。		  	
 		  	</p>
@@ -51,8 +51,8 @@
 			return {
 				catalogs:[{mid:0,name:"无"}],
 				pCatalogId:0,
-				_name:"",
-				_slug:"",
+				catalogName:"",
+				catalogSlug:"",
 
 			}
 		},
@@ -86,15 +86,15 @@
 			createCatalog:function(){
 				var self=this;
 				self.$http.post("catalog/create",{
-					name:this._name,
-					slug:this._slug,
+					name:this.catalogName,
+					slug:this.catalogSlug,
 					parent:this.pCatalogId
 				}).
 				then(function(res){
 					if(res.data.state===200){
 						var catalogObj={
-							name:self._name,
-							slug:self._slug,
+							name:self.catalogName,
+							slug:self.catalogSlug,
 							mid:res.data.insertId
 						};
 						self.catalogs.push(catalogObj);
@@ -125,8 +125,8 @@
 				});
 			},
 			clearData:function(){
-				this._name="";
-				this._slug="";
+				this.catalogName="";
+				this.catalogSlug="";
 				this.pCatalogId=0;
 			},
 			getUpdateCatalog:function(rowArry){
@@ -157,8 +157,8 @@
 			//获取已经存在的目录
 			var self=this;
 			this.getAllCatalog();
-			this._name=this.name;
-			this._slug=this.slug;
+			this.catalogName=this.name;
+			this.catalogSlug=this.slug;
 			this.pCatalogId=this.mid||0;
 			this.$bus.$on("catalogDelete",function(rowArry){
 				console.log("目录删除事件");
@@ -189,10 +189,6 @@
 	.pageTitle{
 		color: #97a8be;
 		font-weight: lighter;		
-	}
-	.tips{
-		font-size: 12px;
-		color: gray;
 	}
 	.el-select{
 		width: 100%;

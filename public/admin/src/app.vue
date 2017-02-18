@@ -14,6 +14,7 @@
   }
   html,body{
     overflow-x: hidden;
+
   }
 /*重置boostrap样式*/
 /*  .form-control{
@@ -34,5 +35,14 @@
   .row{
     margin-left: 0;
     margin-right: 0;
+  }
+  .tips{
+    font-size: 12px;
+    color: gray;
+  } 
+
+  .pageTitle{
+    color: #97a8be;
+    font-weight: lighter;   
   }
 </style>

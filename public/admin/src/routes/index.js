@@ -6,9 +6,12 @@ const Login = r => require(['views/login'], r);
 const NotFound = r => require(['views/notfound'], r);
 const Admin = r=>require(['views/admin/index'],r);
 const Welcome = r=>require(['views/admin/welcome'],r);
-const editorEassy = r=>require(['views/admin/editorEassy'],r);
+const EditorEassy = r=>require(['views/admin/editorEassy'],r);
 
-const catalogCreate = r=>require(['views/admin/catalog/create'],r);
+const CatalogCreate = r=>require(['views/admin/catalog/create'],r);
+
+const Media = r=>require(['views/admin/media'],r);
+const MediaAdd = r=>require(['views/admin/mediaAdd'],r);
 
 
 // 根目录
@@ -40,14 +43,24 @@ const routes = [
 	  	children:[
 	  		{
 	  			path:"editorEassy",
-	  			component:editorEassy,
+	  			component:EditorEassy,
 	  			name:"editorEassy"
 	  		},
 	  		{
 	  			path:"catalog/create",
-	  			component:catalogCreate,
+	  			component:CatalogCreate,
 	  			name:"catalogCreate"
-	  		}	  		
+	  		},
+	  		{
+	  			path:"media",
+	  			component:Media,
+	  			name:"media"
+	  		},
+	  		{
+	  			path:"mediaAdd",
+	  			component:MediaAdd,
+	  			name:"mediaAdd"
+	  		}	  		 		
 	  	]
 	  },
 ].map(route => {
