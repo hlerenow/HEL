@@ -42,8 +42,6 @@ app.engine('html', require('ejs').renderFile);
 app.set("view engine","html");
 app.set("views",path.join(__dirname,"views"));
 
-app.use(express.static(path.join(__dirname,"public")));
-
 app.use(cookieParser("595806119HL"));
 
 app.use(session({
@@ -59,9 +57,13 @@ app.use(urlencoed);
 
 app.use(jsonParser);
 
+app.use(express.static(path.join(__dirname,"public")));
+
 app.use(compression());
 
 app.set("port",3000);
+
+
 
 //登录过滤
 app.use(baseLoginCheck);

@@ -12,6 +12,7 @@
 				catalogs:[]
 			};
 		},
+		props:["checkCatalogs"],
 		methods:{
 			selectCatalog:function(){
 				var self=this;
@@ -39,13 +40,18 @@
 		              showClose:true
 		            });					
 				});
-			},						
+			},				
 		},
 		mounted:function(){
 			var self=this;
 			this.getAllCatalog();
 			this.$bus.$on("catalog-created",function(data){
 				self.catalogs.push(data);
+			});
+
+			//初始化目录使用
+			this.$watch("checkCatalogs",function(newVal){
+				self.eassyCatalogs=newVal;
 			});
 		}
 	};

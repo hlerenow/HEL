@@ -2,8 +2,9 @@
     <el-menu theme="dark" default-active="2" class="el-menu-vertical" @select="handleSelect" :router="true">
       <el-submenu index="1">
         <template slot="title"><i class="el-icon-edit"></i>文章</template>
-        <el-menu-item index="1-1">所有文章</el-menu-item>
+        <el-menu-item index="/main/eassyList">所有文章</el-menu-item>
         <el-menu-item index="/main/editorEassy">写文章</el-menu-item>
+        <!-- <el-menu-item index="/main/modifyEassy">修改文章</el-menu-item> -->
         <el-menu-item index="/main/catalog/create">分类目录</el-menu-item>
         <!-- <el-menu-item index="1-4">标签</el-menu-item> -->
       </el-submenu>
@@ -14,8 +15,8 @@
       </el-submenu>
       <el-submenu index="3">
         <template slot="title"><i class="el-icon-menu"></i>设置</template>
-        <el-menu-item index="3-1">常规</el-menu-item>
-        <el-menu-item index="3-2">邮件代理</el-menu-item>
+        <el-menu-item index="31">常规</el-menu-item>
+        <el-menu-item index="32">邮件代理</el-menu-item>
       </el-submenu>
     </el-menu>
 </template>
@@ -24,7 +25,7 @@
   export default {
     methods: {
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       }
     }
   }
@@ -44,4 +45,5 @@
   .el-menu-item{
     padding:0 20px !important;
   }
+  
 </style>

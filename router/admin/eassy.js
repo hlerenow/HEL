@@ -62,24 +62,68 @@ router.post("/modify",function(req,res,next){
 
 });
 
+/**
+ * 博文删除
+ * @param  {[type]}     req         [description]
+ * @param  {[type]}     res         [description]
+ * @param  {eassyModel} next){	let em            [description]
+ * @return {[type]}                 [description]
+ */
 router.post("/delete",function(req,res,next){
 	let em=new eassyModel;
 	debug("删除文章");
 
-
-	let exObj={
-		authorId:req.session.uid,
-		type:"post"
-	};
-
-	if(req.session.role=="admin"){
-		em.deleteEassy(req.body.eid,function(result){
-			res.json(result);
-		});
-	}else{
-		res.json(stateCode.notAuthority());
+	if(req.session.role!="admin"){
+		res.json(stateCode.notAuthority());		
+		return;
 	}
 
+	em.deleteEassy(req.body.eid,function(result){
+		res.json(result);
+	});	
+
 });
+
+router.post("/deleteMulti",function(req,res,next){
+	var em=new eassyModel;
+	debug("删除多个文章");
+	if(req.session.role!="admin"){
+		res.json(stateCode.notAuthority());		
+		return;
+	}
+
+	var eidArry=req.body.eids.split(",");
+
+	em.deleteEassyMulti(eidArry,function(result){
+		res.json(result);
+	});
+
+});
+
+router.post("/get",function(req,res,next){
+	var em=new eassyModel;
+	debug("获取单个文章");
+	em.getEassy(req.body.eid,function(result){
+		res.json(result);
+	});
+});
+
+router.post("/getList",function(req,res,next){
+	var em=new eassyModel;
+	debug("获取文章列表");
+	em.getEassyList(req.body,function(result){
+		res.json(result);
+	})
+});
+
+router.post("/getInfo",function(req,res,next){
+	var em=new eassyModel;
+	debug("获取文章的数量信息");
+	em.getEassysInfo(function(result){
+		res.json(result);
+	});
+})
+
+
 
 module.exports=exports=router;

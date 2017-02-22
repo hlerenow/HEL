@@ -7,11 +7,14 @@ const NotFound = r => require(['views/notfound'], r);
 const Admin = r=>require(['views/admin/index'],r);
 const Welcome = r=>require(['views/admin/welcome'],r);
 const EditorEassy = r=>require(['views/admin/editorEassy'],r);
+const ModifyEassy = r=>require(['views/admin/modifyEassy'],r);
 
 const CatalogCreate = r=>require(['views/admin/catalog/create'],r);
 
 const Media = r=>require(['views/admin/media'],r);
 const MediaAdd = r=>require(['views/admin/mediaAdd'],r);
+
+const EassyList = r =>require(['views/admin/eassyList'],r);
 
 
 // 根目录
@@ -44,7 +47,10 @@ const routes = [
 	  		{
 	  			path:"editorEassy",
 	  			component:EditorEassy,
-	  			name:"editorEassy"
+	  			name:"editorEassy",
+	  			meta:{
+	  				keepAlive:true
+	  			}	  			
 	  		},
 	  		{
 	  			path:"catalog/create",
@@ -60,7 +66,17 @@ const routes = [
 	  			path:"mediaAdd",
 	  			component:MediaAdd,
 	  			name:"mediaAdd"
-	  		}	  		 		
+	  		},
+	  		{
+	  			path:"modifyEassy",
+	  			component:ModifyEassy,
+	  			name:"modifyEassy"
+	  		},
+	  		{
+	  			path:"eassyList",
+	  			component:EassyList,
+	  			name:"EassyList"
+	  		}
 	  	]
 	  },
 ].map(route => {

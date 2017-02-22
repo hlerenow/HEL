@@ -9,6 +9,7 @@ module.exports = {
 		index: path.join(__dirname,"src/index.js"),
 	},
 	devtool: false,
+	watch:true,
 	output: {
 		path: productionPath,
 		// publicPath: path.join(__dirname, "../public"),
@@ -17,7 +18,8 @@ module.exports = {
 	},
 	externals:{
 		jQuery: 'window.$',
-		editormd:"window.editormd"
+		editormd:"window.editormd",
+		vue:"window.Vue"
 	},	
 	resolve: {
 		extensions: ['', '.js', '.vue'],

@@ -1,6 +1,13 @@
 <template>
   <div id="admin">
-    <router-view class="admin-content__box"></router-view>
+    <transition name="slide-fade" mode="out-in">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive" class="admin-content__box"></router-view>      
+      </keep-alive>
+    </transition>
+    <transition name="slide-fade"  mode="out-in">
+      <router-view v-if="!$route.meta.keepAlive" class="admin-content__box"></router-view>    
+    </transition>
     <menue-nav id="menue-nav__left"></menue-nav>
     <head-bar id="menue-nav__top" :nickname="username" :mail="mail" :username="username"></head-bar>
   </div>
@@ -47,7 +54,7 @@
   #admin{
     height: 100%;
     width: 100%;
-    background-color: #324157;
+    /*background-color: #324157;*/
     position: relative;
     box-sizing:border-box;
   }
@@ -81,9 +88,25 @@
 
   html,body,#app{
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;    
-    height: inherit !important;
+    height: 100% !important;
   }
   body{
     padding:0 !important;
   }
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter{
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave{
+  position: absolute;
+  opacity: 1;
+  transition: all .1s ease;  
+}
+.slide-fade-leave-active {
+  opacity: 0;
+}
 </style>

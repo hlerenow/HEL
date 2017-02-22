@@ -18,7 +18,7 @@
 			    <template slot="title">
 			      分类目录<i @click.capture.stop ="showAddCatalog" class="el-icon-plus addCatalog"></i>
 			    </template>			  
-				<eassy-catalog></eassy-catalog>
+				<eassy-catalog :checkCatalogs="initCatalog"></eassy-catalog>
 			  </el-collapse-item>
 			</el-collapse>
 
@@ -41,7 +41,7 @@
 			  </el-collapse-item>
 			</el-collapse>				
 
-			<el-collapse id="publishCollapse" value="4">
+			<el-collapse id="publishCollapse"  value="4">
 			  <el-collapse-item title="发布" name="4">
 			  	<el-button type="warning" @click="postEassy('draft')">保存为草稿</el-button>
 			  	<el-button type="success" @click="postEassy('publish')">发布</el-button>
@@ -52,12 +52,12 @@
 				<catalog-create></catalog-create>
 			</el-dialog>											
 		</div>		
-		<div class="eassyEditorCon">
-			<h2 class="pageTitle">撰写文章</h2>
+		<div class="eassyEditorCon" >
+			<h2 class="pageTitle">编辑文章</h2>
 			<el-input v-model="eassyTitle" class="eassy--title" placeholder="请输入标题"></el-input>
 			<el-button id="addFile-btn" @click="showFileSelect('editorInsert')"><i class="el-icon-picture"></i> 添加媒体</el-button>
-			<div id="editormd">
-			    <textarea style="display: none;">### Hello Editor.md !</textarea>
+			<div id="editormdModify">
+			    <textarea style="display: none;"></textarea>
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
 			    <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>				
 			</div>		
@@ -75,20 +75,13 @@
 		</el-dialog>		
 	</div>
 </template>
-<!-- <script type="text/javascript" src="./lib/markDownEditor/lib/jquery.min.js"></script>
-<script type="text/javascript" src="./lib/markDownEditor/editormd.min.js"></script> -->
+
 <script type="text/javascript">
 	var jQuery=require("jQuery"),
 		$=jQuery,
 		jquery=jQuery;
 
 	var editormd=require('editormd');
-	// 
-	// var jQuery=require("lib/markDownEditor/lib/jquery.min.js");
-	// var $=jQuery;
-	// var jquery=jQuery;
-
-
   	import fileSelect from "components/file-select.vue";
   	import eassyCatalog from "components/eassy-catalog.vue";
   	import catalogCreate from "components/catalog-create.vue";
@@ -105,20 +98,22 @@
 		    tips:"",
 		    createCatalogVisible:false,
 		    eassyCatalogs:[],
-		    eassyExcpert:"",
-		    eassyTitle:"",
+		    eassyExcpert:"只要",
+		    eassyTitle:"123",
 		    editorMd:"",
 		    thumnail:"",
 		    eassyStatus:"draft",
 		    selectFiles:[],
-		    fileInsertType:"editorInsert"
+		    fileInsertType:"editorInsert",
+		    initCatalog:[]
 		  }
 		},
+		props:['modifedEassy'],
 		methods: {
 			editorInit:function(){
 				var self=this;
 				$(function() {
-				    var editor = editormd("editormd", {
+				    var editor = editormd("editormdModify", {
 				        path : "./lib/markDownEditor/lib/",
 				        height:"600px",
 				        watch:true,
@@ -139,7 +134,7 @@
 				        },
 				        onload:function(){
 							this.unwatch();
-			        	
+							self.getEassy();	        	
 				        }
 				    });
 
@@ -194,7 +189,6 @@
 			},
 			postEassy:function(eassyStatus){
 				var self=this;
-				self.eassyStatus=eassyStatus;
 				//检查数据完整性
 				console.log(self.eassyCatalogs.length);
 				console.log(self.eassyCatalogs);
@@ -208,20 +202,32 @@
 					title:self.eassyTitle,
 					content:self.editorMd.getHTML(),
 					templateContent:self.editorMd.getMarkdown(),
-					status:self.eassyStatus,
+					status:eassyStatus,
 					excerpt:self.eassyExcpert,
 					belongCatalog:self.eassyCatalogs.join("&"),
 					thumbnail:self.thumnail
 				}).
 				then(function(res){
 				});
+			},
+			getEassy:function(){
+				var self=this;
+					self.eassyTitle="44455";
+					self.eassyStatus="publish";
+					self.eassyExcpert="呵呵大大";
+					self.eassyCatalogs=[41,42];
+					self.initCatalog=[41,42];
+					self.thumnail="";
+					self.editorMd.insertValue("### asd");
+	               	this.editorMd.focus();					
+
+
 			}
 		},
 		components:{eassyCatalog,catalogCreate,fileSelect,mediaAdd},
 		computed:{
 		},
 		mounted:function(){
-			console.log("asdsd");
 			var self=this;
 			this.editorInit();
 			this.listerEassyCatalogChange();
@@ -343,7 +349,8 @@
 		max-width: 100%;
 	}
 	/*预览样式*/
-	#editormd{
+	
+	#editormdModify{
 		border-radius: 1px;
 	}
 	.editormd-preview-container{

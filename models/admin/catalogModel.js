@@ -62,14 +62,28 @@ fn.deleteCatalog = function(midArry, func) {
 		func(stateCode.parMiss());
 		return;
 	}
+
+	//将删除目录下的文章的目录关系
+	let sqlR="delete from relationships where type='postCatalog' and mid in (";
+
+	//删除目录信息sql
 	let sql = "delete from meta where type='catalog' and mid in ( ";
+
 	let questionMark = [];
 	for (let i = 0; i < midArry.length; i++) {
 		questionMark.push("?");
 	}
 
 	sql += questionMark.join() + " ) ;";
+	sqlR+=questionMark.join()+") ;";
+
 	debug(sql,midArry);	
+	//删除目录与文章的联系
+	this.query(sqlR,midArry,function(result){
+		debug('文章与目录关系删除结果',result);
+	});
+	
+	//删除目录
 	this.query(sql, midArry, function(result) {
 		if (result.state !== 200) {
 			func(stateCode.sqlDeleteFail({

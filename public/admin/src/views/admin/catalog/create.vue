@@ -50,7 +50,7 @@
 	}
 
 	.el-input__inner{
-		border-radius: 0px !important;
+		border-radius: 1px !important;
 	}
 	.el-button{
 		border-radius: 1px !important;

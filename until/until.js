@@ -19,8 +19,12 @@ const until={
 	//合并obj个对象到extObj上(深度1),返回extObj
 	mergeObj:function(obj,extObj){
 		for(let i in obj){
-			extObj[i]=obj[i];
+			// if(obj[i]!=""){
+				debug(i);
+				extObj[i]=obj[i];				
+			// }
 		}
+		debug(extObj);
 		return extObj;
 	},
 	getNowTimeSecondInt:function(){
@@ -55,22 +59,22 @@ const until={
 			temp=rex.exec(str);
 		};
 
-		//匹配文章中的其他附件
+		//匹配文章中的其他附件 链接也会匹配出来
 		
-		rex=/<a[^(>)]*href=("|')([^("|')]+\.([^("|')]+))("|')[^(>|<)]*>([^(>|<)]+)</ig;
-		temp=rex.exec(str);
+		// rex=/<a[^(>)]*href=("|')([^("|')]+\.([^("|')]+))("|')[^(>|<)]*>([^(>|<)]+)</ig;
+		// temp=rex.exec(str);
 
-		while(temp){
-			let mObj={
-				type:temp[3],
-				url:temp[2],
-				alt:temp[5]
-			};
+		// while(temp){
+		// 	let mObj={
+		// 		type:temp[3],
+		// 		url:temp[2],
+		// 		alt:temp[5]
+		// 	};
 
-			result.push(mObj);
+		// 	result.push(mObj);
 
-			temp=rex.exec(str);
-		};
+		// 	temp=rex.exec(str);
+		// };
 
 		return result;		
 	},
@@ -135,12 +139,12 @@ const until={
 		return str.join("");
 	},
 	//过滤obj对象的属性，返回一个只包含fieldArry字段属性的对象
-	filterObjFiles:function(fieldArry,obj){
+	filterObjFields:function(fieldArry,obj){
 		let resObj={};
 		for(let i =0;i<fieldArry.length;i++){
-			if(obj[fieldArry[i]]){
+			// if(obj[fieldArry[i]]){
 				resObj[fieldArry[i]]=obj[fieldArry[i]];
-			}
+			// }
 		}
 
 		return resObj;

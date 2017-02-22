@@ -23,10 +23,6 @@
 </template>
 
 <script>
-
-  import {mapState} from 'vuex';
-  import {mapMutations} from 'vuex';
-
   export default {
     data () {
       return {
@@ -159,5 +155,5 @@
 
   .el-button--success{
     background-color: #5cb85c;
-  }
+  } 
 </style>

@@ -184,12 +184,13 @@
 	}
 
 	.catalogPage .el-input__inner{
-		border-radius: 0;
+		border-radius: 1px;
 	}
 	.pageTitle{
 		color: #97a8be;
 		font-weight: lighter;		
 	}
+
 	.el-select{
 		width: 100%;
 	}
