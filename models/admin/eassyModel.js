@@ -69,6 +69,8 @@ fn.insertEassy = function(obj, func) {
 				}
 			});
 
+		}else{
+			func(stateCode.sqlInsertFail({moreInfo:"文章插入失败"}));
 		}
 
 	});
