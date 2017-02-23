@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<div id="eassyActions">
-			<el-button class="deleteMulti" type="danger">批量删除</el-button>
+			<el-button class="deleteMulti" type="danger" @click="deleteMultiEassy">批量删除</el-button>
 			<el-select v-model="searchCatalog" placeholder="请选择">
 				<el-option label="全部目录" value="" check></el-option>
 				<el-option
@@ -18,94 +18,86 @@
 				  :value="item.mid">
 				</el-option>
 			</el-select>
-			<el-button>筛选</el-button>
+			<el-button @click="filterEassy">筛选</el-button>
 		</div>
 	  <el-table
-	    :data="eassyList"
-	    style="width: 100%"
-	    @selection-change="">
-	    <el-table-column
-	      type="selection"
-	      width="55">
-	    </el-table-column>
+	    	:data="eassyList"
+	    	style="width: 100%"
+	   		@selection-change="eassySelectionChange"
+	   		 >
+		    <el-table-column
+		      type="selection"
+		      width="55">
+		    </el-table-column>
 
-	    <el-table-column
-	      label="标题"
-	      width="120">
-	      <template scope="scope">{{ scope.row.title }}</template>
-	    </el-table-column>
+		    <el-table-column
+		      label="标题"
+		      width="120">
+		      <template scope="scope">{{ scope.row.title }}</template>
+		    </el-table-column>
 
-	    <el-table-column
-	      label=" 作者"
-	      width="120">
-	      <template scope="scope">{{ scope.row.nickName }}</template>     
-	    </el-table-column>
+		    <el-table-column
+		      label=" 作者"
+		      width="120">
+		      <template scope="scope">{{ scope.row.nickName }}</template>     
+		    </el-table-column>
 
-	    <el-table-column
-	      label="目录"
-	      >
-	      <template scope="scope">{{ scope.row.catalogs | catalogFormat }}</template>	      
-	    </el-table-column>	
+		    <el-table-column
+		      label="目录"
+		      >
+		      <template scope="scope">{{ scope.row.catalogs | catalogFormat }}</template>	      
+		    </el-table-column>	
 
-	    <el-table-column
-	      label="状态"
-	      >
-	      <template scope="scope">{{ scope.row.status | statusFormat }}</template>	      
-	    </el-table-column>	    
+		    <el-table-column
+		      label="状态"
+		      >
+		      <template scope="scope">{{ scope.row.status | statusFormat }}</template>	      
+		    </el-table-column>	    
 
-	    <el-table-column
-	      label="日期"
-	      >
-	      <template scope="scope"><span class="tips">最后修改于</span></br> {{ scope.row.modified | timeToStr }}</template>	      
-	    </el-table-column>
-	    <el-table-column
-	      label="操作"
-	      >
-	      <template scope="scope">
-	      	<el-button type="info">编辑</el-button>
-	      	<el-button type="danger">删除</el-button>
-	      </template>	      
-	    </el-table-column>
+		    <el-table-column
+		      label="日期"
+		      >
+		      <template scope="scope"><span class="tips">最后修改于</span></br> {{ scope.row.modified | timeToStr }}</template>	      
+		    </el-table-column>
+		    <el-table-column
+		      label="操作"
+		      >
+		      <template scope="scope">
+		      	<el-button type="info">编辑</el-button>
+		      	<el-button type="danger" @click="deleteEassy(scope.row.eid)">删除</el-button>
+		      </template>	      
+		    </el-table-column>
 	  </el-table>
+
 		<div id="eassyListPagination" v-show="totalEassysCount">
 		    <el-pagination
-			  @current-change=""
+			  @current-change="eassyPageChange"
 		      :current-page="page"
 		      :page-size="pageSize"
 		      layout="total, prev, pager, next,jumper"
 		      :total="totalEassysCount">
 		    </el-pagination>			
-		</div>	  
+		</div>
+
 	</div>
 </template>
 <script type="text/javascript">
 	export default{
 		data (){
 			return {
-				eassyList:[
-					{
-						"title": "123",
-						"commentsNum": 0,
-						"modified": 1487583113,
-						"eid": 56,
-						"status": "draft",
-						"nickName": "何雷",
-						"catalogs": "37&生活1,47&asd"
-					}
-				],
-				catalogs:[{
-					name:"生活1",
-					mid:123
-				}],
+				eassyList:[],
+				catalogs:[],
 				searchCatalog:"",
+				catalogTemp:"",
 				page:1,
 				pageSize:10,
-				totalEassysCount:20,
+				totalEassysCount:0,
 				eassysInfo:{
 					"allEassy": 0,
 					"pubEassy": 0,
 					"draftEassy": 0
-				}
+				},
+				deleteEassyList:[]
 			};
 		},
 		methods:{
@@ -119,7 +111,90 @@
 						self.$message.error("文章数量信息获取失败,"+req.data.info);
 					}
 				});
+			},
+			getEassyList:function(){
+				var self=this;
+				self.$http.post("eassy/getList",{
+					page:self.page,
+					catalog:self.catalogTemp
+				}).
+				then(function(res){
+					if(res.data.state===200){
+						//列表信息
+						self.eassyList	=res.data.opRes[0];
+						//文章总数
+						self.totalEassysCount=res.data.opRes[1][0].resCount;
+					}else{
+						self.$message.error("文章列表请求失败，请稍后再试");
+					}
+				});
+			},
+			eassyPageChange:function(page){
+				var self=this;
+				self.page=page;
+				self.getEassyList();
+			},
+			getAllCatalog:function(){
+				var self=this;
+				self.$http.post("catalog/get").
+				then(function(res){
+					if(res.data.state===200){
+						self.catalogs=res.data.opRes;
+					}else{
+			            self.$message({
+			              message:"目录获取失败，服务器错误,请稍后再试！",
+			              type:"error",
+			              duration:0,
+			              showClose:true
+			            });
+					}
+				},function(res){
+		            self.$message({
+		              message:"网络错误,请检查网络连接,稍后再试！",
+		              type:"error",
+		              duration:2000,
+		              showClose:true
+		            });					
+				});
+			},
+			deleteEassy:function(eids){
+				var self=this;
+				self.$http.post("eassy/deleteMulti",{
+					eids:eids.toString()
+				}).
+				then(function(res){
+					if(res.data.state===200){
+						self.$message.success("文章删除成功");
+						self.getEassyList();
+						self.getEassysInfo();
+					}else{
+						self.$message.error("文章删除失败,请稍候再试!");
+					}
+				})
+			},
+			deleteMultiEassy:function(){
+				var self=this;
+				var eids=[];
+				for(var i=0;i<self.deleteEassyList.length;i++){
+					eids.push(self.deleteEassyList[i].eid);
+				}
+				self.deleteEassy(eids.join(","));
+			},
+			eassyRowClick:function(selection){
+
+			},
+			eassySelectionChange:function(val){
+				console.log(val);
+				this.deleteEassyList=val;
+			},
+			filterEassy:function(){
+				this.catalogTemp=this.searchCatalog;
+				console.log(this.catalogTemp);
+				this.page=1;
+				this.getEassyList();
+
 			}
+
 		},
 		filters:{
 			timeToStr:function(value){
@@ -146,7 +221,12 @@
 			//获取文章数量信息
 			this.getEassysInfo();
 
-			console.log("控件初始化");
+			//获取文章列表
+			this.getEassyList();
+
+			//获取所有文章目录
+			this.getAllCatalog();
+
 		}
 	}
 </script>
@@ -193,6 +273,9 @@
 	#eassyListPagination{
 		float: right;
 		margin-top: 15px;
+	}
+	.deleteMulti {
+		margin-left: 0;
 	}
 
 </style>

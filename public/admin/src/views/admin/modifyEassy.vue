@@ -219,9 +219,7 @@
 					self.initCatalog=[41,42];
 					self.thumnail="";
 					self.editorMd.insertValue("### asd");
-	               	this.editorMd.focus();					
-
-
+	               	this.editorMd.focus();
 			}
 		},
 		components:{eassyCatalog,catalogCreate,fileSelect,mediaAdd},

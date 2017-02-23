@@ -168,8 +168,7 @@
 					}					
 				}
 			},
-			fileDialogClose:function(){
-				console.log("关闭");
+			fileDialogClose:function(){			
 				$("#showFileDetail video,#showFileDetail audio").each(function(){
 					this.pause();
 				});

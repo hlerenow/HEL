@@ -2,18 +2,18 @@
 	<div id="mediaAdd">
 		<h2 class="pageTitle" v-if="pFileListShow">添加媒体</h2>
 		<el-upload
-			action="./api/file/upload "
-			type="drag"
-			:multiple="true"
+			action="./api/file/upload"
+			drag
+			multiple
 			:on-success="fileUpSucess"
 			:on-error="fileUpError"
-			:default-file-list="fileList"
-			:show-upload-list="pFileListShow"
+			:file-list="fileList"
+			:show-file-list="pFileListShow"
 		>
 			<i class="el-icon-upload"></i>
-			<div class="el-dragger__text">将文件拖到此处，或<em>点击上传</em></div>
+		  	<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 			<div class="el-upload__tip" slot="tip">文件不能超过128M</div>
-		</el-upload>
+		</el-upload>	
 	</div>
 </template>
 <script type="text/javascript">
@@ -80,12 +80,16 @@
 		padding-top: 20px;
 	}
 	#mediaAdd .el-upload,
-	#mediaAdd .el-upload__inner.el-dragger{
+	#mediaAdd .el-upload-dragger{
 		width: 100%;
 	}
 
-	.el-dragger{
+	.el-upload-dragger{
 		border-radius: 2px;
 		border-style: dashed;
+	}
+	
+	.el-upload__tip{
+		text-align: center;
 	}
 </style>

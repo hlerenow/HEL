@@ -18,7 +18,7 @@
 			    <template slot="title">
 			      分类目录<i @click.capture.stop ="showAddCatalog" class="el-icon-plus addCatalog"></i>
 			    </template>			  
-				<eassy-catalog></eassy-catalog>
+				<eassy-catalog :checkCatalogs="eassyCatalogs"></eassy-catalog>
 			  </el-collapse-item>
 			</el-collapse>
 
@@ -196,8 +196,6 @@
 				var self=this;
 				self.eassyStatus=eassyStatus;
 				//检查数据完整性
-				console.log(self.eassyCatalogs.length);
-				console.log(self.eassyCatalogs);
 
 				if(self.eassyCatalogs.length<1){
 					self.$message.error("文章目录不能为空");
@@ -214,7 +212,26 @@
 					thumbnail:self.thumnail
 				}).
 				then(function(res){
+					if(res.data.state===200){
+						self.$message.success("文章保存成功！");
+						self.clearEassy();
+					}else{
+						self.$message.error("文章保存失败！");
+					}
 				});
+			},
+			clearEassy:function(){
+				var self=this;
+
+				self.eassyTitle="";
+				self.eassyStatus="draft";
+				self.eassyExcpert="";
+				self.eassyCatalogs=[];
+				self.thumnail="";
+
+				//清除编辑器内容
+				self.editorMd.clear();
+               	self.editorMd.focus();						
 			}
 		},
 		components:{eassyCatalog,catalogCreate,fileSelect,mediaAdd},
