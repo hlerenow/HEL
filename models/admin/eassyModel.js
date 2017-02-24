@@ -93,7 +93,7 @@ fn.modifyEassy = function(obj, func) {
 	var self = this;
 
 	//检验必要的字段
-	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment'];
+	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment','templateContent'];
 
 	let resObj = until.filterObjFields(dataField, obj);
 
