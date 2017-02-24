@@ -8,7 +8,7 @@
 	export default{
 		data () {
 			return {
-				eassyCatalogs:[],
+				eassyCatalogs:[37],
 				catalogs:[]
 			};
 		},
@@ -24,6 +24,9 @@
 				then(function(res){
 					if(res.data.state===200){
 						self.catalogs=self.catalogs.concat(res.data.opRes);
+						console.log("445566");
+					console.log(self.eassyCatalogs);
+					console.log(self.catalogs);
 					}else{
 			            self.$message({
 			              message:"目录获取失败，服务器错误,请稍后再试！",
@@ -44,14 +47,21 @@
 		},
 		mounted:function(){
 			var self=this;
+			//获取目录
 			this.getAllCatalog();
+
 			this.$bus.$on("catalog-created",function(data){
 				self.catalogs.push(data);
 			});
 
 			//初始化目录使用
 			this.$watch("checkCatalogs",function(newVal){
-				self.eassyCatalogs=newVal;
+				console.log("change");
+
+					self.eassyCatalogs=newVal;
+					console.log(self.eassyCatalogs);
+					console.log(self.catalogs);
+
 			});
 		}
 	};

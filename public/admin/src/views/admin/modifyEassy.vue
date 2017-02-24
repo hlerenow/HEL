@@ -98,14 +98,16 @@
 		    tips:"",
 		    createCatalogVisible:false,
 		    eassyCatalogs:[],
-		    eassyExcpert:"只要",
-		    eassyTitle:"123",
+		    eassyExcpert:"",
+		    eassyTitle:"",
 		    editorMd:"",
 		    thumnail:"",
 		    eassyStatus:"draft",
 		    selectFiles:[],
 		    fileInsertType:"editorInsert",
-		    initCatalog:[]
+		    initCatalog:[],
+		    eid:0,
+		    eassyAllInfo:''
 		  }
 		},
 		props:['modifedEassy'],
@@ -190,36 +192,76 @@
 			postEassy:function(eassyStatus){
 				var self=this;
 				//检查数据完整性
-				console.log(self.eassyCatalogs.length);
-				console.log(self.eassyCatalogs);
+				if(!self.eid){
+					self.$message.erroe("没有可编辑的文章");
+					return;
+				}
 
 				if(self.eassyCatalogs.length<1){
 					self.$message.error("文章目录不能为空");
 					return;
 				};
 
-				self.$http.post("eassy/post",{
+				self.$http.post("eassy/modify",{
 					title:self.eassyTitle,
 					content:self.editorMd.getHTML(),
 					templateContent:self.editorMd.getMarkdown(),
 					status:eassyStatus,
 					excerpt:self.eassyExcpert,
 					belongCatalog:self.eassyCatalogs.join("&"),
-					thumbnail:self.thumnail
+					thumbnail:self.thumnail,
+					eid:self.eid
 				}).
 				then(function(res){
+					if(res.data.state===200){
+						self.$message.success("文章修改成功");
+					}else{
+						self.$message.error("文章修改失败,"+res.data.moreInfo);
+					}
+				},function(res){
+					self.$message.error("网络错误,请稍后再试");
 				});
 			},
 			getEassy:function(){
 				var self=this;
-					self.eassyTitle="44455";
-					self.eassyStatus="publish";
-					self.eassyExcpert="呵呵大大";
-					self.eassyCatalogs=[41,42];
-					self.initCatalog=[41,42];
-					self.thumnail="";
-					self.editorMd.insertValue("### asd");
-	               	this.editorMd.focus();
+
+				if(!self.eid){
+					return;
+				}
+
+				self.$http.post("eassy/get",{
+					eid:self.eid
+				}).
+				then(function(res){
+					if(res.data.state==200){
+						var eassyInfo=self.eassyAllInfo=res.data.opRes[0];
+
+						self.eassyTitle=eassyInfo.title;
+						self.eassyStatus=eassyInfo.status;
+						self.eassyExcpert=eassyInfo.excerpt;
+
+						//过滤文章目录信息
+						var catalogsStr=eassyInfo.catalogs.split(",");
+						var catalogs=[];
+						for(var i=0;i<catalogsStr.length;i++){
+							catalogs.push(parseInt(catalogsStr[i].split('&')[0]));
+						}
+						//过滤文章目录信息 end
+						
+						self.initCatalog=catalogs;
+						self.eassyCatalogs=catalogs;
+						console.log(self.initCatalog);
+						
+						self.thumnail=eassyInfo.thumbnail;
+						try{
+							self.editorMd.insertValue(eassyInfo.templateContent);
+		               		this.editorMd.focus();												
+						}catch(e){
+
+						}
+					}
+				})
+
 			}
 		},
 		components:{eassyCatalog,catalogCreate,fileSelect,mediaAdd},
@@ -250,7 +292,8 @@
 				}
 			});
 
-
+			this.eid=this.$route.params.eid;
+			this.getEassy();			
 		}
 }
 

@@ -148,7 +148,6 @@ const until={
 		}
 
 		return resObj;
-
 	},
 	jsonParse:function(jsonStr){
 		let res;

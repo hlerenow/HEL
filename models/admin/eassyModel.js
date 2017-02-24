@@ -126,7 +126,7 @@ fn.modifyEassy = function(obj, func) {
 		authorId: authorId
 	}, function(result) {
 		debug("插入文章");
-		if (result.state === 200) {
+		if (result.state === 200&&result.opRes.affectedRows>0) {
 
 			//检查是否需要修改文章所属目录
 
@@ -159,6 +159,8 @@ fn.modifyEassy = function(obj, func) {
 					}
 				});
 			});
+		}else{
+			func(stateCode.sqlUpdateFail({moreInfo:"文章不存"}));
 		}
 
 	});
@@ -231,21 +233,39 @@ fn.getEassy=function(eid,func){
 
 fn.getEassyList=function(obj,func){
 	var catalog=" and b.mid=? ";
+	var searchWord=' and  (title LIKE ? or excerpt LIKE ? or content LIKE ? ) ';
 	var valueArry=[];
+	var valueArry2=[];
 
 	var sql="select c.title,c.commentsNum,c.modified,c.eid,c.status,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
 	var sql2="select count(eid) as resCount from ( select c.eid  from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
 
 
+	//是否有目录筛选
 	if(parseInt(obj.catalog)){
 		sql+=catalog;
 		sql2+=catalog;
 		valueArry.push(parseInt(obj.catalog));
+		valueArry2.push(parseInt(obj.catalog));
 	}
+
+	//是否有关键词搜索
+	if(obj.seachWord){
+		sql+=searchWord;
+		sql2+=searchWord;
+		valueArry.push('%'+obj.seachWord+'%');
+		valueArry.push('%'+obj.seachWord+'%');
+		valueArry.push('%'+obj.seachWord+'%');
+
+		valueArry2.push('%'+obj.seachWord+'%');
+		valueArry2.push('%'+obj.seachWord+'%');
+		valueArry2.push('%'+obj.seachWord+'%');		
+	}
+
 	var eOffset=parseInt(obj.page)*10-10;
 	valueArry.push(eOffset<0?0:eOffset);
 
-	valueArry.push(parseInt(obj.catalog));
+	valueArry=valueArry.concat(valueArry2);
 
 	sql+=" and d.uid=c.authorId   GROUP BY b.nid order by c.modified desc limit ?,10;";
 	sql2+=" and d.uid=c.authorId   GROUP BY b.nid order by c.modified ) f;";

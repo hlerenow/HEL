@@ -4,8 +4,8 @@
 		<div class="eassysInfo">
 			<a href="">全部（{{eassysInfo.allEassy}}）</a>| <a href="">已发布（{{eassysInfo.pubEassy}}）</a>| <a href="">草稿（{{eassysInfo.draftEassy}}）</a>
 			<div id="search--model">
-				<el-input></el-input>
-				<el-button> 搜索文章</el-button>
+				<el-input v-model="searchWord"></el-input>
+				<el-button @click="searchEassyByWords"> 搜索文章</el-button>
 			</div>
 		</div>
 		<div id="eassyActions">
@@ -63,7 +63,7 @@
 		      label="操作"
 		      >
 		      <template scope="scope">
-		      	<el-button type="info">编辑</el-button>
+		      	<el-button type="info" @click="modifiedEassy(scope.row.eid)">编辑</el-button>
 		      	<el-button type="danger" @click="deleteEassy(scope.row.eid)">删除</el-button>
 		      </template>	      
 		    </el-table-column>
@@ -88,6 +88,8 @@
 				eassyList:[],
 				catalogs:[],
 				searchCatalog:"",
+				searchWord:"",
+				searchWordTemp:"",
 				catalogTemp:"",
 				page:1,
 				pageSize:10,
@@ -116,7 +118,8 @@
 				var self=this;
 				self.$http.post("eassy/getList",{
 					page:self.page,
-					catalog:self.catalogTemp
+					catalog:self.catalogTemp,
+					seachWord:self.searchWordTemp
 				}).
 				then(function(res){
 					if(res.data.state===200){
@@ -181,7 +184,6 @@
 				self.deleteEassy(eids.join(","));
 			},
 			eassyRowClick:function(selection){
-
 			},
 			eassySelectionChange:function(val){
 				console.log(val);
@@ -192,7 +194,14 @@
 				console.log(this.catalogTemp);
 				this.page=1;
 				this.getEassyList();
-
+			},
+			searchEassyByWords:function(){
+				this.page=1;
+				this.searchWordTemp=this.searchWord;
+				this.getEassyList();
+			},
+			modifiedEassy:function(eid){
+				this.$router.push({name:"modifyEassy",params:{eid:eid}});
 			}
 
 		},
