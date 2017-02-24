@@ -42,7 +42,7 @@ fn.modifyCatalog = function(obj, func) {
 	delete obj.mid;
 	let fields = ['name', 'slug', 'parent'];
 
-	let resObj = until.filterObjFiles(fields, obj);
+	let resObj = until.filterObjFields(fields, obj);
 
 	this.updateOneRecord("meta", obj, {
 		mid: mid

@@ -128,11 +128,11 @@
 				            return ["undo", "redo","clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "fullscreen",  "search", "|", "help"]
 				        },
 				        onfullscreen:function(){
-				        	$("#editormd").css("z-index","10000");
+				        	$("#editormdModify").css("z-index","10000");
 				        },
 				        onfullscreenExit:function(){
-				        	$("#editormd").css("z-index","inherit");
-				        	$('#editormd').css("width","99%");
+				        	$("#editormdModify").css("z-index","inherit");
+				        	$('#editormdModify').css("width","99%");
 				        },
 				        onload:function(){
 							this.unwatch();
