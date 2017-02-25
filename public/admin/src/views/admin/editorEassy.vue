@@ -57,9 +57,9 @@
 			<el-input v-model="eassyTitle" class="eassy--title" placeholder="请输入标题"></el-input>
 			<el-button id="addFile-btn" @click="showFileSelect('editorInsert')"><i class="el-icon-picture"></i> 添加媒体</el-button>
 			<div id="editormd">
-			    <textarea style="display: none;">### Hello Editor.md !</textarea>
+			    <textarea style="display: none;"></textarea>
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-			    <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>				
+			    <textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>				
 			</div>		
 		</div>
 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
@@ -138,7 +138,8 @@
 				        	$('#editormd').css("width","99%");
 				        },
 				        onload:function(){
-							this.unwatch();			        	
+							this.unwatch();	
+							console.log(this.preview());
 				        }
 				    });
 
@@ -171,21 +172,27 @@
 					if(fileArry[i].type.indexOf("image")>=0){
 						let imgObj=fileArry[i];
 						let imgStr
-						imgStr='!['+imgObj.name+']('+imgObj.url+' "'+imgObj.name+'")';
+						imgStr='\r\n!['+imgObj.name+']('+imgObj.url+' "'+imgObj.name+'")';
 						if(imgObj.link){
 							imgStr='['+imgStr+']('+imgObj.link+' "'+imgObj.name+'")';
 						}
 						resStr+=imgStr+"\r\n";							
 					}else if(fileArry[i].type.indexOf("video")>=0){
-						resStr+='<video src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></video>'+"\r\n";
+						resStr+='\r\n<video src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></video>'+"\r\n";
 					} else if(fileArry[i].type.indexOf("audio")>=0){
-						resStr+='<audio src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></audio>'+"\r\n";					
+						resStr+='\r\n<audio src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></audio>'+"\r\n";					
 					} else {
 						resStr+='['+fileArry[i].name+']('+fileArry[i].url+' "'+fileArry[i].name+'")'+"\r\n";
 					}
 				}
-               this.editorMd.insertValue(resStr);
-               this.editorMd.focus();
+				try{
+               		this.editorMd.insertValue(resStr);
+
+               		this.editorMd.previewContainer.html(this.editorMd.getMarkdown());
+               		this.editorMd.focus();					
+				}catch(e){
+					console.log(e);
+				}
 
 			},
 			insertFileEvent:function(){

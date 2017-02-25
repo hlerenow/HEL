@@ -59,7 +59,7 @@
 			<div id="editormdModify">
 			    <textarea style="display: none;"></textarea>
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-			    <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>				
+			    <textarea class="editormd-html-textarea" name="editormdModify-html-code"></textarea>				
 			</div>		
 		</div>
 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
@@ -135,6 +135,7 @@
 				        	$('#editormdModify').css("width","99%");
 				        },
 				        onload:function(){
+				        	console.log(this);
 							this.unwatch();
 							self.getEassy();	        	
 				        }
@@ -169,21 +170,27 @@
 					if(fileArry[i].type.indexOf("image")>=0){
 						let imgObj=fileArry[i];
 						let imgStr
-						imgStr='!['+imgObj.name+']('+imgObj.url+' "'+imgObj.name+'")';
+						imgStr='\r\n!['+imgObj.name+']('+imgObj.url+' "'+imgObj.name+'")';
 						if(imgObj.link){
 							imgStr='['+imgStr+']('+imgObj.link+' "'+imgObj.name+'")';
 						}
 						resStr+=imgStr+"\r\n";							
 					}else if(fileArry[i].type.indexOf("video")>=0){
-						resStr+='<video src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></video>'+"\r\n";
+						resStr+='\r\n<video src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></video>'+"\r\n";
 					} else if(fileArry[i].type.indexOf("audio")>=0){
-						resStr+='<audio src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></audio>'+"\r\n";					
+						resStr+='\r\n<audio src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></audio>'+"\r\n";					
 					} else {
-						resStr+='['+fileArry[i].name+']('+fileArry[i].url+' "'+fileArry[i].name+'")'+"\r\n";
+						resStr+='\r\n['+fileArry[i].name+']('+fileArry[i].url+' "'+fileArry[i].name+'")'+"\r\n";
 					}
 				}
-               this.editorMd.insertValue(resStr);
-               this.editorMd.focus();
+				try{
+               		this.editorMd.insertValue(resStr);
+               		this.editorMd.previewContainer.html(this.editorMd.getMarkdown());
+               		this.editorMd.focus();					
+				}catch(e){
+					console.log(e);
+				}
+
 
 			},
 			insertFileEvent:function(){
@@ -254,7 +261,7 @@
 						
 						self.thumnail=eassyInfo.thumbnail;
 						try{
-							self.editorMd.insertValue(eassyInfo.templateContent);
+							self.editorMd.setMarkdown(eassyInfo.templateContent);
 		               		this.editorMd.focus();												
 						}catch(e){
 
