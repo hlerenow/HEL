@@ -1,7 +1,7 @@
 <!--suppress ALL -->
 <template>
   <div id="app">
-    <transition>
+    <transition name="slide-fade" mode="out-in">
       <router-view>
       </router-view>      
     </transition>
@@ -47,4 +47,22 @@
     color: #97a8be;
     font-weight: lighter;   
   }
+
+  /*过渡效果*/
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter{
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave{
+  position: absolute;
+  opacity: 1;
+  transition: all .1s ease;  
+}
+.slide-fade-leave-active {
+  opacity: 0;
+}  
 </style>

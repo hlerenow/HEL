@@ -28,7 +28,7 @@ gulp.task("bowserSync", function() {
         server: {
             baseDir: "./public/admin"
         },
-        port:4000
+        port:3000
 
 	});
 
@@ -75,18 +75,9 @@ gulp.task("app_run",function(){
 	});
 })
 
-gulp.task("watch_webpack",["webpack","bowserSync"],function(){
+gulp.task("webpack",function(){
 	gulp.watch(path.join(webpackBulidPath,"src/**")).on("change",function(cb){
-			clearTimeout(reloadTimerWebpack);
-			reloadTimerWebpack=null;
-			console.log("wepack 文件改变");
-			reloadTimerWebpack=setTimeout(function(){
-				console.log("运行webpack");
-				cmd.get("gulp webpack",function(data){
-					console.log(data);
-					console.log("webpack end ");
-				});
-			},1000);
+			cmd.get("cd public/admin & webpack");
 	});
 });
 

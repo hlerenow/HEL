@@ -112,7 +112,6 @@
 
 			},
 			delFiles:function(fidArry){
-				console.log(fidArry);
 				var self=this;
 				self.$http.post("file/delete",{
 					fids:JSON.stringify(fidArry)

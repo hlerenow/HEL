@@ -18,17 +18,12 @@
 		data (){
 			return{
 				allCatalogs:[]
-
 			}
 		},
 		components:{catalogCreate,catalogList},
 		methods:{
-			catalogCreated:function(data){
-				console.log(data);
-			},
 			getAllCatalog:function(data){
 				this.allCatalogs=data;
-				console.log(this.allCatalogs);
 			}
 		}
 	}

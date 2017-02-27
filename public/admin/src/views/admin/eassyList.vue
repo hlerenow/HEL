@@ -110,7 +110,7 @@
 					if(res.data.state===200){
 						self.eassysInfo=res.data.opRes[0];
 					}else{
-						self.$message.error("文章数量信息获取失败,"+req.data.info);
+						self.$message.error("文章数量信息获取失败,"+res.data.info);
 					}
 				});
 			},
@@ -159,6 +159,7 @@
 		              showClose:true
 		            });					
 				});
+
 			},
 			deleteEassy:function(eids){
 				var self=this;
@@ -186,12 +187,10 @@
 			eassyRowClick:function(selection){
 			},
 			eassySelectionChange:function(val){
-				console.log(val);
 				this.deleteEassyList=val;
 			},
 			filterEassy:function(){
 				this.catalogTemp=this.searchCatalog;
-				console.log(this.catalogTemp);
 				this.page=1;
 				this.getEassyList();
 			},
@@ -286,5 +285,4 @@
 	.deleteMulti {
 		margin-left: 0;
 	}
-
 </style>

@@ -1,18 +1,22 @@
 <template>
-<el-menu  theme="dark" default-active="1" class="el-menu-top" mode="horizontal" @select="handleSelect">
+<el-menu  theme="dark" default-active="1" class="el-menu-top" mode="horizontal">
   <el-menu-item index="icon-hel">HEL</el-menu-item>
   <el-menu-item index="1"><i class="el-icon-message"></i>0</el-menu-item>
   <el-submenu class="addPlus" index="newAdd">
     <template slot="title"><i class="el-icon-plus"></i>新建</template>
-    <el-menu-item index="newAdd-1">文章</el-menu-item>
-    <el-menu-item index="newAdd-2">文件</el-menu-item>
-    <el-menu-item index="newAdd-3">页面</el-menu-item>
-    <el-menu-item index="newAdd-4">链接</el-menu-item>
+    <el-menu-item index="/main/editorEassy">
+      <router-link to="/main/editorEassy">文章</router-link>  
+    </el-menu-item>
+    <el-menu-item index="/main/mediaAdd">
+      <router-link to="/main/mediaAdd">文件</router-link>       
+    </el-menu-item>
+    <!-- <el-menu-item index="newAdd-3">页面</el-menu-item> -->
+    <!-- <el-menu-item index="newAdd-4">链接</el-menu-item> -->
   </el-submenu>  
   <el-submenu index="4" id="user--info">
     <template slot="title">你好，{{nickname}}</template>
-    <el-menu-item index="4-1">修改个人资料</el-menu-item>
-    <el-menu-item index="4-2">退出</el-menu-item>
+    <!-- <el-menu-item index="4-1">修改个人资料</el-menu-item> -->
+    <el-menu-item index="/login" @click="logout">退出</el-menu-item>
   </el-submenu>
 
 </el-menu>
@@ -21,8 +25,23 @@
 <script>
   export default {
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+      logout:function(){
+        var self=this;
+        self.$http.get("logout").
+        then(function(res){
+          if(res.data.state==200){
+            self.$cookie.delete("username");
+            self.$cookie.delete("mail");
+            self.$cookie.delete("nickname");
+            
+            self.$router.push({
+              path:"/login"
+            });
+
+          }else{
+            self.$message.error("退出登录失败,请稍后再试！");
+          }
+        });
       }
     },
     props:['username','mail','nickname']
@@ -61,8 +80,4 @@
     font-size: 12px;
 
   }
-
-
-
-
 </style>

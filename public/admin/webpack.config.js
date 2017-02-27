@@ -6,15 +6,17 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 	entry: {
-		index: path.join(__dirname,"src/index.js"),
+		index: path.join(__dirname,"src/index.js")
+		// vue:"src/vue.js",
+		// eleui:'src/ele-ui.js'
 	},
-	devtool: false,
+	devtool: false,//source-map
 	watch:true,
 	output: {
 		path: productionPath,
 		// publicPath: path.join(__dirname, "../public"),
 		filename: './[name].js',
-		chunkFilename: 'js/[name].[id].js'
+		chunkFilename: 'js/chunk/[name].min.js'
 	},
 	externals:{
 		jQuery: 'window.$',
@@ -68,7 +70,7 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
+		// new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
 		new HtmlWebpackPlugin({
 			filename: path.join(__dirname,"index.html"),
 			template: path.join(__dirname , "src/index_tmp.html"),

@@ -51,7 +51,6 @@
 		props:["row","allCatalogs"],
 		methods:{
 			modifyCatalog:function(){
-				console.log(this.row);
 				var self=this;
 				self.$http.post("catalog/modify",{
 					mid:self.row.mid,

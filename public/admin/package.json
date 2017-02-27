@@ -17,7 +17,6 @@
     "babel-preset-stage-0": "^6.1.2",
     "css-loader": "^0.23.1",
     "eslint-loader": "^1.6.1",
-    
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.24.1",
@@ -28,7 +27,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
-    "element-ui": "^1.0.0",
+    "element-ui": "^1.2.1",
     "es6-promise": "^4.0.5",
     "vue": "^2.1.10",
     "vue-cookie": "^1.1.3",

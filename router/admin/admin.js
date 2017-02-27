@@ -37,7 +37,7 @@ router.post("/login", function(req, res, next) {
 				req.session.uid = data.opRes.uid;
 				req.session.name = data.opRes.name;
 				req.session.role = data.opRes.role;
-				
+				debug(req.session);
 				res.send(stateCode.success({
 					moreInfo:"登录成功",
 					username:data.opRes.name,
@@ -45,6 +45,7 @@ router.post("/login", function(req, res, next) {
 					siteUrl:data.opRes.siteUrl,
 					mail:data.opRes.mail
 				}));
+
 			} else {
 				res.send(data);
 			}
@@ -57,8 +58,15 @@ router.post("/login", function(req, res, next) {
 });
 
 router.get("/logout",function(req,res,next){
-	req.session={};
-	res.json(stateCode.success({moreInfo:"退出登录成功"}));
+	req.session.destroy(function(err){
+		if(err){
+			res.json(stateCode.fail({moreInfo:"退出登录失败"}));
+		}else{
+			res.json(stateCode.success({moreInfo:"退出登录成功"}));
+			debug(req.session);			
+		}
+
+	});
 });
 
 //博文api

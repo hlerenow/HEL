@@ -92,7 +92,6 @@
 				this.selectObj=val;
 			},
 			catalogDelete:function(index,row){
-				console.log("删除单个目录",row.mid);
 				this.postDeleteCatalog([row.mid],[row]);
 			},
 			//删除多个目录
@@ -101,7 +100,6 @@
 			},
 			postDeleteCatalog:function(midArry,objArry){
 				var self=this;
-				console.log(JSON.stringify(midArry));
 				self.$http.post("catalog/delete",{mids:JSON.stringify(midArry)}).
 				then(function(res){
 					console.log(res);
@@ -158,7 +156,6 @@
 			}
 		},
 		mounted:function(){
-			console.log("catalog-list 初始化");
 			var self=this;
 			//获取所有的目录事件
 			this.$bus.$on("getAllCatalog",function(data){

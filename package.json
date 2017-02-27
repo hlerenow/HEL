@@ -9,6 +9,7 @@
   "scripts": {
     "test": "forever start -o out.log  -e ferr.log -w app.js"
   },
+  "node": ">= 6.0.0",
   "author": "",
   "license": "MIT",
   "devDependencies": {
@@ -22,7 +23,6 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
-  
     "connect": "^3.5.0",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.5",

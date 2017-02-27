@@ -10,7 +10,7 @@
       </div>
       <div class="login__input--con">
         <el-input type="password" v-model.trim="password">
-          <template slot="prepend">密  码</template>
+          <template slot="prepend">密&nbsp;码</template>
         </el-input>
       </div>     
           <el-button @click.prevent="login"  class="login__submit" type="primary submit" >
@@ -156,4 +156,9 @@
   .el-button--success{
     background-color: #5cb85c;
   } 
+
+  .login_body .el-input-group__prepend{
+    box-sizing:border-box;
+    width:69px !important;
+  }
 </style>

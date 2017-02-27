@@ -139,7 +139,6 @@
 				        },
 				        onload:function(){
 							this.unwatch();	
-							console.log(this.preview());
 				        }
 				    });
 
@@ -244,7 +243,6 @@
 		computed:{
 		},
 		mounted:function(){
-			console.log("asdsd");
 			var self=this;
 			this.editorInit();
 			this.listerEassyCatalogChange();

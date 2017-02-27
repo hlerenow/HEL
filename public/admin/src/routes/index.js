@@ -2,20 +2,34 @@
  * @file
  * Created by hanan on 16/10/15.
  */
-const Login = r => require(['views/login'], r);
-const NotFound = r => require(['views/notfound'], r);
-const Admin = r=>require(['views/admin/index'],r);
-const Welcome = r=>require(['views/admin/welcome'],r);
-const EditorEassy = r=>require(['views/admin/editorEassy'],r);
-const ModifyEassy = r=>require(['views/admin/modifyEassy'],r);
+// const Login = r => require(['views/login'], r);
+// const NotFound = r => require(['views/notfound'], r);
+// const Admin = r=>require(['views/admin/index'],r);
+// const Welcome = r=>require(['views/admin/welcome'],r);
+// const EditorEassy = r=>require(['views/admin/editorEassy'],r);
+// const ModifyEassy = r=>require(['views/admin/modifyEassy'],r);
 
-const CatalogCreate = r=>require(['views/admin/catalog/create'],r);
+// const CatalogCreate = r=>require(['views/admin/catalog/create'],r);
 
-const Media = r=>require(['views/admin/media'],r);
-const MediaAdd = r=>require(['views/admin/mediaAdd'],r);
+// const Media = r=>require(['views/admin/media'],r);
+// const MediaAdd = r=>require(['views/admin/mediaAdd'],r);
 
-const EassyList = r =>require(['views/admin/eassyList'],r);
+// const EassyList = r =>require(['views/admin/eassyList'],r);
 
+const Login = r => require.ensure([],()=>r(require('views/login')),'login');
+const NotFound = r => require.ensure([],()=>r(require('views/notfound')),'notfound');
+const Admin = r => require.ensure([],()=>r(require('views/admin/index')),'admin');
+
+const EditorEassy = r=>require.ensure([],()=>r(require("views/admin/editorEassy")),"editorEassy");
+
+const ModifyEassy = r=>require.ensure([],()=>r(require("views/admin/modifyEassy")),"modifyEassy");
+const CatalogCreate = r=>require.ensure([],()=>r(require("views/admin/catalog/create")),"catalogCreate");
+
+const Media = r=>require.ensure([],()=>r(require("views/admin/media")),"media");
+
+const MediaAdd = r=>require.ensure([],()=>r(require("views/admin/mediaAdd")),"mediaAdd");
+
+const EassyList = r=>require.ensure([],()=>r(require("views/admin/eassyList")),"eassyList");
 
 // 根目录
 const rootPath = '';

@@ -27,6 +27,15 @@
     methods: {
       isLogin:function(){
         return (this.username&&this.mail&&this.nickname);
+      },
+      nextPage:function(){
+        this.username=this.$cookie.get("username");
+        this.mail=this.$cookie.get("mail");
+        this.nickname=this.$cookie.get("nickname");
+
+        if(!this.isLogin()){
+          this.$router.replace("/login");
+        }        
       }
     },
     computed:{
@@ -36,14 +45,11 @@
     components: {headBar,menueNav},
     mounted:function(){
       // 初始化检测是否登陆
-      // 未登录
-      this.username=this.$cookie.get("username");
-      this.mail=this.$cookie.get("mail");
-      this.nickname=this.$cookie.get("nickname");
+      this.nextPage();
 
-      // if(!this.isLogin()){
-      //   this.$router.replace("/login");
-      // }
+    },
+    updated:function(){
+      this.nextPage();
     }
   }
 
