@@ -9,7 +9,7 @@ import App from './app';
 import routes from './routes';
 
 // import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-default/index.css';
+import 'element-ui/lib/theme-default/index.css';
 // Vue.use(ElementUI);
 
 // Tell Vue to use the plugin

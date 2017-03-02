@@ -31,6 +31,8 @@ const MediaAdd = r=>require.ensure([],()=>r(require("views/admin/mediaAdd")),"me
 
 const EassyList = r=>require.ensure([],()=>r(require("views/admin/eassyList")),"eassyList");
 
+const BaseSetting = r=>require.ensure([],()=>r(require("views/admin/baseSetting")),"baseSetting");
+
 // 根目录
 const rootPath = '';
 
@@ -90,6 +92,11 @@ const routes = [
 	  			path:"eassyList",
 	  			component:EassyList,
 	  			name:"EassyList"
+	  		},
+	  		{
+	  			path:"baseSetting",
+	  			component:BaseSetting,
+	  			name:"baseSetting"
 	  		}
 	  	]
 	  },

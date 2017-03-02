@@ -78,6 +78,8 @@
   .el-menu-item, 
   .el-submenu__title {
     font-size: 12px;
-
+  }
+  .el-menu-item a{
+    text-decoration: none;
   }
 </style>

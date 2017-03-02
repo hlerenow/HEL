@@ -11,12 +11,13 @@
 
   html,body,#app{
     max-width: 100%;
+    /*min-width: 800px;*/
     height: 100%;
     min-height: 100%;
   }
+
   html,body{
     overflow-x: hidden;
-
   }
 /*重置boostrap样式*/
 /*  .form-control{

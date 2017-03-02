@@ -1,13 +1,15 @@
 <template>
   <div id="admin">
-    <transition name="slide-fade" mode="out-in">
-      <keep-alive>
-        <router-view v-if="$route.meta.keepAlive" class="admin-content__box"></router-view>      
-      </keep-alive>
-    </transition>
-    <transition name="slide-fade"  mode="out-in">
-      <router-view v-if="!$route.meta.keepAlive" class="admin-content__box"></router-view>    
-    </transition>
+    <div id="admin-content__layout">
+      <transition name="slide-fade" mode="out-in">
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive" class="admin-content__box"></router-view>      
+        </keep-alive>
+      </transition>
+      <transition name="slide-fade"  mode="out-in">
+        <router-view v-if="!$route.meta.keepAlive" class="admin-content__box"></router-view>    
+      </transition>      
+    </div>
     <menue-nav id="menue-nav__left"></menue-nav>
     <head-bar id="menue-nav__top" :nickname="username" :mail="mail" :username="username"></head-bar>
   </div>
@@ -38,9 +40,6 @@
         }        
       }
     },
-    computed:{
-
-    },
 // 子组件
     components: {headBar,menueNav},
     mounted:function(){
@@ -57,21 +56,29 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+  .el-input__inner{
+    border-radius: 2px;
+  }
+  
   #admin{
     height: 100%;
     width: 100%;
-    /*background-color: #324157;*/
     position: relative;
     box-sizing:border-box;
   }
 
-  .admin-content__box{
+  #admin-content__layout{
     box-sizing:border-box;
     width: 100%;
     height: 100%;
     padding: 60px 0 0 130px;
-    background-color: white;
-
+    background-color: white;    
+  }
+  .admin-content__box{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin:0;
   }
 
   #menue-nav__left{

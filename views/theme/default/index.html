@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />
+		<title>我是模版啦</title>
+		<style type="text/css">
+			*{
+				font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, STXihei, "Microsoft YaHei", 微软雅黑, sans-serif;
+			}
+			.blogName{
+				font-size: 30px;
+				color: #607D8B;
+				border-left: 5px solid #cbcdcf;
+				padding: 10px;
+				font-weight: bold;
+				margin-bottom: 20px;
+			}
+
+			.eassyTip{
+				color:gray;
+				font-size: 15px;
+			}
+
+			.eassyList{
+				list-style: none;
+				padding:0 0 0 15px;
+
+			}
+
+			.eassyList li{
+				margin:10px 0;				
+			}
+
+			.eassyList a{
+				text-decoration: none;
+				color:#312f2f;				
+			}
+
+			#contentBox{
+				margin-top: 20px;
+				border-top: 1px dashed gray;
+			}
+
+			.eassyTitle{
+				color: #ee5f5f;
+				font-size: 30px;
+				border-bottom: 1px solid #e2dfdf;
+				padding-bottom: 5px;				
+			}
+			
+			.content{
+				padding-left: 30px;
+			}
+			
+			.eassySplice{
+				padding: 10px;
+				border-bottom: 1px dashed #f1c3c3;
+				margin: 50px 20px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="blogName">
+			<%= baseInfo.blogname %>			
+		</div>
+		<div>
+			<span class="eassyTip">
+				文章列表(<%=posts.postCount %>)				
+			</span>
+			<ul class="eassyList">
+				<% posts.postList.forEach(function(post){ %>
+					<li><a href="#pid<%=post.eid%>"><%=post.title %></a></li>
+				<% }); %>
+			</ul>
+			<div id="contentBox">
+				<% posts.postList.forEach(function(post){ %>
+
+				<div class="eassy">
+					<h2 class="eassyTitle" id="pid<%=post.eid%>"><%= post.title%></h2>
+					<div class="content">
+						<%-post.content %>
+					</div>					
+				</div>
+				<div class="eassySplice"></div>
+				<% });%>
+			</div>
+		</div>
+		<% helper.getPostLink(posts) %>
+	</body>
+</html>

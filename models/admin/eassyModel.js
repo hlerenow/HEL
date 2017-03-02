@@ -3,7 +3,6 @@ var debug = require("debug")("eassyModel");
 var dbBase = require(path.join(__dirname, "../dbBase"));
 var pool = require(path.join(__dirname, "../dbPool"));
 var stateCode = require(path.join(__dirname, "../../stateCode"));
-var config = require(path.join(__dirname, "../../config"));
 var until = require(path.join(__dirname, "../../until/until"));
 
 var eassyModel = function() {};

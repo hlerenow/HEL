@@ -3,7 +3,6 @@ var debug = require("debug")("optionModel");
 var dbBase = require(path.join(__dirname, "../dbBase"));
 var pool = require(path.join(__dirname, "../dbPool"));
 var stateCode = require(path.join(__dirname, "../../stateCode"));
-var config = require(path.join(__dirname, "../../config"));
 var until = require(path.join(__dirname, "../../until/until"));
 
 var optionModel = function() {};
@@ -74,21 +73,22 @@ fn.deleteOptions = function(oidArry, func) {
  * @param  {[type]} func    [description]
  * @return {[type]}         [description]
  */
+
 fn.modifyOptions = function(objArry, func) {
 	let resState = [];
 	let self=this;
-
 	for (let i = 0; i < objArry.length; i++) {
 		(function(i) {
 
 			let modifyObj={};
 			let tempFileds=['name','value'];
+
 			Object.keys(objArry[i]).forEach(function(key){
 				if(tempFileds.indexOf(key)>=0){
 					modifyObj[key]=objArry[i][key];
 				}
 			});
-
+			debug(objArry[i].oid);
 			self.updateOneRecord("options",modifyObj, {
 					oid: objArry[i].oid
 				},
@@ -106,7 +106,7 @@ fn.modifyOptions = function(objArry, func) {
 					}
 					debug(resState.length,objArry.length);
 					if (resState.length === objArry.length) {
-						func(resState);
+						func(stateCode.success({opRes:resState}));
 					}
 				}
 			);
@@ -114,5 +114,13 @@ fn.modifyOptions = function(objArry, func) {
 
 	}
 };
+
+fn.getStaticOptions=function(func){
+	var self=this;
+	var sql="select oid,label,name,value,description from options where type='static' and user=0 ;";
+	this.query(sql,[],function(result){
+		func(result);
+	});
+}
 
 module.exports = exports = optionModel;

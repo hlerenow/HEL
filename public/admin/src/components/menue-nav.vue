@@ -15,8 +15,8 @@
       </el-submenu>
       <el-submenu index="3">
         <template slot="title"><i class="el-icon-menu"></i>设置</template>
-        <el-menu-item index="31">常规</el-menu-item>
-        <el-menu-item index="32">邮件代理</el-menu-item>
+        <el-menu-item index="/main/baseSetting">常规</el-menu-item>
+        <!-- <el-menu-item index="32">邮件代理</el-menu-item> -->
       </el-submenu>
     </el-menu>
 </template>

@@ -43,7 +43,7 @@ router.post("/modify",function(req,res,next){
 	let objArry=until.jsonParse(req.body.options);
 
 	if (!objArry) {
-		res.JSON(stateCode.jsonParseFail());
+		res.json(stateCode.jsonParseFail());
 		return;
 	}
 
@@ -51,6 +51,13 @@ router.post("/modify",function(req,res,next){
 		res.json(result);
 	});
 
+});
+
+router.post("/getStatic",function(req,res,next){
+	let om=new optionModel;
+	om.getStaticOptions(function(result){
+		res.json(result);
+	});
 });
 
 module.exports = exports = router;
