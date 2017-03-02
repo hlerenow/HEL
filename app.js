@@ -30,7 +30,7 @@ var baseLoginCheck=require("./router/baseLogin");
 var adminRouter=require("./router/admin/admin");
 
 //内容展示路由
-var showContent=require("./router/showCOntent");
+var showContent=require("./router/showContent");
 
 //环境选择
 switch (app.get('env')) {
