@@ -19,6 +19,10 @@ router.get("/",function(req,res,next){
 	templateService.getIndexInfo(req,res,next);
 });
 
+router.get("/index",function(req,res,next){
+	req.params.page=1;
+	templateService.getIndexInfo(req,res,next);
+});
 /**
  * 匹配 /page or /page/
  * @param  {[type]} req                     [description]
@@ -26,14 +30,14 @@ router.get("/",function(req,res,next){
  * @param  {[type]} next){	req.params.page [description]
  * @return {[type]}                         [description]
  */
-router.get("/page",function(req,res,next){
+router.get("/index/page",function(req,res,next){
 	req.params.page=1;
 	templateService.getIndexInfo(req,res,next);
 });
 
-router.get("/page/:page(\\d+)",function(req,res,next){
+router.get("/index/page/:page(\\d+)",function(req,res,next){
 	var page=parseInt(req.params.page);
-	showContentService.getIndexInfo(req,res,next);
+	templateService.getIndexInfo(req,res,next);
 });
 
 module.exports=router;

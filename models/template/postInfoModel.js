@@ -1,7 +1,8 @@
 /**
- * 这个包主要用来查询文章列表
+ * 这个包主要用来查询 文章列表 以及 文章信息
  * @type {[type]}
  */
+
 
 var path = require("path");
 var debug = require("debug")("postInfoModel");
@@ -38,6 +39,8 @@ fn.getPostList=function(page,perPage,func){
 				postList:result.opRes[0],
 				postCount:result.opRes[1][0].allEassyCount
 			};
+		}else{
+			debug("查询出错");
 		}
 
 		func(opRs);

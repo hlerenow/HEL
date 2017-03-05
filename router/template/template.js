@@ -14,8 +14,8 @@ var postRouter=require(path.join(__dirname,"post.js"));
 
 router.use("/",indexRouter);
 
-// router.use("/catalog",catalogRouter);
 
+router.use("/catalog",catalogRouter);
 // router.use("/archives",indexRouter);
 
 router.use("/post",postRouter);

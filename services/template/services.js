@@ -10,6 +10,7 @@ var fs=require("fs");
 //数据模型
 var bim=new (require(path.join(__dirname,"../../models/template/blogInfoModel")));
 var pim=new (require(path.join(__dirname,"../../models/template/postInfoModel")));
+var cm=new (require(path.join(__dirname,"../../models/template/catalogModel")));
 
 
 
@@ -58,7 +59,36 @@ fn.getIndexInfo=function(req,res,next){
  * @return {[type]}        [description]
  */
 fn.getCatalogInfo=function(req,res,next){
-	res.render("");
+	var resObj={};
+	function renderView(){
+		//检测所需结果是否都已经拿到，拿到了就渲染视图
+		if(until.objLength(resObj)===2){
+			debug(resObj);
+			var postTemplatePath=path.join(templatePath,themName,"/catalog.html");
+			if(fs.existsSync(postTemplatePath)){
+				res.render(themPath+themName+"catalog",resObj);
+			}else{
+				res.send("文章模版不存在");
+			}
+		}	
+	}
+
+	//获取blog的基本信息
+	bim.getBaseInfo(themName,function(result){
+		// debug(result);
+		resObj["baseInfo"]=result;
+		renderView();
+	});
+	
+	//获取目录下的文章信息		
+	cm.getCatalogPost(
+		req.params.slug,
+		req.params.page,
+		req.app.locals.blogConfig.static.postPerPage,
+		function(result){
+			resObj.catalogInfo=result;
+			renderView();
+	});
 }
 
 /**
