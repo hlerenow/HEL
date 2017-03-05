@@ -64,9 +64,9 @@ const routes = [
 	  			path:"editorEassy",
 	  			component:EditorEassy,
 	  			name:"editorEassy"
-	  			// meta:{
-	  			// 	keepAlive:true
-	  			// }	  			
+	  			meta:{
+	  				keepAlive:true
+	  			}	  			
 	  		},
 	  		{
 	  			path:"catalog/create",

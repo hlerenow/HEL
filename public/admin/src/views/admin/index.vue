@@ -1,13 +1,13 @@
 <template>
   <div id="admin">
     <div id="admin-content__layout">
-<!--       <transition name="slide-fade" mode="out-in">
+      <transition name="slide-fade" mode="out-in">
         <keep-alive>
           <router-view v-if="$route.meta.keepAlive" class="admin-content__box"></router-view>      
         </keep-alive>
-      </transition> -->
+      </transition>
       <transition name="slide-fade"  mode="out-in">
-        <router-view  class="admin-content__box"></router-view>    
+        <router-view v-if="!$route.meta.keepAlive"  class="admin-content__box"></router-view>    
       </transition>      
     </div>
     <menue-nav id="menue-nav__left"></menue-nav>

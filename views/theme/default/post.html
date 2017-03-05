@@ -7,6 +7,9 @@
 	</head>
 	<body>
 		文章页
+		<div>
+			<%= JSON.stringify(post.rencentPost);%>
+		</div>
 		<h2><%=post.title %></h2>
 		<div id="content">
 			<%-post.content%>
