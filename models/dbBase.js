@@ -30,6 +30,7 @@ fn.query = function(sql, val, func) {
 
 		con.query(sql, val, function(err, data, fields) {
 			debug("基本查询");
+			debug(data);
 			con.release();
 			if (err) {
 				debug(err);

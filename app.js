@@ -29,8 +29,8 @@ var app=express();
 var baseLoginCheck=require("./router/baseLogin");
 var adminRouter=require("./router/admin/admin");
 
-//内容展示路由
-var showContent=require("./router/showContent");
+//模版路由
+var templateRouter=require("./router/template/template.js");
 
 //环境选择
 switch (app.get('env')) {
@@ -49,6 +49,7 @@ switch (app.get('env')) {
 }
 
 // 中间件
+var compression=require("compression");
 var cookieParser=require("cookie-parser");
 
 var bodyParser=require("body-parser");
@@ -58,17 +59,16 @@ var urlencoed=bodyParser.urlencoded({
 var jsonParser=bodyParser.json();
 
 var session=require("express-session");
-var compression=require("compression");
-
 //模版函数挂载
 var tpFunc=require(path.join(__dirname,"services/templateFunctions.js"));
 app.locals.helper=tpFunc(app.locals);
 
 //bolog的一些全局配置
-app.locals.blogConfig={
-	postPearPage:1
-};
-
+var aic=require(path.join(__dirname,"./until/appInitConfig.js"));
+aic(app,function(flage){
+	debug("系统设置加载成功");
+	debug(app.locals.blogConfig)
+});
 
 app.engine('html', require('ejs').renderFile);
 app.set("view engine","html");
@@ -104,11 +104,12 @@ app.use(baseLoginCheck);
 
 app.use(/^\/admin\/api*/,adminRouter);
 
-app.use("/",showContent);
+app.use("/",templateRouter);
 
 //404 
 app.all("*",function(req,res,next){
-	res.send("404 Not Found ");
+	// res.redirect("/");
+	res.send("404 not found");
 });
 
 app.listen(app.get("port"),function(){

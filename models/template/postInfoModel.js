@@ -18,7 +18,8 @@ fn.getPostList=function(page,perPage,func){
 		return {};
 	}
 
-	perPage=perPage||10;
+	perPage=parseInt(perPage)||10;
+
 	debug(perPage);
 
 	var index=(page-1)*perPage;
@@ -44,11 +45,24 @@ fn.getPostList=function(page,perPage,func){
 };
 
 fn.getPost=function(eid,func){	
-	this.query("select * from eassy where type='post' and eid= ?;",[eid],function(result){
-		if(result.state===200){
-			return result.opRes[0];
+	var postSql="select * from eassy where type='post' and eid= ?;";
+	var recentPostSql="select * from eassy where eid in ((select eid from eassy where eid < 71 limit 1 ),(select eid from eassy where eid > ? limit 1));"
+	this.query(postSql+recentPostSql,[eid,eid,eid],function(result){
+		// debug(result);
+		if(result.state===200&&result.opRes.length>0){
+			if(result.opRes[0].length>0){
+				var postInfo=result.opRes[0][0];
+				//判断是否有上下一篇文章
+				if(result.opRes[1].length>0){
+					postInfo.rencentPost=result.opRes[1];
+				}
+
+				func(postInfo);
+			}else{
+				func({});
+			}
 		}else{
-			return {};
+			func({});
 		}
 	});
 };

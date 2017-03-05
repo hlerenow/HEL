@@ -98,21 +98,21 @@
 
 	export default {
 		data () {
-		  return {
-		  	fileSelectDialog:false,
-		    username:'',
-		    password:'',
-		    tips:"",
-		    createCatalogVisible:false,
-		    eassyCatalogs:[],
-		    eassyExcpert:"",
-		    eassyTitle:"",
-		    editorMd:"",
-		    thumnail:"",
-		    eassyStatus:"draft",
-		    selectFiles:[],
-		    fileInsertType:"editorInsert"
-		  }
+			  return {
+			  	fileSelectDialog:false,
+			    username:'',
+			    password:'',
+			    tips:"",
+			    createCatalogVisible:false,
+			    eassyCatalogs:[],
+			    eassyExcpert:"",
+			    eassyTitle:"",
+			    editorMd:"",
+			    thumnail:"",
+			    eassyStatus:"draft",
+			    selectFiles:[],
+			    fileInsertType:"editorInsert"
+			  }
 		},
 		methods: {
 			editorInit:function(){
@@ -209,7 +209,7 @@
 
 				self.$http.post("eassy/post",{
 					title:self.eassyTitle,
-					content:self.editorMd.getHTML(),
+					content:self.editorMd.getPreviewedHTML(),
 					templateContent:self.editorMd.getMarkdown(),
 					status:self.eassyStatus,
 					excerpt:self.eassyExcpert,
@@ -251,7 +251,13 @@
 			this.$bus.$on("SendselectFile",function(selectFiles){
 				//关闭 媒体库
 				self.fileSelectDialog=false;
+
+				var isThisPage=self.$router.currentRoute.path.indexOf("editorEassy");
 				
+				if(isThisPage<0||selectFiles.length<1){
+					return;
+				}
+
 				self.selectFiles=selectFiles;
 				if(self.fileInsertType=="editorInsert"){
 					//插入编辑器
@@ -259,12 +265,13 @@
 					
 				}else if(self.fileInsertType=="thumbnailInsertType"){
 					//缩略图
+					
 					if(selectFiles.length>0&&selectFiles[0].type.indexOf("image")>=0){
 						self.thumnail=selectFiles[0].url;
 					}else{
-						self.$message.error("所选缩略图不是图片文件，或者为空");
+						self.$message.error("所选缩略图不是图片文件，或者为空 书写");
 					}
-				}
+				}					
 			});
 
 

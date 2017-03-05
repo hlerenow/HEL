@@ -3,9 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>我是模版啦</title>
+		<link rel="stylesheet" type="text/css" href="https://pandao.github.io/editor.md/css/editormd.preview.css"/>		
 		<style type="text/css">
 			*{
-				font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, STXihei, "Microsoft YaHei", 微软雅黑, sans-serif;
+				font-family: "Microsoft YaHei", 微软雅黑, sans-serif;
 			}
 			.blogName{
 				font-size: 30px;
@@ -58,7 +59,7 @@
 				margin: 50px 20px;
 			}
 
-		</style>
+		</style>		
 	</head>
 	<body>
 		<div class="blogName">
@@ -78,7 +79,7 @@
 
 				<div class="eassy">
 					<h2 class="eassyTitle" id="pid<%=post.eid%>"><%= post.title%></h2>
-					<div class="content">
+					<div class="content editormd-html-preview">
 						<%-post.content %>
 					</div>					
 				</div>

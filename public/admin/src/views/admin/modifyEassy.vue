@@ -59,7 +59,7 @@
 			<div id="editormdModify">
 			    <textarea style="display: none;"></textarea>
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-			    <textarea class="editormd-html-textarea" name="editormdModify-html-code"></textarea>				
+<!-- 			    <textarea class="editormd-html-textarea" name="editormdModify-html-code"></textarea>	 -->			
 			</div>		
 		</div>
 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
@@ -122,7 +122,6 @@
 				        width:"99%",
 				        tocm:true,
 				        htmlDecode:"style,script,iframe,sub,sup|on*",
-				        saveHTMLToTextarea:true,
 				        toolbarIcons:function() {
 				            // Using "||" set icons align right.
 				            return ["undo", "redo","clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "fullscreen",  "search", "|", "help"]
@@ -135,7 +134,7 @@
 				        	$('#editormdModify').css("width","99%");
 				        },
 				        onload:function(){
-				        	console.log(this);
+				        	// console.log(this);
 							this.unwatch();
 							self.getEassy();	        	
 				        }
@@ -203,15 +202,15 @@
 					self.$message.erroe("没有可编辑的文章");
 					return;
 				}
-
 				if(self.eassyCatalogs.length<1){
 					self.$message.error("文章目录不能为空");
 					return;
 				};
 
+				// console.log(self.editorMd.getPreviewedHTML());sasad
 				self.$http.post("eassy/modify",{
 					title:self.eassyTitle,
-					content:self.editorMd.getHTML(),
+					content:self.editorMd.getPreviewedHTML(),
 					templateContent:self.editorMd.getMarkdown(),
 					status:eassyStatus,
 					excerpt:self.eassyExcpert,
@@ -257,7 +256,7 @@
 						
 						self.initCatalog=catalogs;
 						self.eassyCatalogs=catalogs;
-						console.log(self.initCatalog);
+						// console.log(self.initCatalog);
 						
 						self.thumnail=eassyInfo.thumbnail;
 						try{
@@ -285,6 +284,14 @@
 				self.fileSelectDialog=false;
 				
 				self.selectFiles=selectFiles;
+
+				// console.log("修改",selectFiles.length);
+				// console.log(self.$router.currentRoute.path);
+				// console.log(self.$router.currentRoute.path.indexOf("modifyEassy"))				;
+				if(self.$router.currentRoute.path.indexOf("modifyEassy")<0||selectFiles.length<1){
+					return;
+				}
+
 				if(self.fileInsertType=="editorInsert"){
 					//插入编辑器
 					self.insertImgToEditor(selectFiles);
@@ -294,7 +301,7 @@
 					if(selectFiles.length>0&&selectFiles[0].type.indexOf("image")>=0){
 						self.thumnail=selectFiles[0].url;
 					}else{
-						self.$message.error("所选缩略图不是图片文件，或者为空");
+						self.$message.error("所选缩略图不是图片文件，或者为空 修改");
 					}
 				}
 			});

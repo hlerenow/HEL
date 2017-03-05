@@ -1,5 +1,26 @@
 {
-	"blogOptions":[
-		
+	"blogSetting":[
+		{
+			"label":"主题设置",
+			"page":"setting.html"
+		},
+		{
+			"lable":"小工具设置",
+			"page":"tools.html"
+		}
+	],
+	"dataInject":[
+		{
+			"templateName":"post.html",
+			"data":[
+				{
+					"type":"catalogs"
+				},
+				{
+					"type":"recentPost",
+					"count":"10"
+				}
+			]
+		}
 	]
 }

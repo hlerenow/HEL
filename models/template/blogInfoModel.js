@@ -19,7 +19,7 @@ var fn = baseInfoModel.prototype = dbBase.prototype;
  * @return {[type]} [description]
  */
 fn.getBaseInfo=function(themName,func){
-	var sql="select name,value from options where user=0 and (type='custom' ";
+	var sql="select name,value from options where user=0 and (type='static' ";
 	var valArry=[];
 	if((typeof themName)!='function'){
 		sql+= " or type=? ";
@@ -32,12 +32,11 @@ fn.getBaseInfo=function(themName,func){
 
 	this.query(sql,valArry,function(result){	
 		// debug(result);
+		var rst = {};
+		for (var i = 0; i < result.opRes.length; i++) {
+			rst[result.opRes[i].name] = result.opRes[i].value;
+		}
 		if(result.state===200){
-			var rst={};
-			for(var i=0;i<result.opRes.length;i++){
-				rst[result.opRes[i].name]=result.opRes[i].value;
-			}
-
 			func(rst);
 		}else{
 			func({});

@@ -5,6 +5,8 @@ var path = require("path");
 var stateCode = require(path.join(__dirname, "../../stateCode"));
 var until = require(path.join(__dirname, "../../until/until"));
 var debug = require("debug")("option");
+var aic=require(path.join(__dirname,"../../until/appInitConfig.js"));
+
 
 //自定义
 var optionModel = require(path.join(__dirname, "../../models/admin/optionModel"));
@@ -48,6 +50,13 @@ router.post("/modify",function(req,res,next){
 	}
 
 	om.modifyOptions(objArry,function(result){
+		aic(req.app,function(flage){
+			if(flage){
+				debug("系统设置更新成功");
+			}else{
+				debug("系统设置更新失败");								
+			}
+		});		
 		res.json(result);
 	});
 

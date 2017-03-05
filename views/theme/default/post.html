@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />
+		<title><%=post.title %></title>
+		<%- include('header.html', {post: post}); %>
+	</head>
+	<body>
+		文章页
+		<h2><%=post.title %></h2>
+		<div id="content">
+			<%-post.content%>
+		</div>
+	</body>
+</html>
