@@ -37,7 +37,7 @@ aic(app,function(flage){
 
 	app.set("port",3000);
 
-	app.listen(3000,function(){
+	app.listen(app.get("port"),function(){
 		console.log("Express 4.0 on http://localhost:%s",app.get("port"));
 	});	
 });
