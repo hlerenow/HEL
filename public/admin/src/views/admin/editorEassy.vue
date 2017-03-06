@@ -61,6 +61,9 @@
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
 			    <textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>				
 			</div>		
+			<div style="display: none;">
+				<div id="editormd-view-html-new"></div>				
+			</div>
 		</div>
 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
 			<el-button id="insertFile-btn" @click="insertFileEvent()">插入</el-button>
@@ -184,7 +187,6 @@
 				}
 				try{
                		this.editorMd.insertValue(resStr);
-
                		this.editorMd.previewContainer.html(this.editorMd.getMarkdown());
                		this.editorMd.focus();					
 				}catch(e){
@@ -204,10 +206,19 @@
 					self.$message.error("文章目录不能为空");
 					return;
 				};
+			    testEditormdView = editormd.markdownToHTML("editormd-view-html-new", {
+                    markdown        : self.editorMd.getMarkdown() ,//+ "\r\n" + $("#append-test").text(),
+                    //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                    htmlDecode      : "style,script,iframe,sub,sup|on*"  // you can filter tags decode
+                    //toc             : false,
+                });
+
+                // console.log($("#test-editormd-view").html());
+
 
 				self.$http.post("eassy/post",{
 					title:self.eassyTitle,
-					content:self.editorMd.getPreviewedHTML(),
+					content:$("#editormd-view-html-new")[0].outerHTML,
 					templateContent:self.editorMd.getMarkdown(),
 					status:self.eassyStatus,
 					excerpt:self.eassyExcpert,
@@ -222,6 +233,9 @@
 						self.$message.error("文章保存失败！");
 					}
 				});
+
+				//清空回显html
+				$("#editormd-view-html-new").html("");
 			},
 			clearEassy:function(){
 				var self=this;

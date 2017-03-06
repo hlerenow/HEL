@@ -54,7 +54,7 @@ fn.getCatalogPost=function(catalogSlug,page,perPage,func){
 		var	sql2="select * from eassy where eid in "+
 					"(select nid FROM relationships where type='postCatalog' and mid = "+
 						"( select mid from meta where type='catalog' and slug="+catalogSlugEscape+")) "+
-							"ORDER BY created limit "+pool.escape(index)+","+pool.escape(perPage)+";";
+							"ORDER BY created desc limit "+pool.escape(index)+","+pool.escape(perPage)+";";
 
 	//当前目录下总的文章数
 	var	sql3="select count(nid) allEassyCount FROM relationships where type='postCatalog' and mid = ( select mid from meta where type='catalog' and slug="+catalogSlugEscape+");";

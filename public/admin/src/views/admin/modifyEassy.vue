@@ -60,7 +60,10 @@
 			    <textarea style="display: none;"></textarea>
 			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
 <!-- 			    <textarea class="editormd-html-textarea" name="editormdModify-html-code"></textarea>	 -->			
-			</div>		
+			</div>
+			<div style="display: none;">
+				<div id="editormd-view-html-modify" ></div>				
+			</div>
 		</div>
 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
 			<el-button id="insertFile-btn" @click="insertFileEvent()">插入</el-button>
@@ -206,10 +209,19 @@
 					return;
 				};
 
+			    testEditormdView = editormd.markdownToHTML("editormd-view-html-modify", {
+                    markdown        : self.editorMd.getMarkdown() ,//+ "\r\n" + $("#append-test").text(),
+                    //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                    htmlDecode      : "style,script,iframe,sub,sup|on*"  // you can filter tags decode
+                    //toc             : false,
+                });
+
+
 				// console.log(self.editorMd.getPreviewedHTML());sasad
+				// console.log($("#editormd-view-html-modify")[0].outerHTML);
 				self.$http.post("eassy/modify",{
 					title:self.eassyTitle,
-					content:self.editorMd.getPreviewedHTML(),
+					content:$("#editormd-view-html-modify")[0].outerHTML,
 					templateContent:self.editorMd.getMarkdown(),
 					status:eassyStatus,
 					excerpt:self.eassyExcpert,
@@ -226,6 +238,9 @@
 				},function(res){
 					self.$message.error("网络错误,请稍后再试");
 				});
+
+				//清空回显html
+				$("#editormd-view-html-modify").html("");
 			},
 			getEassy:function(){
 				var self=this;
