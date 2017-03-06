@@ -123,7 +123,6 @@
 				        height:"600px",
 				        watch:true,
 				        width:"99%",
-				        tocm:true,
 				        htmlDecode:"style,script,iframe,sub,sup|on*",
 				        toolbarIcons:function() {
 				            // Using "||" set icons align right.
