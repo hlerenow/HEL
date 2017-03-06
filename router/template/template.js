@@ -20,5 +20,4 @@ router.use("/catalog",catalogRouter);
 
 router.use("/post",postRouter);
 
-
 module.exports=exports=router;

@@ -24,6 +24,7 @@ var clearFilejob=schedule.scheduleJob(timeRule, function(result){
 //开启express服务器
 var express=require("express");
 var app=express();
+
 //bolog的一些全局配置
 var aic=require(path.join(__dirname,"./until/appInitConfig.js"));
 aic(app,function(flage){

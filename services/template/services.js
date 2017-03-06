@@ -2,7 +2,7 @@ var path=require("path");
 var themPath="theme/";
 var themName="default/";
 var until = require(path.join(__dirname, "../../until/until"));
-var debug=require("debug")("showContentServices");
+var debug=require("debug")("templateServices");
 
 var templatePath=path.join(__dirname,"../../views/theme/");
 var fs=require("fs");
@@ -29,6 +29,7 @@ fn.getIndexInfo=function(req,res,next){
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===3){
+			resObj.pageType="index";
 			debug(resObj);
 			res.render(themPath+themName+"/index",resObj);
 		}	
@@ -63,7 +64,28 @@ fn.getCatalogInfo=function(req,res,next){
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===2){
-			debug(resObj);
+			resObj.pageType="catalog";	
+			resObj.app=req.app;
+			var ss=req.app._router.stack;
+			debug(ss);
+			// ss[ss.length-6].handle=function(res,req,next){
+			// 	debug("哈哈我被修改了");
+			// 	next();
+			// };
+
+			// debug(ss[ss.length-6].handle.toString());
+
+				// ss=ss[ss.length-2].handle.stack;
+
+			// for(var i=0;i<ss.length;i++){
+			// 	debug(ss[i]);	
+			// 	// debug(/^\/?(?=\/|$)/i.toString().toString());	
+
+			// 	// debug(ss[i].regexp.toString()===/^\/?(?=\/|$)/i.toString());
+			// 	// debug("");
+
+			// }
+
 			var postTemplatePath=path.join(templatePath,themName,"/catalog.html");
 			if(fs.existsSync(postTemplatePath)){
 				res.render(themPath+themName+"catalog",resObj);
@@ -101,9 +123,11 @@ fn.getCatalogInfo=function(req,res,next){
 fn.getPostInfo=function(req,res,next){
 	var resObj={};
 	
+
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===2){
+			resObj.pageType="post";			
 			debug(resObj);
 			var postTemplatePath=path.join(templatePath,themName,"/post.html");
 			if(fs.existsSync(postTemplatePath)){

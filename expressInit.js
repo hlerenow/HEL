@@ -1,7 +1,7 @@
 module.exports = exports = function(app,express) {
 		var path = require("path");
 
-		var debug = require("debug")("express");
+		var debug = require("debug")("expressInit");
 
 		var favicon = require('express-favicon');
 		// 路由
@@ -31,6 +31,32 @@ module.exports = exports = function(app,express) {
 		app.use(favicon(path.join(__dirname, '/views/theme/', app.locals.blogConfig.system.nowTheme,"/favicon.png")));
 
 
+			app.engine('html', require('ejs').renderFile); 
+			app.set("view engine", "html"); 
+			app.set("views", path.join(__dirname, "views"));
+
+			app.use(cookieParser("595806119HL"));
+
+			app.use(session({
+				secret: "595806119HL",
+				cookie: {
+					secure: false
+				},
+				name: "mySid",
+				resave: false,
+				saveUninitialized: true
+			}));
+
+
+			var cdss=app.use(urlencoed);
+
+
+			app.use(jsonParser);
+
+			app.use(compression());
+
+			app.use(express.static(path.join(__dirname, "public")));
+			app.use(express.static(path.join(__dirname, "views/theme/defaule")));
 
 			//环境选择
 			switch (app.get('env')) {
@@ -47,35 +73,13 @@ module.exports = exports = function(app,express) {
 						break;
 					}
 			}
-
-			app.engine('html', require('ejs').renderFile); app.set("view engine", "html"); app.set("views", path.join(__dirname, "views"));
-
-			app.use(cookieParser("595806119HL"));
-
-			app.use(session({
-				secret: "595806119HL",
-				cookie: {
-					secure: false
-				},
-				name: "mySid",
-				resave: false,
-				saveUninitialized: true
-			}));
-
-
-			app.use(urlencoed);
-
-			app.use(jsonParser);
-
-			app.use(compression());
-
-			app.use(express.static(path.join(__dirname, "public")));
-
-
+			
 			//登录过滤
 			app.use(baseLoginCheck);
 
 			app.use(/^\/admin\/api*/, adminRouter);
+
+			debug(templateRouter.name);
 
 			app.use("/", templateRouter);
 
