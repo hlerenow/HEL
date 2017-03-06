@@ -2,7 +2,6 @@ var gulp = require("gulp");
 var bowserSync = require("browser-sync");
 var reload=bowserSync.reload;
 var nodemon = require('gulp-nodemon');
-var webpackStream = require(("webpack-stream"));
 var path = require("path");
 var cmd=require("node-cmd");
 
