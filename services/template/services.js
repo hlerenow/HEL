@@ -1,6 +1,5 @@
 var path=require("path");
 var themPath="theme/";
-var themName="default/";
 var until = require(path.join(__dirname, "../../until/until"));
 var debug=require("debug")("templateServices");
 
@@ -24,7 +23,8 @@ var fn=showContent.prototype;
  */
 fn.getIndexInfo=function(req,res,next){
 	var resObj={page:req.params.page};
-	var themName=req.app.locals.blogConfig.system.nowTheme.replace(/\//ig,"");
+	var themName=req.app.locals.blogConfig.system.nowTheme+"";
+		themName=themName.replace(/\//ig,"");
 	
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
@@ -61,6 +61,9 @@ fn.getIndexInfo=function(req,res,next){
  */
 fn.getCatalogInfo=function(req,res,next){
 	var resObj={};
+	var themName=req.app.locals.blogConfig.system.nowTheme+"";
+		themName=themName.replace(/\//ig,"");
+
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===2){
@@ -122,7 +125,9 @@ fn.getCatalogInfo=function(req,res,next){
  */
 fn.getPostInfo=function(req,res,next){
 	var resObj={};
-	
+
+	var themName=req.app.locals.blogConfig.system.nowTheme+"";
+		themName=themName.replace(/\//ig,"");		
 
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
