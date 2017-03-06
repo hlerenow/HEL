@@ -125,7 +125,6 @@
 				        width:"99%",
 				        tocm:true,
 				        htmlDecode:"style,script,iframe,sub,sup|on*",
-				        saveHTMLToTextarea:true,
 				        toolbarIcons:function() {
 				            // Using "||" set icons align right.
 				            return ["undo", "redo","clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "fullscreen",  "search", "|", "help"]

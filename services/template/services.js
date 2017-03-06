@@ -134,7 +134,7 @@ fn.getPostInfo=function(req,res,next){
 		if(until.objLength(resObj)===2){
 			resObj.pageType="post";			
 			debug(resObj);
-			var postTemplatePath=path.join(templatePath,themName,"/post.html");
+			var postTemplatePath=path.join(templatePath,""+themName,"/post.html");
 			if(fs.existsSync(postTemplatePath)){
 				res.render(themPath+themName+"post",resObj);
 			}else{
