@@ -28,7 +28,7 @@ module.exports = exports = function(app,express) {
 		app.locals.helper = tpFunc(app.locals);
 
 		debug(app.locals.system);
-		app.use(favicon(path.join(__dirname, '/views/theme/', app.locals.blogConfig.system.nowTheme,"/favicon.png")));
+		app.use(favicon(path.join(__dirname, '/views/theme/',""+app.locals.blogConfig.system.nowTheme,"/favicon.png")));
 
 
 			app.engine('html', require('ejs').renderFile); 
