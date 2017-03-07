@@ -31,8 +31,13 @@ fn.getIndexInfo=function(req,res,next){
 		if(until.objLength(resObj)===3){
 			resObj.pageType="index";
 			debug(resObj);
-			res.render(themPath+themName+"/index",resObj);
-		}	
+			if(resObj.posts.postList.length>0){
+				res.render(themPath+themName+"/index",resObj);								
+			}else{
+				next();
+			}
+
+		}
 	}
 
 	//获取blog的基本信息
@@ -90,11 +95,12 @@ fn.getCatalogInfo=function(req,res,next){
 			// }
 
 			var postTemplatePath=path.join(templatePath,themName,"/catalog.html");
-			if(fs.existsSync(postTemplatePath)){
-				res.render(themPath+themName+"/catalog",resObj);
+			if(fs.existsSync(postTemplatePath)&&resObj.catalogInfo.postList.length>0){
+					res.render(themPath + themName + "/catalog", resObj);
 			}else{
-				res.send("文章模版不存在");
+				next();				
 			}
+
 		}	
 	}
 
@@ -135,10 +141,10 @@ fn.getPostInfo=function(req,res,next){
 			resObj.pageType="post";			
 			debug(resObj);
 			var postTemplatePath=path.join(templatePath,""+themName,"/post.html");
-			if(fs.existsSync(postTemplatePath)){
-				res.render(themPath+themName+"/post",resObj);
+			if(fs.existsSync(postTemplatePath)&&until.objLength(resObj.post)>0){
+				res.render(themPath + themName + "/post", resObj);
 			}else{
-				res.send("文章模版不存在");
+				next();
 			}
 		}	
 	}

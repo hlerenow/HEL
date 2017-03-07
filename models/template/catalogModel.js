@@ -13,6 +13,14 @@ var stateCode = require(path.join(__dirname, "../../stateCode"));
 var catalogModel = function() {};
 var fn = catalogModel.prototype = dbBase.prototype;
 
+/**
+ * 获取当前catalogSlug目录下第page页的文章数据,
+ * @param  {[type]} catalogSlug [description]
+ * @param  {[type]} page        [description]
+ * @param  {[type]} perPage     [description]
+ * @param  {[type]} func        [description]
+ * @return {[type]}             [description]
+ */
 fn.getCatalogPost=function(catalogSlug,page,perPage,func){
 	
 	var index=(page-1)*perPage;

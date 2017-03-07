@@ -63,7 +63,8 @@
 	</head>
 	<body>
 		<div class="blogName">
-			<%= baseInfo.blogname %>			
+			<%= baseInfo.blogname %>	
+			link:<a href="<%= Helper.getPostLink(posts.postList[0].eid)%>" >post</a>
 		</div>
 		<div>
 			<span class="eassyTip">
@@ -87,6 +88,6 @@
 				<% });%>
 			</div>
 		</div>
-		<% helper.getPostLink(posts) %>
+		<!-- <% Helper.getPostLink()%> -->
 	</body>
 </html>

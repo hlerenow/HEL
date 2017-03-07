@@ -25,7 +25,7 @@ module.exports = exports = function(app,express) {
 		var session = require("express-session");
 		//模版函数挂载
 		var tpFunc = require(path.join(__dirname, "services/templateFunctions.js"));
-		app.locals.helper = tpFunc(app.locals);
+		app.locals.Helper = tpFunc(app.locals);
 
 		debug(app.locals.system);
 		app.use(favicon(path.join(__dirname, '/views/theme/',""+app.locals.blogConfig.system.nowTheme,"/favicon.png")));
