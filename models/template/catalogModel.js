@@ -24,37 +24,10 @@ fn.getCatalogPost=function(catalogSlug,page,perPage,func){
 	//首先根据别名为slug的目录的基本信息
 	var sql="select * from meta where type='catalog' and slug="+catalogSlugEscape+";";
 	//目录显得文章信息
-	// var sql2="SELECT"+
-	// 		"	*"+
-	// 		"FROM"+
-	// 		"	eassy"+
-	// 		"WHERE"+
-	// 		"	eid IN ("+
-	// 		"		SELECT"+
-	// 		"			nid"+
-	// 		"		FROM"+
-	// 		"			relationships"+
-	// 		"		WHERE"+
-	// 		"			type = 'postCatalog'"+
-	// 		"		AND mid = ("+
-	// 		"			SELECT"+
-	// 		"				mid"+
-	// 		"			FROM"+
-	// 		"				meta"+
-	// 		"			WHERE"+
-	// 		"				type = 'catalog'"+
-	// 		"			AND slug = "+catalogSlugEscape+" "+
-	// 		"		)"+
-	// 		"	)"+
-	// 		"ORDER BY"+
-	// 		"	created"+
-	// 		"LIMIT "+pool.escape(index)+","+
-	// 		" "+pool.escape(perPage)+" ;";
-
-		var	sql2="select * from eassy where eid in "+
-					"(select nid FROM relationships where type='postCatalog' and mid = "+
-						"( select mid from meta where type='catalog' and slug="+catalogSlugEscape+")) "+
-							"ORDER BY created desc limit "+pool.escape(index)+","+pool.escape(perPage)+";";
+	var	sql2="select * from eassy where eid in "+
+				"(select nid FROM relationships where type='postCatalog' and mid = "+
+					"( select mid from meta where type='catalog' and slug="+catalogSlugEscape+")) "+
+						"ORDER BY created desc limit "+pool.escape(index)+","+pool.escape(perPage)+";";
 
 	//当前目录下总的文章数
 	var	sql3="select count(nid) allEassyCount FROM relationships where type='postCatalog' and mid = ( select mid from meta where type='catalog' and slug="+catalogSlugEscape+");";

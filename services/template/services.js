@@ -91,7 +91,7 @@ fn.getCatalogInfo=function(req,res,next){
 
 			var postTemplatePath=path.join(templatePath,themName,"/catalog.html");
 			if(fs.existsSync(postTemplatePath)){
-				res.render(themPath+themName+"catalog",resObj);
+				res.render(themPath+themName+"/catalog",resObj);
 			}else{
 				res.send("文章模版不存在");
 			}
@@ -136,7 +136,7 @@ fn.getPostInfo=function(req,res,next){
 			debug(resObj);
 			var postTemplatePath=path.join(templatePath,""+themName,"/post.html");
 			if(fs.existsSync(postTemplatePath)){
-				res.render(themPath+themName+"post",resObj);
+				res.render(themPath+themName+"/post",resObj);
 			}else{
 				res.send("文章模版不存在");
 			}
