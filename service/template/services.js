@@ -1,16 +1,13 @@
 var path=require("path");
-var themPath="theme/";
-var until = require(path.join(__dirname, "../../until/until"));
-var debug=require("debug")("templateServices");
-
-var templatePath=path.join(__dirname,"../../views/theme/");
-var fs=require("fs");
-
-//数据模型
-var bim=new (require(path.join(__dirname,"../../models/template/blogInfoModel")));
-var pim=new (require(path.join(__dirname,"../../models/template/postInfoModel")));
-var cm=new (require(path.join(__dirname,"../../models/template/catalogModel")));
-
+	fs=require("fs"),
+	debug=require("debug")("templateServices"),
+	constVar = require(path.join(constVarPath)),
+	until = require(path.join(constVar.untilPath,"/until")),
+	themePath=constVar.themePath+"/",
+	//数据模型
+	bim=new (require(path.join(constVar.modelPath,"template/blogInfoModel"))),
+	pim=new (require(path.join(constVar.modelPath,"template/postInfoModel"))),
+	cm=new (require(path.join(constVar.modelPath,"template/catalogModel")));
 
 
 var showContent=function(){};
@@ -23,8 +20,8 @@ var fn=showContent.prototype;
  */
 fn.getIndexInfo=function(req,res,next){
 	var resObj={page:req.params.page};
-	var themName=req.app.locals.blogConfig.system.nowTheme+"";
-		themName=themName.replace(/\//ig,"");
+	var themeName=req.app.locals.blogConfig.system.nowTheme+"";
+		themeName=themeName.replace(/\//ig,"");
 	
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
@@ -32,7 +29,7 @@ fn.getIndexInfo=function(req,res,next){
 			resObj.pageType="index";
 			debug(resObj);
 			if(resObj.posts.postList.length>0){
-				res.render(themPath+themName+"/index",resObj);								
+				res.render(themePath+themeName+"/index",resObj);								
 			}else{
 				next();
 			}
@@ -41,7 +38,7 @@ fn.getIndexInfo=function(req,res,next){
 	}
 
 	//获取blog的基本信息
-	bim.getBaseInfo(themName,function(result){
+	bim.getBaseInfo(themeName,function(result){
 		// debug(result);
 		
 		resObj["baseInfo"]=result;
@@ -66,8 +63,8 @@ fn.getIndexInfo=function(req,res,next){
  */
 fn.getCatalogInfo=function(req,res,next){
 	var resObj={};
-	var themName=req.app.locals.blogConfig.system.nowTheme+"";
-		themName=themName.replace(/\//ig,"");
+	var themeName=req.app.locals.blogConfig.system.nowTheme+"";
+		themeName=themeName.replace(/\//ig,"");
 
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
@@ -94,9 +91,9 @@ fn.getCatalogInfo=function(req,res,next){
 
 			// }
 
-			var postTemplatePath=path.join(templatePath,themName,"/catalog.html");
+			var postTemplatePath=path.join(themePath,themeName,"/catalog.html");
 			if(fs.existsSync(postTemplatePath)&&resObj.catalogInfo.postList.length>0){
-					res.render(themPath + themName + "/catalog", resObj);
+					res.render(themePath + themeName + "/catalog", resObj);
 			}else{
 				next();				
 			}
@@ -105,7 +102,7 @@ fn.getCatalogInfo=function(req,res,next){
 	}
 
 	//获取blog的基本信息
-	bim.getBaseInfo(themName,function(result){
+	bim.getBaseInfo(themeName,function(result){
 		// debug(result);
 		resObj["baseInfo"]=result;
 		renderView();
@@ -132,17 +129,17 @@ fn.getCatalogInfo=function(req,res,next){
 fn.getPostInfo=function(req,res,next){
 	var resObj={};
 
-	var themName=req.app.locals.blogConfig.system.nowTheme+"";
-		themName=themName.replace(/\//ig,"");		
+	var themeName=req.app.locals.blogConfig.system.nowTheme+"";
+		themeName=themeName.replace(/\//ig,"");		
 
 	function renderView(){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===2){
 			resObj.pageType="post";			
 			debug(resObj);
-			var postTemplatePath=path.join(templatePath,""+themName,"/post.html");
+			var postTemplatePath=path.join(themePath,""+themeName,"/post.html");
 			if(fs.existsSync(postTemplatePath)&&until.objLength(resObj.post)>0){
-				res.render(themPath + themName + "/post", resObj);
+				res.render(themePath + themeName + "/post", resObj);
 			}else{
 				next();
 			}
@@ -150,7 +147,7 @@ fn.getPostInfo=function(req,res,next){
 	}
 
 	//获取blog的基本信息
-	bim.getBaseInfo(themName,function(result){
+	bim.getBaseInfo(themeName,function(result){
 		// debug(result);
 		resObj["baseInfo"]=result;
 		renderView();

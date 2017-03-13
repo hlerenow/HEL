@@ -1,11 +1,14 @@
-var debug = require("debug")("dbBase");
-var path = require("path");
-var stateCode = require(path.join(__dirname, "../stateCode"));
-var pool = require(path.join(__dirname, "dbPool"));
-var until = require(path.join(__dirname, "../until/until"));
+var path = require("path"),
+	debug = require("debug")("dbBase"),
+	constVar = require(path.join(constVarPath)),
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until = require(path.join(path.join(constVar.untilPath, "until.js"))),
+	pool = require(path.join(__dirname, "dbPool"));
+
 var dbBase = function() {};
 var fn = dbBase.prototype;
 
+fn.pool = pool;
 /**
  * 简化查询的代码,对错误进行了自己的封装
  * @param  {[type]} sql  [sql查询语句(占位符)]
@@ -302,110 +305,6 @@ fn.deleteMultiById = function(tableName, id, conditionArry, func) {
 
 			});
 		});
-
-
-
 	});
 };
-
-/**
- * 用于 替换mysql 自带的功能函数 replace ，
- * 当记录存在时，直接修改记录，而不是删掉然后插入
- * 当记录不存在时，直接插入
- * @param  {[type]} tableName [description]
- * @param  {[type]} obj       [description]
- * @param  {[type]} condition [description]
- * @param  {[type]} func      [description]
- * @return {[type]}           [description]
- * eg:
- * 	condition={
- * 		field:{
- * 			conStr:"",
- * 			val:""
- * 		}
- * 	}
- */
-
-/** 
- * 用于 替换mysql 自带的功能函数 replace ，
- * 当记录存在时，直接修改记录，而不是删掉然后插入
- * 当记录不存在时，直接插入(以后再实现吧)，唉
- * @param  {[type]} tableName   [表名]
- * @param  {[type]} valArry     [需要插入的值数组]
- * @param  {[type]} condition   [条件]
- * @param  {[type]} uniqueFiled [标志记录唯一的字段,必须]
- * @param  {[type]} func        [回调函数]
- * @return {[type]}             [description]
- */
-// fn.replaceMulti=function(tableName,valArry,condition,uniqueFiled,func){
-
-// 	if(!(tableName&&obj&&uniqueFiled)){
-// 		func(stateCode.parMiss());
-// 		return;
-// 	}
-// 	var fieldArry=[];
-
-// 	for(let i in valArry[0]){
-// 		fieldArry.push(i);
-// 	}
-
-// 	//拼接查询的sql语句
-// 	var {sql,val}=until.getQuerySqlStr(tableName,fieldArry,condition);
-
-// 	var valLen=until.objLength(valArry);
-
-// 	debug(sql,val);
-
-// 	sql+=" limit "+valLen+" ;";
-// 	this.query(sql,val,function(result){
-// 		if(result.state!=200){
-// 			func(stateCode.sqlQueryFail());
-// 			return ;
-// 		}
-// 		let opRes=result.opRes;
-
-// 		//记录每条标记的唯一id
-// 		let idArry=[];
-// 		for(let i=0;i<opRes.length;i++){
-// 			idArry.push(opRes[i][uniqueFiled]);
-// 		}
-
-// 		let updateSuccessCount=0;
-// 		let updateCount=0;
-
-// 		if(opRes.length<valLen){
-// 			let j=0;
-// 			for(j=0;j<opRes.length;j++){
-// 				self.updateOneRecord(tableName,valArry[j],{uniqueFiled:opRes[j][uniqueFiled]},function(err,result){
-// 					updateCount++;
-// 					if(err){
-// 						debug("replaceMulti",err);
-// 					}else{
-// 						updateSuccessCount++;			
-// 					}
-// 				});						
-// 			}
-
-// 			for(;j<valArry.length;j++){
-// 				self.insert(tableName,valArry[j],{uniqueFiled:opRes[j][uniqueFiled]},function(err,result){
-// 					updateCount++;
-// 					if(err){
-// 						debug("replaceMulti",err);
-// 					}else{
-// 						updateSuccessCount++;			
-// 					}
-// 				});					
-// 			}
-
-
-
-// 		}else{
-
-// 		}
-// 	});
-
-// }
-
-
-
 module.exports = exports = dbBase;

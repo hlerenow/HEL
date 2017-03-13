@@ -1,10 +1,11 @@
-var express=require("express");
-var router=express.Router();
-var debug=require("debug")("baseLogin");
-var path=require("path");
-var stateCode=require(path.join(__dirname,"../stateCode"));
+var path=require("path"),
+	constVar = require(path.join(constVarPath)),
+	express=require("express"),
+	debug=require("debug")("baseLogin"),
+	stateCode=require(path.join(constVar.configPath,"stateCode"));
+	baseLoginRouter=express.Router(),
 
-router.use(/^\/admin\/api*/,function(req,res,next){
+baseLoginRouter.use(/^\/admin\/api*/,function(req,res,next){
 	debug(req.path);
 	if(req.path==="/login"){
 		next();
@@ -30,4 +31,4 @@ router.use(/^\/admin\/api*/,function(req,res,next){
 });
 
 
-module.exports=router;
+module.exports=baseLoginRouter;

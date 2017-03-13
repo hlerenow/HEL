@@ -1,10 +1,11 @@
-var path = require("path");
-var crypto = require("crypto");
-var debug = require("debug")("adminModel");
-var dbBase = require(path.join(__dirname, "../dbBase"));
-var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var config = require(path.join(__dirname, "../../config"));
+var path = require("path"),
+	crypto = require("crypto"),
+	debug = require("debug")("adminModel"),
+	constVar = require(path.join(constVarPath)),
+	pool=require(path.join(constVar.modelPath, "dbPool")),
+	config = require(path.join(constVar.configPath, "config")),
+	dbBase = require(path.join(constVar.modelPath, "dbBase")),
+	stateCode = require(path.join(constVar.configPath, "stateCode"));
 
 var adminModel = function() {};
 
@@ -68,9 +69,9 @@ fn.login = function(obj, func) {
 			} else {
 				func(stateCode.loginFail());
 			}
-		}else if(result.state===107){
-				func(stateCode.loginFailUserNotExit());
-		} else{
+		} else if (result.state === 107) {
+			func(stateCode.loginFailUserNotExit());
+		} else {
 			func(state.sysError());
 		}
 

@@ -1,9 +1,9 @@
-var path = require("path");
-var debug = require("debug")("adminModel");
-var dbBase = require(path.join(__dirname, "../dbBase"));
-var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until=require(path.join(__dirname, "../../until/until"));
+var path = require("path"),
+	debug = require("debug")("adminModel"),
+	constVar = require(path.join(constVarPath)),	
+	dbBase = require(path.join(constVar.modelPath, "dbBase")),
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until = require(path.join(constVar.untilPath, "until"));
 
 
 var catalogModel = function() {};

@@ -1,9 +1,9 @@
-var path = require("path");
-var debug = require("debug")("eassyModel");
-var dbBase = require(path.join(__dirname, "../dbBase"));
-var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until = require(path.join(__dirname, "../../until/until"));
+var path = require("path"),
+	debug = require("debug")("eassyModel"),
+	constVar = require(path.join(constVarPath)),
+	dbBase = require(path.join(constVar.modelPath, "dbBase")),
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until = require(path.join(constVar.untilPath, "until"));
 
 var eassyModel = function() {};
 var fn = eassyModel.prototype = dbBase.prototype;
@@ -19,7 +19,7 @@ fn.insertEassy = function(obj, func) {
 	var self = this;
 
 	//检验必要的字段		
-	let dataField = ['title', 'content', 'created', 'modified', 'authorId', 'status', 'thumbnail', 'belongCatalog', 'excerpt', 'type', 'attachment','templateContent'];
+	let dataField = ['title', 'content', 'created', 'modified', 'authorId', 'status', 'thumbnail', 'belongCatalog', 'excerpt', 'type', 'attachment', 'templateContent'];
 
 	let resObj = until.filterObjFields(dataField, obj);
 
@@ -34,10 +34,12 @@ fn.insertEassy = function(obj, func) {
 	let cataLog = resObj.belongCatalog;
 	cataLog = cataLog.split("&");
 
-	if(cataLog.length<1||cataLog[0]==""){
-		debug("参数缺少错误");	
-		func(stateCode.parMiss({morInfo:"文章目录不能为空"}));
-		return;		
+	if (cataLog.length < 1 || cataLog[0] == "") {
+		debug("参数缺少错误");
+		func(stateCode.parMiss({
+			morInfo: "文章目录不能为空"
+		}));
+		return;
 	}
 
 	delete resObj.belongCatalog;
@@ -68,8 +70,10 @@ fn.insertEassy = function(obj, func) {
 				}
 			});
 
-		}else{
-			func(stateCode.sqlInsertFail({moreInfo:"文章插入失败"}));
+		} else {
+			func(stateCode.sqlInsertFail({
+				moreInfo: "文章插入失败"
+			}));
 		}
 
 	});
@@ -92,7 +96,7 @@ fn.modifyEassy = function(obj, func) {
 	var self = this;
 
 	//检验必要的字段
-	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment','templateContent'];
+	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment', 'templateContent'];
 
 	let resObj = until.filterObjFields(dataField, obj);
 
@@ -125,7 +129,7 @@ fn.modifyEassy = function(obj, func) {
 		authorId: authorId
 	}, function(result) {
 		debug("插入文章");
-		if (result.state === 200&&result.opRes.affectedRows>0) {
+		if (result.state === 200 && result.opRes.affectedRows > 0) {
 
 			//检查是否需要修改文章所属目录
 
@@ -158,8 +162,10 @@ fn.modifyEassy = function(obj, func) {
 					}
 				});
 			});
-		}else{
-			func(stateCode.sqlUpdateFail({moreInfo:"文章不存"}));
+		} else {
+			func(stateCode.sqlUpdateFail({
+				moreInfo: "文章不存"
+			}));
 		}
 
 	});
@@ -196,89 +202,91 @@ fn.deleteEassy = function(eid, func) {
 
 }
 
-fn.deleteEassyMulti=function(eidArry,func){
-	var deleteRes=[];
-	var len=eidArry.length;
-	var scuessCount=0;
+fn.deleteEassyMulti = function(eidArry, func) {
+	var deleteRes = [];
+	var len = eidArry.length;
+	var scuessCount = 0;
 
-	for(var i=0;i<len;i++){
-			debug("循环删除");
+	for (var i = 0; i < len; i++) {
+		debug("循环删除");
 
-		this.deleteEassy(eidArry[i],function(result){
+		this.deleteEassy(eidArry[i], function(result) {
 			deleteRes.push(result);
-			if(result.state===200){
+			if (result.state === 200) {
 				scuessCount++;
 			}
-			if(deleteRes.length===len){
-				func(stateCode.success({opRes:deleteRes}));
+			if (deleteRes.length === len) {
+				func(stateCode.success({
+					opRes: deleteRes
+				}));
 			}
 		});
 	}
 }
 
-fn.getEassy=function(eid,func){
-	var sql="select c.*,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid and b.nid=? and b.nid=c.eid  and d.uid=c.authorId GROUP BY b.nid;";
+fn.getEassy = function(eid, func) {
+	var sql = "select c.*,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid and b.nid=? and b.nid=c.eid  and d.uid=c.authorId GROUP BY b.nid;";
 
-	if(!parseInt(eid)){
+	if (!parseInt(eid)) {
 		func(stateCode.parMiss());
-		return ;
+		return;
 	}
 
-	this.query(sql,[eid],function(result){
+	this.query(sql, [eid], function(result) {
 
-			func(result);
+		func(result);
 	});
 }
 
-fn.getEassyList=function(obj,func){
-	var catalog=" and b.mid=? ";
-	var searchWord=' and  (title LIKE ? or excerpt LIKE ? or content LIKE ? ) ';
-	var valueArry=[];
-	var valueArry2=[];
+fn.getEassyList = function(obj, func) {
+	var catalog = " and b.mid=? ";
+	var searchWord = ' and  (title LIKE ? or excerpt LIKE ? or content LIKE ? ) ';
+	var valueArry = [];
+	var valueArry2 = [];
 
-	var sql="select c.title,c.commentsNum,c.modified,c.eid,c.status,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
-	var sql2="select count(eid) as resCount from ( select c.eid  from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
+	var sql = "select c.title,c.commentsNum,c.modified,c.eid,c.status,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
+	var sql2 = "select count(eid) as resCount from ( select c.eid  from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
 
 
 	//是否有目录筛选
-	if(parseInt(obj.catalog)){
-		sql+=catalog;
-		sql2+=catalog;
+	if (parseInt(obj.catalog)) {
+		sql += catalog;
+		sql2 += catalog;
 		valueArry.push(parseInt(obj.catalog));
 		valueArry2.push(parseInt(obj.catalog));
 	}
 
 	//是否有关键词搜索
-	if(obj.seachWord){
-		sql+=searchWord;
-		sql2+=searchWord;
-		valueArry.push('%'+obj.seachWord+'%');
-		valueArry.push('%'+obj.seachWord+'%');
-		valueArry.push('%'+obj.seachWord+'%');
+	if (obj.seachWord) {
+		sql += searchWord;
+		sql2 += searchWord;
+		valueArry.push('%' + obj.seachWord + '%');
+		valueArry.push('%' + obj.seachWord + '%');
+		valueArry.push('%' + obj.seachWord + '%');
 
-		valueArry2.push('%'+obj.seachWord+'%');
-		valueArry2.push('%'+obj.seachWord+'%');
-		valueArry2.push('%'+obj.seachWord+'%');		
+		valueArry2.push('%' + obj.seachWord + '%');
+		valueArry2.push('%' + obj.seachWord + '%');
+		valueArry2.push('%' + obj.seachWord + '%');
 	}
 
-	var eOffset=parseInt(obj.page)*10-10;
-	valueArry.push(eOffset<0?0:eOffset);
+	var eOffset = parseInt(obj.page) * 10 - 10;
+	valueArry.push(eOffset < 0 ? 0 : eOffset);
 
-	valueArry=valueArry.concat(valueArry2);
+	valueArry = valueArry.concat(valueArry2);
 
-	sql+=" and d.uid=c.authorId   GROUP BY b.nid order by c.modified desc limit ?,10;";
-	sql2+=" and d.uid=c.authorId   GROUP BY b.nid order by c.modified ) f;";
+	sql += " and d.uid=c.authorId   GROUP BY b.nid order by c.modified desc limit ?,10;";
+	sql2 += " and d.uid=c.authorId   GROUP BY b.nid order by c.modified ) f;";
 
-	this.query(sql+sql2,valueArry,function(result){
+	this.query(sql + sql2, valueArry, function(result) {
 		func(result);
 	});
 
 }
 
 //获取文章的一些数量信息
-fn.getEassysInfo=function(func){
-	var sql="select * from (select count(eid) allEassy from eassy where type='post') a ,(select count(eid) pubEassy from eassy where type='post' and status='publish') b,(select count(eid) draftEassy FROM eassy where type='post' and STATUS='draft') c;";
-	this.query(sql,[],function(result){
+fn.getEassysInfo = function(func) {
+	var sql = "select * from (select count(eid) allEassy from eassy where type='post') a ,(select count(eid) pubEassy from eassy where type='post' and status='publish') b,(select count(eid) draftEassy FROM eassy where type='post' and STATUS='draft') c;";
+	this.query(sql, [], function(result) {
 		func(result);
 	});
 }

@@ -2,13 +2,14 @@
  * 将数据库里的应用信息，和当前的主题信息写入app的全局变量里面
  * @type {[type]}
  */
-var path=require("path");
-var dbBase = new (require(path.join(__dirname, "../models/dbBase")));
+var path = require("path"),
+	constVar = require(path.join(constVarPath)),
+	dbBase = new(require(path.join(constVar.modelPath, "dbBase")));
 
-module.exports = exports = function(app, func) {
+function appInitConfig(app, func) {
 	var sql = "select name,value  from options where user=0 and type='system' ;";
-	if(!app.locals.blogConfig){
-		app.locals.blogConfig={}
+	if (!app.locals.blogConfig) {
+		app.locals.blogConfig = {}
 	}
 
 	dbBase.query(sql, [], function(result) {
@@ -20,9 +21,9 @@ module.exports = exports = function(app, func) {
 
 			app.locals.blogConfig.system = rst;
 
-			var themePath=path.join(__dirname,"../views/theme",app.locals.blogConfig.system.nowTheme,'./config.json');
+			var themePath = path.join(constVar.themePath, app.locals.blogConfig.system.nowTheme, './config.json');
 
-			app.locals.blogConfig.themeConfig=require(themePath);
+			app.locals.blogConfig.themeConfig = require(themePath);
 
 			var sql2 = "select name,value from options where user=0 and (type='static' or type=?);";
 
@@ -45,3 +46,5 @@ module.exports = exports = function(app, func) {
 		}
 	});
 }
+
+module.exports = exports = appInitConfig;

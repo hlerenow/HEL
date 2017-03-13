@@ -1,23 +1,22 @@
-var express=require("express");
-var router=express.Router();
-var debug=require("debug")("showContent");
-var path=require("path");
+var path = require("path"),
+	express = require("express"),
+	tempalteRouter = express.Router(),
+	constVar = require(path.join(constVarPath)),
+	debug = require("debug")("showContent"),
+	//路由模块
+	indexRouter = require(path.join(__dirname, "index.js")),
 
-var indexRouter=require(path.join(__dirname,"index.js"));
+	catalogRouter = require(path.join(__dirname, "catalog.js")),
 
-var catalogRouter=require(path.join(__dirname,"catalog.js"));
-
-var postRouter=require(path.join(__dirname,"post.js"));
-
-
-
-
-router.use("/",indexRouter);
+	postRouter = require(path.join(__dirname, "post.js"));
 
 
-router.use("/catalog",catalogRouter);
+tempalteRouter.use("/", indexRouter);
+
+
+tempalteRouter.use("/catalog", catalogRouter);
 // router.use("/archives",indexRouter);
 
-router.use("/post",postRouter);
+tempalteRouter.use("/post", postRouter);
 
-module.exports=exports=router;
+module.exports = exports = tempalteRouter;

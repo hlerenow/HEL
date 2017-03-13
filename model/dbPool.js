@@ -1,6 +1,7 @@
-var mysql=require("mysql");
-var path=require("path");
-var config=require(path.join(__dirname,"../config"));
+var	mysql=require("mysql"),
+	path=require("path"),
+	constVar = require(path.join(constVarPath)),	
+	config=require(path.join(constVar.configPath,"/config"));
 
 var pool  = mysql.createPool({
   multipleStatements:true,

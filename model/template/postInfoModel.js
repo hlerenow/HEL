@@ -3,12 +3,11 @@
  * @type {[type]}
  */
 
-
-var path = require("path");
-var debug = require("debug")("postInfoModel");
-var dbBase = require(path.join(__dirname, "../dbBase"));
-var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode = require(path.join(__dirname, "../../stateCode"));
+var path = require("path"),
+	debug = require("debug")("postInfoModel"),
+	constVar = require(path.join(constVarPath)),
+	dbBase = require(path.join(constVar.modelPath, "dbBase")),
+	stateCode = require(path.join(constVar.configPath, "stateCode"));
 
 var postInfoModel = function() {};
 var fn = postInfoModel.prototype = dbBase.prototype;
@@ -26,7 +25,7 @@ fn.getPostList=function(page,perPage,func){
 	var index=(page-1)*perPage;
 		index=index>0?index:0;
 
-	var sql="select * from eassy where type='post' order by created desc limit "+pool.escape(index)+","+perPage+";";
+	var sql="select * from eassy where type='post' order by created desc limit "+this.pool.escape(index)+","+perPage+";";
 		sql+="select count(eid) allEassyCount from eassy where type='post';";
 	this.query(sql,[],function(result){
 		var opRs={

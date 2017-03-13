@@ -1,56 +1,61 @@
-var path=require('path');
-var debug=require("debug")("fileUpload");
-var multiparty = require('multiparty');
-var sizeOfImg=require('image-size');
-var stateCode=require(path.join(__dirname,'../stateCode'));
+/**
+ * 文件上传设置
+ * @type {[type]}
+ */
+var path = require('path'),
+	constVar = require(path.join(constVarPath)),
+	debug = require("debug")("fileUpload"),
+	multiparty = require('multiparty'),
+	sizeOfImg = require('image-size'),
+	stateCode = require(path.join(constVar.configPath, 'stateCode'));
 
+function fileUpload(req,options, func) {
 
-
-function fileUpload(req,tempPath,func) {
-
-	var form = new multiparty.Form({
-		uploadDir: tempPath
-	});	
+	var form = new multiparty.Form(options);
 
 	form.parse(req, function(err, fields, files) {
 
-		if(err){
+		if (err) {
 			debug(err);
 			func(stateCode.fileUploadFail());
 			return;
 		}
-		let filesObj={};
+		let filesObj = {};
 		debug(files);
 		Object.keys(files).forEach(function(name) {
 
-			if(files[name][0]!='undefined'){
-				let nowFile=files[name][0];
-				let fileType=nowFile.headers['content-type'].indexOf('image');
+			if (files[name][0] != 'undefined') {
+				let nowFile = files[name][0];
+				let fileType = nowFile.headers['content-type'].indexOf('image');
 
 				//获取图片的宽高信息，如果是图片
-				let imageSize={};
+				let imageSize = {};
 
-				if(fileType>=0){
-					imageSize=sizeOfImg(nowFile.path);	
+				if (fileType >= 0) {
+					imageSize = sizeOfImg(nowFile.path);
 					debug(imageSize);
 				}
 
-				filesObj[name]={
-					fieldName:name,
-					originalFilename:nowFile.originalFilename,
-					type:nowFile.headers['content-type'],
-					size:nowFile.size,
-					path:nowFile.path,
-					width:imageSize.width||0,
-					height:imageSize.height||0
-				};				
+				filesObj[name] = {
+					fieldName: name,
+					originalFilename: nowFile.originalFilename,
+					type: nowFile.headers['content-type'],
+					size: nowFile.size,
+					path: nowFile.path,
+					width: imageSize.width || 0,
+					height: imageSize.height || 0
+				};
 			}
 		});
 
 		debug(fields);
 		debug(filesObj);
 
-		func(stateCode.success({files:filesObj,fields:fields,moreInfo:"文件保存到磁盘成功"}));
+		func(stateCode.success({
+			files: filesObj,
+			fields: fields,
+			moreInfo: "文件保存到磁盘成功"
+		}));
 	});
 }
 
@@ -66,4 +71,4 @@ filw1 [ { fieldName: 'filw1',
     size: 30718 } ]
  */
 
-module.exports=exports=fileUpload;
+module.exports = exports = fileUpload;

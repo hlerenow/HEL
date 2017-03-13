@@ -1,6 +1,8 @@
-var path=require("path");
-var until=require(path.join(__dirname,"until/until"));
-var debug=require("debug")("stateCode");
+var path=require("path"),
+	debug=require("debug")("stateCode"),
+	constVar = require(path.join(constVarPath)),
+	until=require(path.join(constVar.untilPath,"until"));
+
 const stateCode={
 	success:{
 		state:200,

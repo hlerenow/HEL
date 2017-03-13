@@ -1,9 +1,9 @@
-var path = require("path");
-var debug = require("debug")("optionModel");
-var dbBase = require(path.join(__dirname, "../dbBase"));
-var pool = require(path.join(__dirname, "../dbPool"));
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until = require(path.join(__dirname, "../../until/until"));
+var path = require("path"),
+	debug = require("debug")("optionModel"),
+	constVar = require(path.join(constVarPath)),
+	dbBase = require(path.join(constVar.modelPath, "dbBase")),
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until = require(path.join(constVar.untilPath, "until"));
 
 var optionModel = function() {};
 var fn = optionModel.prototype = dbBase.prototype;
@@ -15,32 +15,32 @@ var fn = optionModel.prototype = dbBase.prototype;
  * @return {[type]}         [description]
  */
 fn.createOptions = function(objArry, func) {
-	let self=this;
+	let self = this;
 	let resState = [];
 
 	for (let i = 0; i < objArry.length; i++) {
 
 		(function(i) {
 			debug(i);
-			objArry[i].type = "custom";			
-			self.insert("options",objArry[i], function(result) {
+			objArry[i].type = "custom";
+			self.insert("options", objArry[i], function(result) {
 
-				if(result.state!==200){
+				if (result.state !== 200) {
 					resState.push({
-						optionName:objArry[i].name,
-						state:result.state,
-						info:result.info
-					});	
-				}else{
+						optionName: objArry[i].name,
+						state: result.state,
+						info: result.info
+					});
+				} else {
 					resState.push({
-						optionName:objArry[i].name,
-						state:result.state,
-						insertId:result.insertId,
-						info:result.info
-					});					
+						optionName: objArry[i].name,
+						state: result.state,
+						insertId: result.insertId,
+						info: result.info
+					});
 				}
-				debug(resState.length,objArry.length);
-				if(resState.length===objArry.length){
+				debug(resState.length, objArry.length);
+				if (resState.length === objArry.length) {
 					func(resState);
 				}
 			});
@@ -76,20 +76,20 @@ fn.deleteOptions = function(oidArry, func) {
 
 fn.modifyOptions = function(objArry, func) {
 	let resState = [];
-	let self=this;
+	let self = this;
 	for (let i = 0; i < objArry.length; i++) {
 		(function(i) {
 
-			let modifyObj={};
-			let tempFileds=['name','value'];
+			let modifyObj = {};
+			let tempFileds = ['name', 'value'];
 
-			Object.keys(objArry[i]).forEach(function(key){
-				if(tempFileds.indexOf(key)>=0){
-					modifyObj[key]=objArry[i][key];
+			Object.keys(objArry[i]).forEach(function(key) {
+				if (tempFileds.indexOf(key) >= 0) {
+					modifyObj[key] = objArry[i][key];
 				}
 			});
 			debug(objArry[i].oid);
-			self.updateOneRecord("options",modifyObj, {
+			self.updateOneRecord("options", modifyObj, {
 					oid: objArry[i].oid
 				},
 				function(result) {
@@ -104,9 +104,11 @@ fn.modifyOptions = function(objArry, func) {
 							state: 200
 						});
 					}
-					debug(resState.length,objArry.length);
+					debug(resState.length, objArry.length);
 					if (resState.length === objArry.length) {
-						func(stateCode.success({opRes:resState}));
+						func(stateCode.success({
+							opRes: resState
+						}));
 					}
 				}
 			);
@@ -115,10 +117,10 @@ fn.modifyOptions = function(objArry, func) {
 	}
 };
 
-fn.getStaticOptions=function(func){
-	var self=this;
-	var sql="select oid,label,name,value,description from options where type='static' and user=0 ;";
-	this.query(sql,[],function(result){
+fn.getStaticOptions = function(func) {
+	var self = this;
+	var sql = "select oid,label,name,value,description from options where type='static' and user=0 ;";
+	this.query(sql, [], function(result) {
 		func(result);
 	});
 }

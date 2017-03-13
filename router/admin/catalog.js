@@ -1,15 +1,15 @@
 //路由公用
-var express=require("express");
-var router=express.Router();
-var path=require("path");
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until=require(path.join(__dirname, "../../until/until"));
-var debug=require("debug")("catalog");
+var path=require("path"),
+	express=require("express"),
+	catalogRouter=express.Router(),
+	debug=require("debug")("catalogRouter"),
+	constVar = require(path.join(constVarPath)),
+	stateCode = require(path.join(constVar.configPath,"stateCode")),
+	until=require(path.join(constVar.untilPath, "/until")),
+	//自定义
+	catalogModel=require(path.join(constVar.modelPath,"admin/catalogModel"));
 
-//自定义
-var catalogModel=require(path.join(__dirname,"../../models/admin/catalogModel"));
-
-router.post("/create",function(req,res,next){
+catalogRouter.post("/create",function(req,res,next){
 	let cm=new catalogModel;
 	if(req.session.role=="admin"){
 		cm.createCatalog(req.body,function(result){
@@ -21,7 +21,7 @@ router.post("/create",function(req,res,next){
 	};
 });
 
-router.post("/modify",function(req,res,next){
+catalogRouter.post("/modify",function(req,res,next){
 	let cm=new catalogModel;
 
 	if(req.session.role=="admin"){
@@ -36,7 +36,7 @@ router.post("/modify",function(req,res,next){
 });
 
 
-router.post("/delete",function(req,res,next){
+catalogRouter.post("/delete",function(req,res,next){
 	let cm=new catalogModel;
 	let midArry = until.jsonParse(req.body.mids);	
 	if (!midArry) {
@@ -54,7 +54,7 @@ router.post("/delete",function(req,res,next){
 	}	
 });
 
-router.post("/get",function(req,res,next){
+catalogRouter.post("/get",function(req,res,next){
 	let cm=new catalogModel;
 
 	if(req.session.role=="admin"){
@@ -69,5 +69,5 @@ router.post("/get",function(req,res,next){
 	}	
 });
 
-module.exports=exports=router;
+module.exports=exports=catalogRouter;
 
