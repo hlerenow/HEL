@@ -1,4 +1,5 @@
-var debug = require("debug")("until");
+var debug = require("debug")("until"),
+	fs=require("fs");
 const until = {
 	//判断对象是否为空
 	isEmptyObj: function(obj) {
@@ -218,7 +219,20 @@ const until = {
 		str = str.replace("ss", ss);		
 
 		return str;
+	},
+	getCatalogTemplate:function(dirPath,catalogStr){
+
+		var files=fs.readdirSync(dirPath);
+		var res=[];
+		for(var i=0;i<files.length;i++){
+			if(files[i].indexOf(catalogStr)>=0){
+				res.push(files[i]);
+			}
+		}
+
+		return res;
 	}
+
 };
 
 module.exports = exports = until;

@@ -20,7 +20,8 @@ fn.createCatalog = function(obj, func) {
 		name: obj.name,
 		parent: obj.parent ||0,
 		slug: obj.slug,
-		type: "catalog"
+		type: "catalog",
+		value:obj.value||""
 	}
 
 	this.insert('meta', val, function(result) {
@@ -39,9 +40,15 @@ fn.modifyCatalog = function(obj, func) {
 	}
 	let mid = obj.mid;
 	delete obj.mid;
-	let fields = ['name', 'slug', 'parent'];
+	let fields = ['name', 'slug', 'parent','value'];
 
 	let resObj = until.filterObjFields(fields, obj);
+
+	// //参数缺少
+	// if(until.objLength(resObj)!=fields){
+	// 	func(stateCode.parMiss());
+	// 	return;
+	// }
 
 	this.updateOneRecord("meta", obj, {
 		mid: mid
@@ -63,14 +70,16 @@ fn.deleteCatalog = function(midArry, func) {
 	}
 
 	//将删除目录下的文章的目录关系
-	let sqlR="delete from relationships where type='postCatalog' and mid in (";
+	let sqlR="update relationships set mid=1 where type='postCatalog' and mid in (";
 
 	//删除目录信息sql
 	let sql = "delete from meta where type='catalog' and mid in ( ";
 
 	let questionMark = [];
 	for (let i = 0; i < midArry.length; i++) {
-		questionMark.push("?");
+		if(midArry[i]!==1){
+			questionMark.push("?");	
+		}
 	}
 
 	sql += questionMark.join() + " ) ;";
@@ -95,7 +104,8 @@ fn.deleteCatalog = function(midArry, func) {
 }
 
 fn.getCatalog=function(func){
-	this.query("select mid,name,slug,parent from meta where type='catalog';",[],function(result){
+	var sql="select mid,name,slug,parent,value as template from meta where type='catalog';";
+	this.query(sql,[],function(result){
 		func(result);
 	});
 }

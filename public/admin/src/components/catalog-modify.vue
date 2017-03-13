@@ -29,6 +29,24 @@
 			</el-select>		  	
 		  </el-col>
 		</el-row>
+
+		<el-row :gutter="10">
+		  <el-col :xs="24" :sm="5" :md="3" :lg="3" class="rowTitle">目录模版</el-col>		
+		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
+			<el-select v-model="row.value" placeholder="请选择">
+				<el-option
+				  label="无"
+				  :value="0">
+				</el-option>				
+				<el-option
+				  v-for="item in templates"
+				  :label="item.name"
+				  :value="item.path">
+				</el-option>			
+			</el-select>		  	
+		  </el-col>
+		</el-row>
+
 		<el-row :gutter="10">
 		  <el-col :xs="24" :sm="5" :md="3" :lg="3" style="text-indent:-999px;">.</el-col>
 		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
@@ -48,7 +66,7 @@
 				selfSlug:""
 			}
 		},
-		props:["row","allCatalogs"],
+		props:["row","allCatalogs","templates"],
 		methods:{
 			modifyCatalog:function(){
 				var self=this;
@@ -56,11 +74,13 @@
 					mid:self.row.mid,
 					name:self.row.name,
 					parent:self.row.parent,
-					slug:self.row.slug
+					slug:self.row.slug,
+					value:self.row.value||""
 				}).
 				then(function(res){
 					if(res.data.state===200){
 						self.$bus.$emit("catalogModify",self.row);
+						self.$message.success("目录修改成功！");
 					}else{
 						self.$message.error("修改失败！");
 					}

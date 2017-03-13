@@ -1,3 +1,7 @@
+/**
+ * 将数据库里的应用信息，和当前的主题信息写入app的全局变量里面
+ * @type {[type]}
+ */
 var path=require("path");
 var dbBase = new (require(path.join(__dirname, "../models/dbBase")));
 
@@ -16,6 +20,10 @@ module.exports = exports = function(app, func) {
 
 			app.locals.blogConfig.system = rst;
 
+			var themePath=path.join(__dirname,"../views/theme",app.locals.blogConfig.system.nowTheme,'./config.json');
+
+			app.locals.blogConfig.themeConfig=require(themePath);
+
 			var sql2 = "select name,value from options where user=0 and (type='static' or type=?);";
 
 			dbBase.query(sql2, [app.locals.blogConfig.system.nowTheme], function(result2) {
@@ -25,6 +33,7 @@ module.exports = exports = function(app, func) {
 						rst2[result2.opRes[i].name] = result2.opRes[i].value;
 					}
 					app.locals.blogConfig.static = rst2;
+
 					func(true);
 				} else {
 					func(false);

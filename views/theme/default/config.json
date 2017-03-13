@@ -22,5 +22,15 @@
 				}
 			]
 		}
+	],
+	"catalogTemplate":[
+		{
+			"name":"我的",
+			"path":"catalog-asd.html"
+		},
+		{
+			"name":"它的",
+			"path":"sadasdsad"
+		}
 	]
 }

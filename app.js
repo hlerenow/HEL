@@ -17,9 +17,8 @@ var clearTempFile=require("./until/clearTempFile");
 var clearFilejob=schedule.scheduleJob(timeRule, function(result){
 		clearTempFile(function(){
 			debug("文件缓存目录已经清除. ",result);
-		})
+		});
 	});
-
 
 //开启express服务器
 var express=require("express");
@@ -28,8 +27,12 @@ var app=express();
 //bolog的一些全局配置
 var aic=require(path.join(__dirname,"./until/appInitConfig.js"));
 aic(app,function(flage){
-	debug("系统设置加载成功");
-	debug(app.locals.blogConfig)
+	if(flage){
+		debug("系统设置加载成功");
+		debug(app.locals.blogConfig)		
+	}else{
+		debug("系统设置加载失败");		
+	}
 
 	var initExpress=require("./expressInit.js");
 

@@ -38,6 +38,11 @@
 		      label="别名" 
 		      width="30%" resizable>
 		    </el-table-column>
+<!-- 		    <el-table-column
+		      prop="template"
+		      label="目录模版" 
+		      width="30%" resizable>
+		    </el-table-column>	 -->	    
 		    <el-table-column label="操作" width="30%">
 		      <template scope="scope">
 		        <el-button
@@ -52,7 +57,7 @@
 		  </el-table>
 
 		<el-dialog :title="dialogTitle" v-model="editorCatalogVisible">
-			<catalog-modify :allCatalogs="allCatalogs" :row="modifyCatalogData"></catalog-modify>
+			<catalog-modify :allCatalogs="allCatalogs" :templates="catalogsTemplate" :row="modifyCatalogData"></catalog-modify>
 		</el-dialog>
 
 	</div>
@@ -82,7 +87,8 @@
 					mid:"",
 					slug:"",
 					parent:0,
-					index:""
+					index:"",
+					value:"无"
 				}
 			}
 		},
@@ -102,7 +108,7 @@
 				var self=this;
 				self.$http.post("catalog/delete",{mids:JSON.stringify(midArry)}).
 				then(function(res){
-					console.log(res);
+		
 					if(res.data.state===200){
 						self.$message.success("目录删除成功");
 						self.allCatalogs=self.getUpdateCatalog(objArry);
@@ -133,13 +139,14 @@
 			},
 			catalogModify:function(index,row){
 				var self=this;
-				console.log(row);
+				// console.log(row);
 				self.dialogTitle=row.name;
 				self.modifyCatalogData.index=index;
 				self.modifyCatalogData.name=row.name;
 				self.modifyCatalogData.mid=row.mid;
 				self.modifyCatalogData.slug=row.slug;
 				self.modifyCatalogData.parent=row.parent;
+				self.modifyCatalogData.template=row.template;
 
 				self.editorCatalogVisible=true;
 
@@ -159,10 +166,12 @@
 			var self=this;
 			//获取所有的目录事件
 			this.$bus.$on("getAllCatalog",function(data){
-				self.allCatalogs=self.allCatalogs.concat(data);
+				self.allCatalogs=self.allCatalogs.concat(data.catalogs);
+				self.catalogsTemplate=data.templates;
 			});
 			//目录创建监听
 			this.$bus.$on("catalog-created",function(data){
+				console.log(data);
 				self.allCatalogs.push(data);
 			});
 
@@ -172,7 +181,8 @@
 					name:row.name,
 					slug:row.slug,
 					parent:row.parent,
-					mid:row.mid
+					mid:row.mid,
+					template:row.value
 				});
 				self.editorCatalogVisible=false;
 			});

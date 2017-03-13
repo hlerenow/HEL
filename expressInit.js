@@ -48,15 +48,14 @@ module.exports = exports = function(app,express) {
 			}));
 
 
-			var cdss=app.use(urlencoed);
-
+			app.use(urlencoed);
 
 			app.use(jsonParser);
 
 			app.use(compression());
 
 			app.use(express.static(path.join(__dirname, "public")));
-			app.use(express.static(path.join(__dirname, "views/theme/defaule")));
+			// app.use(express.static(path.join(__dirname, "views/theme/defaule")));
 
 			//环境选择
 			switch (app.get('env')) {

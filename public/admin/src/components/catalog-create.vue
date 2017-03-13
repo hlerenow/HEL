@@ -34,6 +34,21 @@
 			</p>
 		  </el-col>
 		</el-row>
+<!-- 		<el-row :gutter="10">
+		  <el-col :xs="24" :sm="5" :md="3" :lg="3" class="rowTitle">目录模版</el-col>
+		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
+			<el-select v-model="catalogTemplate" placeholder="请选择">
+				<el-option
+				  v-for="item in catalogTemplates"
+				  :label="item.name"
+				  :value="item.path">
+				</el-option>			
+			</el-select>		  	
+			<p class="tips">
+				分类目录对应的页面模版
+			</p>
+		  </el-col>
+		</el-row> -->		
 		<el-row :gutter="10">
 		  <el-col :xs="24" :sm="5" :md="3" :lg="3" style="text-indent:-999px;">.</el-col>
 		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
@@ -50,13 +65,14 @@
 		data (){
 			return {
 				catalogs:[{mid:0,name:"无"}],
+				catalogTemplates:[{name:"无",path:""}],
 				pCatalogId:0,
 				catalogName:"",
 				catalogSlug:"",
-
+				catalogTemplate:""
 			}
 		},
-		props:['name',"slug","type","mid","parent"],
+		props:['name',"slug","type","mid","parent","template"],
 		methods:{
 			getAllCatalog:function(){
 				var self=this;
@@ -64,7 +80,8 @@
 				then(function(res){
 					if(res.data.state===200){
 						self.catalogs=self.catalogs.concat(res.data.opRes);
-						self.$bus.$emit("getAllCatalog",res.data.opRes);
+						self.catalogTemplates=self.catalogTemplates.concat(res.data.templates);
+						self.$bus.$emit("getAllCatalog",{catalogs:res.data.opRes,templates:res.data.templates});
 
 					}else{
 			            self.$message({
@@ -88,14 +105,16 @@
 				self.$http.post("catalog/create",{
 					name:this.catalogName,
 					slug:this.catalogSlug,
-					parent:this.pCatalogId
+					parent:this.pCatalogId,
+					value:this.catalogTemplate
 				}).
 				then(function(res){
 					if(res.data.state===200){
 						var catalogObj={
 							name:self.catalogName,
 							slug:self.catalogSlug,
-							mid:res.data.insertId
+							mid:res.data.insertId,
+							template:self.catalogTemplate
 						};
 						self.catalogs.push(catalogObj);
 						self.clearData();
@@ -128,6 +147,7 @@
 				this.catalogName="";
 				this.catalogSlug="";
 				this.pCatalogId=0;
+				self.catalogTemplate="";
 			},
 			getUpdateCatalog:function(rowArry){
 				var res=[];

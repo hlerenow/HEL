@@ -75,6 +75,10 @@
 </script>
 
 <style type="text/css">
+	#mediaAdd{
+		overflow: hidden;
+	}
+
 	#mediaAdd .el-upload{
 		padding-right: 28px;
 		padding-top: 20px;

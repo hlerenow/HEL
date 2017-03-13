@@ -59,6 +59,9 @@ router.post("/get",function(req,res,next){
 
 	if(req.session.role=="admin"){
 		cm.getCatalog(function(result){
+			debug(req.app.locals.blogConfig.themeConfig);
+			//加载主题配置文件
+			result.templates=req.app.locals.blogConfig.themeConfig.catalogTemplate;
 			res.json(result);
 		});
 	}else{
