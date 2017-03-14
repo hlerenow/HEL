@@ -9,7 +9,7 @@ var path = require("path"),
 
 var adminModel = function() {};
 
-var fn = adminModel.prototype = dbBase.prototype;
+var fn = adminModel.prototype = new dbBase;
 
 /**
  * [获取用户基本信息]

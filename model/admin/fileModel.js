@@ -8,7 +8,7 @@ var path = require("path"),
 
 var fileModel = function() {};
 
-var fn = fileModel.prototype = dbBase.prototype;
+var fn = fileModel.prototype = new dbBase;
 
 fn.uploadFile = function(fileArry, func) {
 	var self = this;

@@ -10,7 +10,7 @@ var path = require("path"),
 	stateCode = require(path.join(constVar.configPath, "stateCode"));
 
 var postInfoModel = function() {};
-var fn = postInfoModel.prototype = dbBase.prototype;
+var fn = postInfoModel.prototype = new dbBase;
 
 fn.getPostList=function(page,perPage,func){
 	if((typeof func )!="function"){

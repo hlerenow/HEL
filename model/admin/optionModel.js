@@ -6,7 +6,7 @@ var path = require("path"),
 	until = require(path.join(constVar.untilPath, "until"));
 
 var optionModel = function() {};
-var fn = optionModel.prototype = dbBase.prototype;
+var fn = optionModel.prototype = new dbBase;
 
 /**
  * 创建多条options记录，并返回每条记录的创建结果

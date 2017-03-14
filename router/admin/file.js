@@ -29,7 +29,7 @@ fileRouter.post("/upload",function(req,res,next){
 		uploadDir: path.join(constVar.publicPath, "./uploadTemp"),
 		maxFilesSize: 1024 * 1024*12,
 	};	
-	fileUpload(req,fileOptions,function(fileResult){
+	fileUpload(req,"file",fileOptions,function(fileResult){
 
 		if(fileResult.state!==200){
 			res.json(fileResult);

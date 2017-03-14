@@ -3,10 +3,11 @@ var path = require("path"),
 	constVar = require(path.join(constVarPath)),
 	dbBase = require(path.join(constVar.modelPath, "dbBase")),
 	stateCode = require(path.join(constVar.configPath, "stateCode")),
-	until = require(path.join(constVar.untilPath, "until"));
+	until = require(path.join(constVar.untilPath, "until")),
+	tagModel=require(path.join(constVar.modelPath,'./admin/tagModel'));
 
 var eassyModel = function() {};
-var fn = eassyModel.prototype = dbBase.prototype;
+var fn = eassyModel.prototype = new dbBase;
 
 
 /**
@@ -19,7 +20,7 @@ fn.insertEassy = function(obj, func) {
 	var self = this;
 
 	//检验必要的字段		
-	let dataField = ['title', 'content', 'created', 'modified', 'authorId', 'status', 'thumbnail', 'belongCatalog', 'excerpt', 'type', 'attachment', 'templateContent'];
+	let dataField = ['title', 'content', 'created', 'modified', 'authorId', 'status', 'thumbnail', 'belongCatalog', 'excerpt', 'type', 'attachment', 'templateContent',"tags"];
 
 	let resObj = until.filterObjFields(dataField, obj);
 
@@ -31,6 +32,7 @@ fn.insertEassy = function(obj, func) {
 		return;
 	};
 
+	//目录变量
 	let cataLog = resObj.belongCatalog;
 	cataLog = cataLog.split("&");
 
@@ -43,10 +45,15 @@ fn.insertEassy = function(obj, func) {
 	}
 
 	delete resObj.belongCatalog;
+	//标签变量
+	let tags=until.jsonParse(resObj.tags);
+	delete resObj.tags;
+
 	//数据校验 end
 
 	//插入数据库,并且调用回调函数
 	self.insert("eassy", resObj, function(result) {
+		var eid=result.insertId;
 		debug("插入文章");
 		if (result.state === 200) {
 			objArry = [];
@@ -58,17 +65,29 @@ fn.insertEassy = function(obj, func) {
 				});
 
 			}
+
 			//插入文章所属目录
-			self.insertMulti("relationships", objArry, function(result) {
-				if (result.state === 200) {
-					func(result);
-				} else {
-					//文章所属目录插入失败
-					func(stateCode.sqlInsertFail({
-						moreInfo: "文章目录插入失败"
-					}));
-				}
-			});
+			self.insertMulti("relationships", objArry, function() {});
+			// self.insertMulti("relationships", objArry, function() {});
+			
+
+			//插入文章标签
+			debug(tags);
+			if(tags){
+				debug("插入标签");
+				var tagsNew=[];
+				var tm=new tagModel;
+				tm.insertTags(tags.slice(0),function(result){
+					//插入文章和标签的关系
+					self.insertTagsRelations(eid,tags.slice(0),function(result){
+						debug("标签文章关系");
+						tm.updateTagsCount(function(){debug("更新标签文章数")});
+					});
+					//标签文章数量统计
+				});
+			}
+			//返回结果
+			func(result);
 
 		} else {
 			func(stateCode.sqlInsertFail({
@@ -96,7 +115,7 @@ fn.modifyEassy = function(obj, func) {
 	var self = this;
 
 	//检验必要的字段
-	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment', 'templateContent'];
+	var dataField = ['eid', 'title', 'content', 'modified', 'belongCatalog', 'authorId', 'status', 'thumbnail', 'excerpt', 'type', 'attachment', 'templateContent',"tags"];
 
 	let resObj = until.filterObjFields(dataField, obj);
 
@@ -117,6 +136,9 @@ fn.modifyEassy = function(obj, func) {
 	let authorId = resObj.authorId;
 
 	debug(resObj.belongCatalog);
+	//标签变量
+	let tags=until.jsonParse(resObj.tags);
+	delete resObj.tags;
 
 	delete resObj.belongCatalog;
 	delete resObj.authorId;
@@ -138,8 +160,9 @@ fn.modifyEassy = function(obj, func) {
 				return;
 			}
 
-			//删除旧的文章所属目录				
-			self.query("delete from relationships where type='postCatalog' and nid=?;", [eid], function(result) {
+			//删除旧的文章所属目录
+			var sqlDeleteCatalog="delete from relationships where type='postCatalog' and nid=?;";
+			self.query(sqlDeleteCatalog, [eid], function(result) {
 				//新的目录数组
 				objArry = [];
 				for (let i = 0; i < cataLog.length; i++) {
@@ -151,17 +174,34 @@ fn.modifyEassy = function(obj, func) {
 				}
 
 				//插入文章所属目录
-				self.insertMulti("relationships", objArry, function(result) {
-					if (result.state === 200) {
-						func(result);
-					} else {
-						//文章所属目录插入失败
-						func(stateCode.sqlInsertFail({
-							moreInfo: "文章目录插入失败"
-						}));
-					}
-				});
+				self.insertMulti("relationships", objArry, function(result) {});
 			});
+
+			//插入文章标签
+			
+			//删除旧的标签
+			var tm=new tagModel;
+
+			debug("标签修改");
+			debug(tags);
+			if(!tags){
+				tags=[];
+			}
+			var tm=new tagModel;
+			//删除旧的标签
+			tm.deleteEassyTags(eid,function(){});
+
+			tm.insertTags(tags.slice(0),function(result){
+				//插入文章和标签的关系
+				self.insertTagsRelations(eid,tags.slice(0),function(result){
+					//标签文章数量统计
+					tm.updateTagsCount(function(){debug("更新标签文章数")});					
+				});
+
+			});
+			//返回结果
+			func(result);			
+
 		} else {
 			func(stateCode.sqlUpdateFail({
 				moreInfo: "文章不存"
@@ -224,6 +264,12 @@ fn.deleteEassyMulti = function(eidArry, func) {
 	}
 }
 
+/**
+ * 获取文章所有的信息
+ * @param  {[type]} eid  [description]
+ * @param  {[type]} func [description]
+ * @return {[type]}      [description]
+ */
 fn.getEassy = function(eid, func) {
 	var sql = "select c.*,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid and b.nid=? and b.nid=c.eid  and d.uid=c.authorId GROUP BY b.nid;";
 
@@ -290,5 +336,16 @@ fn.getEassysInfo = function(func) {
 		func(result);
 	});
 }
+
+fn.insertTagsRelations=function(eid,tags,func){
+	for(var i=0;i<tags.length;i++){
+		tags[i]=this.pool.escape(tags[i]);
+	}
+	var sql="insert into relationships (mid,nid,type) select mid,"+eid+",'postTag' from meta where type='tag' and name in ("+tags.join(",")+") ;";
+	debug(sql);
+	this.query(sql,[],function(result){
+		func(result);
+	});
+};
 
 module.exports = exports = eassyModel;

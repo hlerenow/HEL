@@ -4,6 +4,7 @@
 		<el-upload
 			action="./api/file/upload"
 			drag
+			name="file"
 			multiple
 			:on-success="fileUpSucess"
 			:on-error="fileUpError"

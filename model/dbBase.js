@@ -161,6 +161,7 @@ fn.insertMulti = function(tableName, objArry, func) {
 		var sqlQueryLength = objArry.length;
 		var sqlInsertState = 0;
 		var sqlSuccessState = 0;
+		var insertId=[];
 
 		for (let i = 0; i < sqlQueryLength; i++) {
 
@@ -171,6 +172,7 @@ fn.insertMulti = function(tableName, objArry, func) {
 			debug(sql);
 
 			con.query(sql, val, function(err, data) {
+
 				sqlInsertState++;
 				debug("多记录基本插入");
 
@@ -178,7 +180,6 @@ fn.insertMulti = function(tableName, objArry, func) {
 					debug(err);
 				} else {
 					sqlSuccessState++;
-
 				}
 
 				//说明全部插入完毕了并且都成功

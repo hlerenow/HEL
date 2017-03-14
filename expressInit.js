@@ -19,7 +19,8 @@ var path = require("path"),
 	}),
 	jsonParser = bodyParser.json(),
 	session = require("express-session"),
-	//模版函数挂载
+
+	//模版辅助函数挂载
 	tpFunc = require(path.join(__dirname, "service/templateFunctions.js"));
 
 function expressInit(app, express) {
@@ -41,7 +42,7 @@ function expressInit(app, express) {
 	app.disable('x-powered-by');
 
 	app.use(helmet());
-	
+
 	app.locals.Helper = tpFunc(app.locals);
 
 	debug(app.locals.system);

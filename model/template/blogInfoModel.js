@@ -11,7 +11,7 @@ var path = require("path"),
 
 var baseInfoModel = function() {};
 
-var fn = baseInfoModel.prototype = dbBase.prototype;
+var fn = baseInfoModel.prototype = new dbBase;
 
 /**
  * 获取blog的基本信息

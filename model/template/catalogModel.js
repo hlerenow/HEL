@@ -11,7 +11,7 @@ var path = require("path"),
 	stateCode = require(path.join(constVar.configPath, "stateCode"));
 
 var catalogModel = function() {};
-var fn = catalogModel.prototype = dbBase.prototype;
+var fn = catalogModel.prototype = new dbBase;
 
 /**
  * 获取当前catalogSlug目录下第page页的文章数据,
