@@ -16,7 +16,7 @@
 		</div>
 
 		  <el-table
-		    :data="allCatalogs"
+		    :data="catalogs"
 		    @selection-change="selectionChange"
 		    style="width: 100%;"
 		    empty-text="没有目录"
@@ -35,16 +35,26 @@
 		      label="别名" 
 		      width="30%" resizable>
 		    </el-table-column>
-<!-- 		    <el-table-column
-		      prop="template"
+		    <el-table-column
 		      label="目录模版" 
 		      width="30%" resizable>
-		    </el-table-column>	 -->	    
+		      <template scope="scope">
+					{{scope.row.value.name}}
+		      </template>		      
+		    </el-table-column>
+		    <el-table-column		 
+		      label="文章数" 
+		      width="30%" resizable>
+				<template scope="scope">
+					{{scope.row.count||0}}
+				</template>			      
+		    </el-table-column>
+
 		    <el-table-column label="操作" width="30%">
 		      <template scope="scope">
 		        <el-button
 		          size="small"
-		          @click="catalogModify(scope.$index, scope.row)">编辑</el-button>
+		          @click="catalogModifyFunc(scope.$index, scope.row)">编辑</el-button>
 		        <el-button
 		          size="small"
 		          type="danger"
@@ -54,13 +64,16 @@
 		  </el-table>
 
 		<el-dialog :title="dialogTitle" v-model="editorCatalogVisible">
-			<catalog-modify :allCatalogs="allCatalogs" :templates="catalogsTemplate" :row="modifyCatalogData"></catalog-modify>
+			<catalog-modify @close="closeDialog" :allCatalogs="allCatalogs" :templates="catalogsTemplate" :row="modifyCatalog"></catalog-modify>
 		</el-dialog>
 
 	</div>
 </template>
 <script type="text/javascript">
   	import catalogModify from "components/catalog-modify.vue";
+	import { mapState } from 'vuex'
+	import * as types from 'store/mutation-types'
+
 	export default{
 		data (){
 			return {
@@ -74,12 +87,11 @@
 						value:"delete"
 					}
 				],
-				allCatalogs:[],
 				opValue:"none",
 				selectObj:[],
 				editorCatalogVisible:false,
 				dialogTitle:"",
-				modifyCatalogData:{
+				modifyCatalog:{
 					name:"",
 					mid:"",
 					slug:"",
@@ -88,6 +100,20 @@
 					value:"无"
 				}
 			}
+		},
+		computed:{
+			selectMidArry:function(){
+				var midArry=[];
+				this.selectObj.forEach(function(ite){
+					midArry.push(ite.mid);
+				});
+				return midArry;
+			},			
+			...mapState({
+				catalogTemplates:state=>state.catalog.catalogTemplates,
+				catalogs:(state)=>state.catalog.catalogs
+			}),
+
 		},
 		components:{catalogModify},
 		methods:{
@@ -103,13 +129,18 @@
 			},
 			postDeleteCatalog:function(midArry,objArry){
 				var self=this;
+
+				if(midArry.length<=0){
+					self.$message.error("您没有选中目录");
+					return;
+				}
+
 				self.$http.post("catalog/delete",{mids:JSON.stringify(midArry)}).
 				then(function(res){
 		
 					if(res.data.state===200){
+						self.$store.commit(types.CATALOG_DELETE,midArry);
 						self.$message.success("目录删除成功");
-						self.allCatalogs=self.getUpdateCatalog(objArry);
-						self.$bus.$emit("catalogDelete",objArry);
 					}else{
 						self.$message.error("目录删除失败");					
 					}
@@ -120,69 +151,27 @@
 					this.catalogsDelete();
 				}
 			},
-			getUpdateCatalog:function(rowArry){
-				var res=[];
-				var midArry=[];
-				rowArry.forEach(function(ite){
-					midArry.push(ite.mid);
-				});
-
-				for(var i =0;i<this.allCatalogs.length;i++){
-					if(midArry.indexOf(this.allCatalogs[i].mid)<0){
-						res.push(this.allCatalogs[i]);
-					}
-				}
-				return res;
-			},
-			catalogModify:function(index,row){
+			catalogModifyFunc:function(index,row){
 				var self=this;
-				// console.log(row);
-				self.dialogTitle=row.name;
-				self.modifyCatalogData.index=index;
-				self.modifyCatalogData.name=row.name;
-				self.modifyCatalogData.mid=row.mid;
-				self.modifyCatalogData.slug=row.slug;
-				self.modifyCatalogData.parent=row.parent;
-				self.modifyCatalogData.template=row.template;
 
+				var modifyCatalog = {
+					index: index,
+					name: row.name,
+					mid: row.mid,
+					slug: row.slug,
+					parent: row.parent,
+					value: row.value
+				}
+
+				self.modifyCatalog=modifyCatalog;
+				self.dialogTitle=row.name;
 				self.editorCatalogVisible=true;
 
-			}			
-
-		},
-		computed:{
-			selectMidArry:function(){
-				var midArry=[];
-				this.selectObj.forEach(function(ite){
-					midArry.push(ite.mid);
-				});
-				return midArry;
+			},
+			closeDialog(){
+				this.editorCatalogVisible=false;
 			}
-		},
-		mounted:function(){
-			var self=this;
-			//获取所有的目录事件
-			this.$bus.$on("getAllCatalog",function(data){
-				self.allCatalogs=self.allCatalogs.concat(data.catalogs);
-				self.catalogsTemplate=data.templates;
-			});
-			//目录创建监听
-			this.$bus.$on("catalog-created",function(data){
-				console.log(data);
-				self.allCatalogs.push(data);
-			});
 
-			//目录修改监听
-			this.$bus.$on("catalogModify",function(row){
-				self.allCatalogs.splice(row.index,1,{
-					name:row.name,
-					slug:row.slug,
-					parent:row.parent,
-					mid:row.mid,
-					template:row.value
-				});
-				self.editorCatalogVisible=false;
-			});
 		}
 	}
 </script>

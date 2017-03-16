@@ -32,6 +32,11 @@
 			<div class="self_row_content">
 				<el-select v-model="pCatalogId" placeholder="请选择">
 					<el-option
+						label="无"
+						:value="0"
+					>
+					</el-option>
+					<el-option
 					  v-for="item in catalogs"
 					  :label="item.name"
 					  :value="item.mid">
@@ -49,6 +54,7 @@
 			</div>
 			<div class="self_row_content">
 				<el-select v-model="catalogTemplate" placeholder="请选择">
+					<el-option label="无" value=""></el-option>
 					<el-option
 					  v-for="item in catalogTemplates"
 					  :label="item.name"
@@ -76,6 +82,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+
 	import { mapState } from 'vuex'
 
 	export default{
@@ -98,16 +105,19 @@
 		},
 		methods:{
 			createCatalog:function(){
+				var self=this;
 				var catalog={
 					name: this.catalogName,
 					slug: this.catalogSlug,
 					parent: this.pCatalogId,
-					value: this.catalogTemplate
+					value: JSON.stringify(self.getTemplateObj(self.catalogTemplate))
 				};
+
 				this.$store.dispatch("catalogAdd",catalog).then((res)=>{
 					this.clearData();
+					this.$message.success("目录创建成功");					
 				}).catch((err)=>{
-
+					this.$message.error("目录创建失败");
 				});
 			},
 			clearData:function(){
@@ -116,36 +126,26 @@
 				this.pCatalogId=0;
 				self.catalogTemplate="";
 			},
-			getUpdateCatalog:function(rowArry){
-				var res=[];
-				var midArry=[];
-				rowArry.forEach(function(ite){
-					midArry.push(ite.mid);
-				});
+			getTemplateObj:function(tpath){
+				if(tpath==""){
+					return {};
+				}
 
-				for(var i =0;i<this.catalogs.length;i++){
-					if(midArry.indexOf(this.catalogs[i].mid)<0){
-						res.push(this.catalogs[i]);
+				for(var i=0;i<this.catalogTemplates.length;i++){
+					if(this.catalogTemplates[i].path==tpath){
+						console.log(this.catalogTemplates[i]);
+						return this.catalogTemplates[i];
+						break;
 					}
 				}
-				return res;
-			},
-			getCatalogIndex:function(mid){
-				this.catalogs.forEach(function(ite,index){
-					if(ite.mid===mid){
-						return index;
-					}
-
-				})
-				return -1;			
-			}
+			}			
 		},
 		created:function(){
 			this.$store.dispatch("catalogRequest").then(()=>{
 			}).catch((err)=>{
 				this.$message.error("目录拉取失败");
 			});
-		}		
+		}
 	}
 </script>
 <style type="text/css">

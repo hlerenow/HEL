@@ -4,8 +4,8 @@ import Axios from 'axios';
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  catalogs: [{mid:0,name:"无"}],
-  catalogTemplates:[{name:"无",path:""}],
+  catalogs: [],
+  catalogTemplates:[],
 }
 
 // getters
@@ -16,20 +16,60 @@ const getters = {
 const mutations = {
   //获取所有的目录，和目录模版
   [types.CATALOG_GETALL] (state,data) {
+
+    for(var i=0;i<data.catalogs.length;i++){
+      var ite=data.catalogs[i];
+        try{
+          console.log(ite.value);
+          if(ite.value){
+            ite.value=JSON.parse(ite.value);
+          }else{
+            ite.value={
+              name:"无",
+              path:""
+            };
+          }  
+        }catch(e){
+
+        }      
+    }
+
     state.catalogs=state.catalogs.concat(data.catalogs);
     state.catalogTemplates=state.catalogTemplates.concat(data.catalogTemplates);
   },
   [types.CATALOG_ADD](state,catalog){
+    catalog.value=JSON.parse(catalog.value);
     state.catalogs.push(catalog);
   },
-  [types.CATALOG_DELETE](state,catalog){
-
+  [types.CATALOG_DELETE](state,catalogArry){
+    var updataCatalog=[];
+    state.catalogs.forEach(function(item){
+        if(catalogArry.indexOf(item.mid)<0){
+            updataCatalog.push(item);
+        }
+    });
+    state.catalogs=updataCatalog;
+  },
+  [types.CATALOG_MODIFY](state,catalog){
+    for(var i=0;i<state.catalogs.length;i++){
+      var ite=state.catalogs[i];
+      if(ite.mid=catalog.mid){
+        state.catalogs.splice(i,1,catalog);
+        break;
+      }
+    }
   }
 }
 
 // actions
 const actions = {
   catalogRequest ({ commit, state }) {
+    if(state.catalogs.length>0){
+      return new Promise(function(reslove){
+        reslove();
+      });
+    }
+
     return new Promise((reslove,reject)=>{
       Axios.post("catalog/get").
       then((res)=>{
@@ -42,7 +82,6 @@ const actions = {
       }).catch(function(err){
           reject(err);
       }); 
-
     });
   },
   catalogAdd ({commit,state},catalog){

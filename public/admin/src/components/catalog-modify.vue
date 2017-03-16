@@ -22,9 +22,9 @@
 				  :value="0">
 				</el-option>				
 				<el-option
-				  v-for="item in allCatalogs"
+				  v-for="item in catalogs"
 				  :label="item.name"
-				  :value="item.mid">
+				  :value="item.mid" v-if="item.mid!=row.mid">
 				</el-option>			
 			</el-select>		  	
 		  </el-col>
@@ -33,13 +33,13 @@
 		<el-row :gutter="10">
 		  <el-col :xs="24" :sm="5" :md="3" :lg="3" class="rowTitle">目录模版</el-col>		
 		  <el-col :xs="24" :sm="18" :md="21" :lg="18">
-			<el-select v-model="row.value" placeholder="请选择">
+			<el-select v-model="row.value.path" placeholder="请选择">
 				<el-option
 				  label="无"
-				  :value="0">
+				  value="">
 				</el-option>				
 				<el-option
-				  v-for="item in templates"
+				  v-for="item in catalogTemplates"
 				  :label="item.name"
 				  :value="item.path">
 				</el-option>			
@@ -58,36 +58,58 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { mapState } from 'vuex'
+	import * as types from 'store/mutation-types'
+
 	export default{
-		data (){
-			return {
-				catalogs:[{mid:0,name:"无"}],
-				selfName:"",
-				selfSlug:""
-			}
+		props:["row"],
+		computed:{
+			...mapState({
+				catalogTemplates:state=>state.catalog.catalogTemplates,
+				catalogs:state=>state.catalog.catalogs
+			})
 		},
-		props:["row","allCatalogs","templates"],
 		methods:{
 			modifyCatalog:function(){
 				var self=this;
-				self.$http.post("catalog/modify",{
+
+				var templateObj=self.getTemplateObj(self.row.value.path);
+					catalog={
 					mid:self.row.mid,
 					name:self.row.name,
 					parent:self.row.parent,
 					slug:self.row.slug,
-					value:self.row.value||""
-				}).
+					value:JSON.stringify(templateObj)||""
+				};
+				self.$http.post("catalog/modify",catalog).
 				then(function(res){
 					if(res.data.state===200){
-						self.$bus.$emit("catalogModify",self.row);
 						self.$message.success("目录修改成功！");
+						catalog.value=templateObj;
+						console.log(catalog.value);
+						self.$store.commit(types.CATALOG_MODIFY,catalog);
+						self.$emit("close");
 					}else{
 						self.$message.error("修改失败！");
 					}
 				})
-			}
-		},
-		mounted:function(){
+			},
+			/**
+			 * 更具目录模版path 获取模版对象
+			 * @param  {[type]} tpath [description]
+			 * @return {[type]}       [description]
+			 */
+			getTemplateObj:function(tpath){
+				if(tpath==""){
+					return {};
+				}
+				for(var i=0;i<this.catalogTemplates.length;i++){
+					if(this.catalogTemplates[i].path==tpath){
+						return this.catalogTemplates[i];
+						break;
+					}
+				}
+			}			
 		}
 	}
 </script>

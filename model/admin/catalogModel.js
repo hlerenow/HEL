@@ -111,7 +111,7 @@ fn.deleteCatalog = function(midArry, func) {
 }
 
 fn.getCatalog = function(func) {
-	var sql = "select mid,name,slug,parent,value as template from meta where type='catalog';";
+	var sql = "select mid,name,slug,parent,value ,count from meta where type='catalog';";
 	this.query(sql, [], function(result) {
 		func(result);
 	});

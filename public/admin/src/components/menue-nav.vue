@@ -4,7 +4,7 @@
         <template slot="title"><i class="el-icon-edit"></i>文章</template>
         <el-menu-item index="/main/eassyList">所有文章</el-menu-item>
         <el-menu-item index="/main/editorEassy">写文章</el-menu-item>
-        <el-menu-item index="/main/catalog/create">分类目录</el-menu-item>  
+        <el-menu-item index="/main/catalog">分类目录</el-menu-item>  
         <el-menu-item index="1-4">标签</el-menu-item>          
         <!-- <el-menu-item index="/main/modifyEassy">修改文章</el-menu-item> -->        
       </el-submenu>  

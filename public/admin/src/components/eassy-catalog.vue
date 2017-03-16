@@ -5,55 +5,39 @@
 </template>
 
 <script type="text/javascript">
+	import { mapState } from 'vuex'
 	export default{
-		data () {
-			return {
-				eassyCatalogs:[],
-				catalogs:[]
-			};
+		data (){
+			return{
+				selectObj:[],
+				eassyCatalogs:[]
+			}
 		},
 		props:["checkCatalogs"],
+		computed:{
+			selectMidArry:function(){
+				var midArry=[];
+				this.selectObj.forEach(function(ite){
+					midArry.push(ite.mid);
+				});
+				return midArry;
+			},			
+			...mapState({
+				catalogTemplates:state=>state.catalog.catalogTemplates,
+				catalogs:(state)=>state.catalog.catalogs
+			}),
+
+		},		
 		methods:{
 			selectCatalog:function(){
 				var self=this;
 				self.$bus.$emit("eassyCatalofChage",self.eassyCatalogs);
-			},
-			getAllCatalog:function(){
-				var self=this;
-				self.$http.post("catalog/get").
-				then(function(res){
-					if(res.data.state===200){
-						self.catalogs=self.catalogs.concat(res.data.opRes);
-					}else{
-			            self.$message({
-			              message:"目录获取失败，服务器错误,请稍后再试！",
-			              type:"error",
-			              duration:0,
-			              showClose:true
-			            });
-					}
-				},function(res){
-		            self.$message({
-		              message:"网络错误,请检查网络连接,稍后再试！",
-		              type:"error",
-		              duration:2000,
-		              showClose:true
-		            });					
-				});
-			},				
+			}		
 		},
-		mounted:function(){
-			var self=this;
-			//获取目录
-			this.getAllCatalog();
-
-			this.$bus.$on("catalog-created",function(data){
-				self.catalogs.push(data);
-			});
-
-			//初始化目录使用
-			this.$watch("checkCatalogs",function(newVal){
-				self.eassyCatalogs=newVal;
+		created:function(){
+			this.$store.dispatch("catalogRequest").then(()=>{
+			}).catch((err)=>{
+				this.$message.error("目录拉取失败");
 			});
 		}
 	};
