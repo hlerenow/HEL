@@ -1,5 +1,5 @@
 {
-	"blogSetting":[
+	"themeSetting":[
 		{
 			"label":"主题设置",
 			"page":"setting.html"
@@ -31,6 +31,12 @@
 		{
 			"name":"它的",
 			"path":"sadasdsad"
+		}
+	],
+	" ":[
+		{
+			"name":"它的page",
+			"path":"sadasfs"
 		}
 	]
 }

@@ -9,7 +9,7 @@ var tagModel = function() {},
 	fn = tagModel.prototype = new dbBase;
 
 	fn.getAllTags=function(func){
-		var sql="select * from meta where type='tag' ;";
+		var sql="select * from meta where type='tag';";
 		this.query(sql,[],function(result){
 			func(result);
 		});

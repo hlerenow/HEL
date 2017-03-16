@@ -4,14 +4,15 @@ var path = require("path"),
 	dbBase = require(path.join(constVar.modelPath, "dbBase")),
 	stateCode = require(path.join(constVar.configPath, "stateCode")),
 	until = require(path.join(constVar.untilPath, "until")),
-	tagModel=require(path.join(constVar.modelPath,'./admin/tagModel'));
+	tagModel=require(path.join(constVar.modelPath,'./admin/tagModel')),
+	catalogModel=require(path.join(constVar.modelPath,'./admin/catalogModel'));
 
 var eassyModel = function() {};
 var fn = eassyModel.prototype = new dbBase;
 
 
 /**
- * 插入文章（没有事务处理,后期完善）
+ * 插入文章
  * @param  {[type]} obj  [description]
  * @param  {[type]} func [description]
  * @return {[type]}      [description]
@@ -67,7 +68,11 @@ fn.insertEassy = function(obj, func) {
 			}
 
 			//插入文章所属目录
-			self.insertMulti("relationships", objArry, function() {});
+			self.insertMulti("relationships", objArry, function(result) {
+				//更新目录下的文章数
+				var cm=new catalogModel;
+				cm.updateCatalogCount(function(){});
+			});
 			// self.insertMulti("relationships", objArry, function() {});
 			
 
@@ -91,7 +96,7 @@ fn.insertEassy = function(obj, func) {
 
 		} else {
 			func(stateCode.sqlInsertFail({
-				moreInfo: "文章插入失败"
+				moreInfo: "文章发布失败"
 			}));
 		}
 
@@ -174,7 +179,11 @@ fn.modifyEassy = function(obj, func) {
 				}
 
 				//插入文章所属目录
-				self.insertMulti("relationships", objArry, function(result) {});
+				self.insertMulti("relationships", objArry, function(result) {
+					//更新目录下的文章数
+					var cm=new catalogModel;
+					cm.updateCatalogCount(function(){});					
+				});
 			});
 
 			//插入文章标签
@@ -224,6 +233,11 @@ fn.deleteEassy = function(eid, func) {
 
 	this.query("delete from relationships where type='postCatalog' and nid=?;", [eid], function(result) {
 		if (result.state == 200) {
+			//更新目录下的文章数
+			var cm=new catalogModel;
+			cm.updateCatalogCount(function(){});
+
+			//删除文章实体信息
 			self.query("delete from eassy where eid = ?;", [eid], function(result) {
 				if (result.state === 200) {
 					func(result);

@@ -11,6 +11,7 @@ var catalogModel = function() {};
 var fn = catalogModel.prototype = new dbBase;
 
 fn.createCatalog = function(obj, func) {
+	var self=this;
 	if (!(obj.name && obj.slug)) {
 		func(stateCode.parMiss());
 		return;
@@ -63,7 +64,9 @@ fn.modifyCatalog = function(obj, func) {
 	});
 }
 
+
 fn.deleteCatalog = function(midArry, func) {
+	var self=this;
 	if (!midArry) {
 		func(stateCode.parMiss());
 		return;
@@ -77,6 +80,7 @@ fn.deleteCatalog = function(midArry, func) {
 
 	let questionMark = [];
 	for (let i = 0; i < midArry.length; i++) {
+		//不能删除默认目录 mid=1的目录
 		if (midArry[i] !== 1) {
 			questionMark.push("?");
 		}
@@ -89,11 +93,14 @@ fn.deleteCatalog = function(midArry, func) {
 	//删除目录与文章的联系
 	this.query(sqlR, midArry, function(result) {
 		debug('文章与目录关系删除结果', result);
+		//跟新目录文章数
+		self.updateCatalogCount(function(){});
 	});
 
 	//删除目录
 	this.query(sql, midArry, function(result) {
 		if (result.state !== 200) {
+
 			func(stateCode.sqlDeleteFail({
 				moreInfo: "目录删除失败"
 			}))

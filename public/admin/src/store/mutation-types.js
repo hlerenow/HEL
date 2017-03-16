@@ -1,0 +1,5 @@
+export const CATALOG_GETALL="CATALOG_GETALL";
+
+export const CATALOG_ADD="CATALOG_ADD";
+
+export const CATALOG_DELETE="CATALOG_DELETE";

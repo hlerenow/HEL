@@ -10,7 +10,7 @@ module.exports = {
 		// vue:"src/vue.js",
 		// eleui:'src/ele-ui.js'
 	},
-	devtool: false,//source-map
+	devtool: "source-map",//source-map
 	watch:true,
 	output: {
 		path: productionPath,

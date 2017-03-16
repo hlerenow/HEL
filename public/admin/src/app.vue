@@ -10,31 +10,13 @@
 <style>
 
   html,body,#app{
-    max-width: 100%;
-    /*min-width: 800px;*/
+    width: 100%;
     height: 100%;
     min-height: 100%;
+    max-width: 100%;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   }
 
-  html,body{
-    overflow-x: hidden;
-  }
-/*重置boostrap样式*/
-/*  .form-control{
-    width: 100%;
-    height: 35px;
-    padding: 6px 12px;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  }
-  .form-control:focus{
-    box-shadow: none;
-  }*/
   .row{
     margin-left: 0;
     margin-right: 0;

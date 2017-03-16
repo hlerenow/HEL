@@ -1,22 +1,19 @@
 <template>
-	<div>
-
-		<el-row :gutter="20">
-		  <el-col :span="6">
-			  <el-select v-model="opValue" placeholder="请选择">
-			    <el-option
-			      v-for="item in opList"
-			      :label="item.title"
-			      :value="item.value">
-			    </el-option>
-			  </el-select>	  	
-		  </el-col>
-		  <el-col :span="6">
+	<div id="catalogList">
+		<div class="toolBar">
+			<div class="selectBox">
+				<el-select v-model="opValue" placeholder="请选择">
+				<el-option
+					v-for="item in opList"
+					:label="item.title"
+					:value="item.value">
+				</el-option>
+				</el-select>				
+			</div>
 			<el-button type="primary" @click="multiOp">
-				应用
-			</el-button>
-		  </el-col>
-		</el-row>
+			应用
+			</el-button>			
+		</div>
 
 		  <el-table
 		    :data="allCatalogs"
@@ -196,5 +193,13 @@
 	}
 	.el-table__empty-block{
 		width: 100% !important;
+	}
+	#catalogList .toolBar{
+		margin-bottom: 5px;
+	}
+	.selectBox{
+		display: inline-block;
+		width: 120px;
+		margin-right: 10px;
 	}
 </style>

@@ -25,20 +25,20 @@ var path = require("path"),
 
 function expressInit(app, express) {
 	//环境选择
-	switch (app.get('env')) {
-		case "development":
-			{
-				app.use(require("morgan")("dev"));
-				break;
-			}
-		case 'production':
-			{
-				app.use(require("express-logger")({
-					path: path.join(constVar.logPath,"/log.txt")
-				}));
-				break;
-			}
-	}
+	// switch (app.get('env')) {
+	// 	case "development":
+	// 		{
+	// 			app.use(require("morgan")("dev"));
+	// 			break;
+	// 		}
+	// 	case 'production':
+	// 		{
+	// 			app.use(require("express-logger")({
+	// 				path: path.join(constVar.logPath,"/log.txt")
+	// 			}));
+	// 			break;
+	// 		}
+	// }
 	app.disable('x-powered-by');
 
 	app.use(helmet());

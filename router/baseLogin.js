@@ -18,7 +18,6 @@ baseLoginRouter.use(/^\/admin\/api*/,function(req,res,next){
 		req.session.uid=2;
 		req.session.name='admin';
 		req.session.role='admin';
-	
 
 		if(req.session.loginState===1){
 			next();			

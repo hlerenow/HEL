@@ -12,6 +12,13 @@ var path = require("path"),
 var postInfoModel = function() {};
 var fn = postInfoModel.prototype = new dbBase;
 
+/**
+ * 获取文章列表
+ * @param  {[type]} page    [description]
+ * @param  {[type]} perPage [description]
+ * @param  {[type]} func    [description]
+ * @return {[type]}         [description]
+ */
 fn.getPostList=function(page,perPage,func){
 	if((typeof func )!="function"){
 		throw new Error("参数缺少");
@@ -46,6 +53,12 @@ fn.getPostList=function(page,perPage,func){
 	});
 };
 
+/**
+ * 获取单个文章
+ * @param  {[type]} eid  [description]
+ * @param  {[type]} func [description]
+ * @return {[type]}      [description]
+ */
 fn.getPost=function(eid,func){	
 	var postSql="select * from eassy where type='post' and eid= ?;";
 	var recentPostSql="select * from eassy where eid in ((select eid from eassy where eid < 71 limit 1 ),(select eid from eassy where eid > ? limit 1));"

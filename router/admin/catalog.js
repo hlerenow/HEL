@@ -61,7 +61,10 @@ catalogRouter.post("/get",function(req,res,next){
 		cm.getCatalog(function(result){
 			debug(req.app.locals.blogConfig.themeConfig);
 			//加载主题配置文件
-			result.templates=req.app.locals.blogConfig.themeConfig.catalogTemplate;
+			result.opRes={
+				catalogs:result.opRes,
+				catalogTemplates:req.app.locals.blogConfig.themeConfig.catalogTemplate
+			}
 			res.json(result);
 		});
 	}else{

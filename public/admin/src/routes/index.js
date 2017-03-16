@@ -23,7 +23,7 @@ const Admin = r => require.ensure([],()=>r(require('views/admin/index')),'admin'
 const EditorEassy = r=>require.ensure([],()=>r(require("views/admin/editorEassy")),"editorEassy");
 
 const ModifyEassy = r=>require.ensure([],()=>r(require("views/admin/modifyEassy")),"modifyEassy");
-const CatalogCreate = r=>require.ensure([],()=>r(require("views/admin/catalog/create")),"catalogCreate");
+const Catalog= r=>require.ensure([],()=>r(require("views/admin/catalog")),"catalog");
 
 const Media = r=>require.ensure([],()=>r(require("views/admin/media")),"media");
 
@@ -69,9 +69,9 @@ const routes = [
 	  			}	  			
 	  		},
 	  		{
-	  			path:"catalog/create",
-	  			component:CatalogCreate,
-	  			name:"catalogCreate"
+	  			path:"catalog",
+	  			component:Catalog,
+	  			name:"catalog"
 	  		},
 	  		{
 	  			path:"media",
