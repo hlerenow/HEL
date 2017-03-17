@@ -95,13 +95,13 @@
 				})
 			},
 			/**
-			 * 更具目录模版path 获取模版对象
+			 * 根据目录模版path 获取模版对象
 			 * @param  {[type]} tpath [description]
 			 * @return {[type]}       [description]
 			 */
 			getTemplateObj:function(tpath){
 				if(tpath==""){
-					return {};
+					return {name:"无",path:""};
 				}
 				for(var i=0;i<this.catalogTemplates.length;i++){
 					if(this.catalogTemplates[i].path==tpath){

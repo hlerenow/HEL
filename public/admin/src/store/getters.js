@@ -1,1 +1,1 @@
-export const cartProducts = state => {}
+export const componentUid = state => {}

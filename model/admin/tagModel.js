@@ -19,7 +19,7 @@ var tagModel = function() {},
 
 		var sql="";
 		if(tags.length<1){
-			return func(stateCode.parMiass());
+			return func(stateCode.parMiss());
 		}
 
 		for(var i=0;i<tags.length;i++){

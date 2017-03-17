@@ -25,18 +25,18 @@
 	],
 	"catalogTemplate":[
 		{
-			"name":"我的",
+			"name":"目录模版一",
 			"path":"catalog-asd.html"
 		},
 		{
-			"name":"它的",
+			"name":"目录模版二",
 			"path":"sadasdsad"
 		}
 	],
-	" ":[
+	"pageTemplate":[
 		{
-			"name":"它的page",
-			"path":"sadasfs"
+			"name":"页面模版一",
+			"path":"page-1.html"
 		}
 	]
 }

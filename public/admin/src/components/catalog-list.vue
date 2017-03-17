@@ -39,7 +39,7 @@
 		      label="目录模版" 
 		      width="30%" resizable>
 		      <template scope="scope">
-					{{scope.row.value.name}}
+					{{scope.row.value.name?scope.row.value.name:'无'}}
 		      </template>		      
 		    </el-table-column>
 		    <el-table-column		 
@@ -162,7 +162,7 @@
 					parent: row.parent,
 					value: row.value
 				}
-
+				console.log(row.value);
 				self.modifyCatalog=modifyCatalog;
 				self.dialogTitle=row.name;
 				self.editorCatalogVisible=true;

@@ -14,3 +14,8 @@
 		components:{fileList}
 	}
 </script>
+<style type="text/css">
+	.mediaPage{
+		margin-left: 10px;
+	}
+</style>

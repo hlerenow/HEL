@@ -124,7 +124,7 @@
 				then(function(res){
 					if(res.data&&res.data.state===200){
 						//列表信息
-						console.log(res.data);
+						// console.log(res.data);
 						
 						self.eassyList	=res.data.opRes[0];
 						//文章总数
@@ -204,7 +204,7 @@
 				this.getEassyList();
 			},
 			modifiedEassy:function(eid){
-				this.$router.push({name:"modifyEassy",params:{eid:eid}});
+				this.$router.push({name:"editorEassy",params:{eid:eid}});
 			}
 
 		},

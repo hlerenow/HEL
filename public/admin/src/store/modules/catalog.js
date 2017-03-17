@@ -1,4 +1,4 @@
-import * as types from '../mutation-types'
+import * as types from 'store/mutation-types'
 import Axios from 'axios';
 
 // initial state
@@ -19,19 +19,21 @@ const mutations = {
 
     for(var i=0;i<data.catalogs.length;i++){
       var ite=data.catalogs[i];
-        try{
-          console.log(ite.value);
-          if(ite.value){
+        try{ 
             ite.value=JSON.parse(ite.value);
-          }else{
+        }catch(e){
             ite.value={
               name:"无",
               path:""
             };
-          }  
-        }catch(e){
+        }
 
-        }      
+        if(!(ite.value.name&&ite.value.path)){
+            ite.value={
+              name:"无",
+              path:""
+            };          
+        }
     }
 
     state.catalogs=state.catalogs.concat(data.catalogs);

@@ -1,5 +1,15 @@
 <template>
-	<div >
+	<div class="eassyEditorBox">	
+		<div class="eassyEditorCon">
+			<h2 class="pageTitle">撰写文章</h2>
+
+			<el-input v-model="eassyTitle" class="eassy--title" placeholder="请输入标题"></el-input>
+
+			<el-button id="addFile-btn" @click="showFileSelect('editorInsert')"><i class="el-icon-picture"></i> 
+			添加媒体</el-button>
+
+			<editor ref="editor"></editor>
+		</div>
 		<div id="otherInfo">
 			<el-collapse id="thumbnailCollase">
 			  <el-collapse-item title="缩略图" name="1">
@@ -18,16 +28,15 @@
 			    <template slot="title">
 			      分类目录<i @click.capture.stop ="showAddCatalog" class="el-icon-plus addCatalog"></i>
 			    </template>			  
-				<eassy-catalog :checkCatalogs="eassyCatalogs"></eassy-catalog>
+				<eassy-catalog :checkCatalogs="JSON.stringify(eassyCatalogs)" @catalogChange="catalogChange"></eassy-catalog>
 			  </el-collapse-item>
 			</el-collapse>
 
-<!-- 			<el-collapse id="tagCollapse">
+			<el-collapse id="tagCollapse">
 			  <el-collapse-item title="标签" name="1">
-			    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-			    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+				<eassy-tags :tags="tags" @tagsChange="tagsChange" ></eassy-tags>
 			  </el-collapse-item>
-			</el-collapse> -->
+			</el-collapse>
 
 			<el-collapse id="excpertCollapse">
 			  <el-collapse-item title="摘要" name="3">
@@ -49,23 +58,12 @@
 			</el-collapse>
 			<!-- 目录弹出框 -->
 			<el-dialog  v-model="createCatalogVisible">
+				<!-- <slot name="title">sadsad</slot> -->
 				<catalog-create></catalog-create>
 			</el-dialog>											
-		</div>		
-		<div class="eassyEditorCon">
-			<h2 class="pageTitle">撰写文章</h2>
-			<el-input v-model="eassyTitle" class="eassy--title" placeholder="请输入标题"></el-input>
-			<el-button id="addFile-btn" @click="showFileSelect('editorInsert')"><i class="el-icon-picture"></i> 添加媒体</el-button>
-			<div id="editormd">
-			    <textarea style="display: none;"></textarea>
-			    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-			    <textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>				
-			</div>		
-			<div style="display: none;">
-				<div id="editormd-view-html-new"></div>				
-			</div>
-		</div>
-		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
+		</div>			
+		<file-select-dialog :visiable="fileSelectDialogVisible" :selectOver="selectFileChange" ></file-select-dialog>
+<!-- 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
 			<el-button id="insertFile-btn" @click="insertFileEvent()">插入</el-button>
 			<el-tabs type="card">
 			  <el-tab-pane label="媒体库">
@@ -75,37 +73,31 @@
 					<media-add :pFileListShow="false"></media-add>
 			  </el-tab-pane>
 			</el-tabs>		
-		</el-dialog>		
+		</el-dialog> -->		
 	</div>
 </template>
 <!-- <script type="text/javascript" src="./lib/markDownEditor/lib/jquery.min.js"></script>
 <script type="text/javascript" src="./lib/markDownEditor/editormd.min.js"></script> -->
 <script type="text/javascript">
-	var jQuery=require("jQuery"),
-		$=jQuery,
-		jquery=jQuery;
-
-	var editormd=require('editormd');
-	// 
 	// var jQuery=require("lib/markDownEditor/lib/jquery.min.js");
 	// var $=jQuery;
 	// var jquery=jQuery;
 
 
-  	import fileSelect from "components/file-select.vue";
+  	import fileSelectDialog from "components/file-select-dialog.vue";
   	import eassyCatalog from "components/eassy-catalog.vue";
   	import catalogCreate from "components/catalog-create.vue";
-  	import mediaAdd from "components/media-add.vue";
+  	import editor from "components/editor.vue";
+  	import eassyTags from "components/eassy-tags.vue";
 
 
 
 	export default {
 		data () {
 			  return {
-			  	fileSelectDialog:false,
-			    username:'',
-			    password:'',
-			    tips:"",
+			  	//文件选择框，大于0 显示，小于0 不显示
+			  	fileSelectDialogVisible:-1,
+			  	//新建目录框
 			    createCatalogVisible:false,
 			    eassyCatalogs:[],
 			    eassyExcpert:"",
@@ -114,91 +106,50 @@
 			    thumnail:"",
 			    eassyStatus:"draft",
 			    selectFiles:[],
-			    fileInsertType:"editorInsert"
+			    fileInsertType:"editorInsert",
+			    tags:[],
+			    eid:""
 			  }
 		},
 		methods: {
-			editorInit:function(){
+			tagsChange:function(tags){
+				this.tags=tags;
+			},
+			catalogChange:function(catalogs){
+				console.log("接收事件");
+				this.eassyCatalogs=catalogs;
+			},
+			selectFileChange:function(files){
+				// console.log("filDialog");
 				var self=this;
-				$(function() {
-				    var editor = editormd("editormd", {
-				        path : "./lib/markDownEditor/lib/",
-				        height:"600px",
-				        watch:true,
-				        width:"99%",
-				        htmlDecode:"style,script,iframe,sub,sup|on*",
-				        toolbarIcons:function() {
-				            // Using "||" set icons align right.
-				            return ["undo", "redo","clear", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "fullscreen",  "search", "|", "help"]
-				        },
-				        onfullscreen:function(){
-				        	$("#editormd").css("z-index","10000");
-				        },
-				        onfullscreenExit:function(){
-				        	$("#editormd").css("z-index","inherit");
-				        	$('#editormd').css("width","99%");
-				        },
-				        onload:function(){
-							this.unwatch();	
-				        }
-				    });
+				this.selectFiles = files;
+				if (this.fileInsertType == "editorInsert") {
+					this.$refs.editor.insertImgToEditor(files);
+				} else if (this.fileInsertType == "thumbnailInsertType") {
+					//缩略图
+					if (files.length > 0 && files[0].type.indexOf("image") >= 0) {
+						self.thumnail = files[0].url;
+					} else {
+						self.$message.error("所选缩略图不是图片文件，或者为空 书写");
+					}
+				}
 
-				    self.editorMd=editor;
-				});
+				this.fileSelectDialogVisible = -1;
+				// console.log(files);
 			},
 			showFileSelect:function(type){
-				this.fileSelectDialog=true;
+				var a=1;
+				this.fileSelectDialogVisible=(Math.abs(this.fileSelectDialogVisible)+1)%2;
 				this.fileInsertType=type;
-			},
-			listerEassyCatalogChange:function(){
-				var self=this;
-				self.$bus.$on("eassyCatalofChage",function(val){
-					self.eassyCatalogs=val;
-				});	
 			},
 			showAddCatalog:function(){
 				this.createCatalogVisible=true;
 			},
-			listerCatalogCreate:function(){
-				var self=this;
-				self.$bus.$on("catalog-created",function(data){
-					self.createCatalogVisible=false;
-				});
-			},
-			insertImgToEditor:function(fileArry){
-				var self=this;
-				var resStr="";
-				for(var i=0;i<fileArry.length;i++){
-					if(fileArry[i].type.indexOf("image")>=0){
-						let imgObj=fileArry[i];
-						let imgStr
-						imgStr='\r\n!['+imgObj.name+']('+imgObj.url+' "'+imgObj.name+'")';
-						if(imgObj.link){
-							imgStr='['+imgStr+']('+imgObj.link+' "'+imgObj.name+'")';
-						}
-						resStr+=imgStr+"\r\n";							
-					}else if(fileArry[i].type.indexOf("video")>=0){
-						resStr+='\r\n<video src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></video>'+"\r\n";
-					} else if(fileArry[i].type.indexOf("audio")>=0){
-						resStr+='\r\n<audio src="'+fileArry[i].url+'" controls="controls" class="fileShowImg"></audio>'+"\r\n";					
-					} else {
-						resStr+='['+fileArry[i].name+']('+fileArry[i].url+' "'+fileArry[i].name+'")'+"\r\n";
-					}
-				}
-				try{
-               		this.editorMd.insertValue(resStr);
-               		this.editorMd.previewContainer.html(this.editorMd.getMarkdown());
-               		this.editorMd.focus();					
-				}catch(e){
-					console.log(e);
-				}
-
-			},
-			insertFileEvent:function(){
-				this.$bus.$emit("getSelectFile");
-			},
 			postEassy:function(eassyStatus){
 				var self=this;
+
+				self.editorMd=self.$refs.editor.editorMd;				
+
 				self.eassyStatus=eassyStatus;
 				//检查数据完整性
 
@@ -215,20 +166,39 @@
 
                 // console.log($("#test-editormd-view").html());
 
+                var apiStr="eassy/post",
+	                reqData={
+						title:self.eassyTitle,
+						content:$("#editormd-view-html-new")[0].outerHTML,
+						templateContent:self.editorMd.getMarkdown(),
+						status:self.eassyStatus,
+						excerpt:self.eassyExcpert,
+						belongCatalog:self.eassyCatalogs.join("&"),
+						thumbnail:self.thumnail,
+						tags:JSON.stringify(self.tags)
+					};
 
-				self.$http.post("eassy/post",{
-					title:self.eassyTitle,
-					content:$("#editormd-view-html-new")[0].outerHTML,
-					templateContent:self.editorMd.getMarkdown(),
-					status:self.eassyStatus,
-					excerpt:self.eassyExcpert,
-					belongCatalog:self.eassyCatalogs.join("&"),
-					thumbnail:self.thumnail
-				}).
+				if(self.eid>0){
+					apiStr = "eassy/modify";
+					reqData = {
+						title: self.eassyTitle,
+						content: $("#editormd-view-html-new")[0].outerHTML,
+						templateContent: self.editorMd.getMarkdown(),
+						status: eassyStatus,
+						excerpt: self.eassyExcpert,
+						belongCatalog: self.eassyCatalogs.join("&"),
+						thumbnail: self.thumnail,
+						eid: self.eid,
+						tags:JSON.stringify(self.tags)						
+					}
+				}
+
+				self.$http.post(apiStr,reqData).
 				then(function(res){
 					if(res.data.state===200){
 						self.$message.success("文章保存成功！");
-						self.clearEassy();
+
+						self.eid>0?false:self.clearEassy();
 					}else{
 						self.$message.error("文章保存失败！");
 					}
@@ -247,47 +217,64 @@
 				self.thumnail="";
 
 				//清除编辑器内容
-				self.editorMd.clear();
-               	self.editorMd.focus();						
-			}
-		},
-		components:{eassyCatalog,catalogCreate,fileSelect,mediaAdd},
-		computed:{
-		},
-		mounted:function(){
-			var self=this;
-			this.editorInit();
-			this.listerEassyCatalogChange();
-			this.listerCatalogCreate();
+				var editorMd=self.$refs.editor.editorMd;
+				editorMd.clear();
+               	editorMd.focus();				
+			},
+			getEassy:function(){
+				var self=this;
 
-			this.$bus.$on("SendselectFile",function(selectFiles){
-				//关闭 媒体库
-				self.fileSelectDialog=false;
-
-				var isThisPage=self.$router.currentRoute.path.indexOf("editorEassy");
-				
-				if(isThisPage<0||selectFiles.length<1){
+				if(!self.eid){
 					return;
 				}
 
-				self.selectFiles=selectFiles;
-				if(self.fileInsertType=="editorInsert"){
-					//插入编辑器
-					self.insertImgToEditor(selectFiles);
-					
-				}else if(self.fileInsertType=="thumbnailInsertType"){
-					//缩略图
-					
-					if(selectFiles.length>0&&selectFiles[0].type.indexOf("image")>=0){
-						self.thumnail=selectFiles[0].url;
-					}else{
-						self.$message.error("所选缩略图不是图片文件，或者为空 书写");
+				console.log("获取文章");
+				self.$http.post("eassy/get",{
+					eid:self.eid
+				}).
+				then(function(res){
+					if(res.data.state==200){
+						console.log(res.data);
+						var eassyInfo=self.eassyAllInfo=res.data.opRes[0];
+
+						self.eassyTitle=eassyInfo.title;
+						self.eassyStatus=eassyInfo.status;
+						self.eassyExcpert=eassyInfo.excerpt;
+						if(eassyInfo.tags){
+							self.tags=eassyInfo.tags.split(",");							
+						}
+
+						//过滤文章目录信息
+						var catalogsStr=eassyInfo.catalogs.split(",");
+						var catalogs=[];
+						for(var i=0;i<catalogsStr.length;i++){
+							catalogs.push(parseInt(catalogsStr[i].split('&')[0]));
+						}
+						//过滤文章目录信息 end						
+						self.eassyCatalogs=catalogs;
+						// console.log(self.initCatalog);
+						
+						self.thumnail=eassyInfo.thumbnail;
+
+						try{
+							var editorMd=self.$refs.editor.editorMd;									
+							editorMd.setMarkdown(eassyInfo.templateContent);
+		               		editorMd.focus();												
+						}catch(e){
+
+						}
 					}
-				}					
-			});
-
-
+				})
+			}			
+		},
+		components:{fileSelectDialog,eassyCatalog,catalogCreate,editor,eassyTags},
+		activated:function(){
+			this.eid=parseInt(this.$route.params.eid);
+			if(this.eid>0){
+				this.getEassy();
+			}			
 		}
+
 }
 
 </script>
@@ -301,6 +288,7 @@
 		margin:0 0 10px 5px;
 		border-radius: 0;
 	}
+
 	.eassy--title{
 		width: 99%;
 		margin:0 auto 15px;
@@ -311,14 +299,19 @@
 	}
 	
 	.eassyEditorCon{
-		overflow: auto;
 		padding-left: 10px;
+		padding-right: 300px;
+	}
+	.eassyEditorBox{
+		position: relative;
 	}
 
 	#otherInfo{
-		float: right;
+		position: absolute;
+		top: 0;
+		right: 0;
 		width: 300px;
-		padding:67px 10px 0;
+		padding:50px 10px 0;
 		box-sizing:border-box;
 		font-size: 14px;
 	}
@@ -392,5 +385,27 @@
 	.editormd-preview-container img,
 	.editormd-preview-container video{
 		max-width: 100%
+	}
+
+
+	@media screen and (max-width: 700px){
+		.eassyEditorCon{
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		.eassyEditorBox{
+			position: relative;
+			overflow: auto;
+		}
+
+		#otherInfo{
+			position: relative;
+			top: 0;
+			right: 0;
+			width: 100%;
+			padding:10px 10px 0;
+			box-sizing:border-box;
+			font-size: 14px;
+		}		
 	}
 </style>

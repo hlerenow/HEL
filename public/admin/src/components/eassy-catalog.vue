@@ -14,6 +14,11 @@
 			}
 		},
 		props:["checkCatalogs"],
+		watch:{
+			checkCatalogs:function(newVal){
+				this.eassyCatalogs=JSON.parse(newVal);
+			}
+		},
 		computed:{
 			selectMidArry:function(){
 				var midArry=[];
@@ -25,14 +30,17 @@
 			...mapState({
 				catalogTemplates:state=>state.catalog.catalogTemplates,
 				catalogs:(state)=>state.catalog.catalogs
-			}),
-
+			})
 		},		
 		methods:{
 			selectCatalog:function(){
 				var self=this;
-				self.$bus.$emit("eassyCatalofChage",self.eassyCatalogs);
-			}		
+				console.log("触发事件");
+				self.$emit("catalogChange",self.eassyCatalogs);
+			},
+			initCatalog:function(){
+				this.eassyCatalogs=JSON.parse(this.checkCatalogs);
+			}
 		},
 		created:function(){
 			this.$store.dispatch("catalogRequest").then(()=>{
