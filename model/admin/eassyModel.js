@@ -71,7 +71,11 @@ fn.insertEassy = function(obj, func) {
 			self.insertMulti("relationships", objArry, function(result) {
 				//更新目录下的文章数
 				var cm=new catalogModel;
-				cm.updateCatalogCount(function(){});
+				cm.updateCatalogCount(function(){debug("更新文章目录文章数")});
+
+				//更新文章目录冗余
+				var sql="update eassy set catalogs =(SELECT GROUP_CONCAT(CONCAT(meta.mid,'&',meta.name)) from relationships , meta where relationships.nid=? and meta.type='catalog' and relationships.mid =meta.mid group BY relationships.nid) where eassy.eid=?;";
+				self.query(sql,[eid,eid],function(){debug("更新文章目录冗余")});				
 			});
 			// self.insertMulti("relationships", objArry, function() {});
 			
@@ -87,6 +91,9 @@ fn.insertEassy = function(obj, func) {
 					self.insertTagsRelations(eid,tags.slice(0),function(result){
 						debug("标签文章关系");
 						tm.updateTagsCount(function(){debug("更新标签文章数")});
+						//更新文章标签冗余
+						var sql="update eassy set tags =(SELECT GROUP_CONCAT(meta.name) from relationships , meta where relationships.nid=? and meta.type='tag' and relationships.mid =meta.mid group BY relationships.nid) where eassy.eid=?;";
+						self.query(sql,[eid,eid],function(){debug("更新文章标签冗余")});					
 					});
 					//标签文章数量统计
 				});
@@ -182,7 +189,11 @@ fn.modifyEassy = function(obj, func) {
 				self.insertMulti("relationships", objArry, function(result) {
 					//更新目录下的文章数
 					var cm=new catalogModel;
-					cm.updateCatalogCount(function(){});					
+					cm.updateCatalogCount(function(){});
+
+					//更新文章目录冗余
+					var sql="update eassy set catalogs =(SELECT GROUP_CONCAT(CONCAT(meta.mid,'&',meta.name)) from relationships , meta where relationships.nid=? and meta.type='catalog' and relationships.mid =meta.mid group BY relationships.nid) where eassy.eid=?;";
+					self.query(sql,[eid,eid],function(){debug("更新文章目录冗余")});
 				});
 			});
 
@@ -204,7 +215,10 @@ fn.modifyEassy = function(obj, func) {
 				//插入文章和标签的关系
 				self.insertTagsRelations(eid,tags.slice(0),function(result){
 					//标签文章数量统计
-					tm.updateTagsCount(function(){debug("更新标签文章数")});					
+					tm.updateTagsCount(function(){debug("更新标签文章数")});
+					//更新文章标签冗余
+					var sql="update eassy set tags =(SELECT GROUP_CONCAT(meta.name) from relationships , meta where relationships.nid=? and meta.type='tag' and relationships.mid =meta.mid group BY relationships.nid) where eassy.eid=?;";
+					self.query(sql,[eid,eid],function(){debug("更新文章标签冗余")});								
 				});
 
 			});
@@ -285,7 +299,7 @@ fn.deleteEassyMulti = function(eidArry, func) {
  * @return {[type]}      [description]
  */
 fn.getEassy = function(eid, func) {
-	var sql = "select c.*,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid and b.nid=? and b.nid=c.eid  and d.uid=c.authorId GROUP BY b.nid;";
+	var sql = "select c.*,d.nickName from eassy c,users d where c.eid=? and d.uid=c.authorId;";
 
 	if (!parseInt(eid)) {
 		func(stateCode.parMiss());
@@ -299,48 +313,36 @@ fn.getEassy = function(eid, func) {
 }
 
 fn.getEassyList = function(obj, func) {
-	var catalog = " and b.mid=? ";
-	var searchWord = ' and  (title LIKE ? or excerpt LIKE ? or content LIKE ? ) ';
-	var valueArry = [];
-	var valueArry2 = [];
 
-	var sql = "select c.title,c.commentsNum,c.modified,c.eid,c.status,d.nickName ,group_concat(CONCAT(a.mid,'&',a.name)) as catalogs from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
-	var sql2 = "select count(eid) as resCount from ( select c.eid  from meta a ,relationships b,eassy c,users d where a.type='catalog' and  a.mid=b.mid  and b.nid=c.eid ";
+	var sql1="select c.*,d.nickName from eassy c,users d where d.uid=c.authorId ";
 
+	var sql2="select count(eid) from eassy c,users d where d.uid=c.authorId ";
 
-	//是否有目录筛选
-	if (parseInt(obj.catalog)) {
-		sql += catalog;
-		sql2 += catalog;
-		valueArry.push(parseInt(obj.catalog));
-		valueArry2.push(parseInt(obj.catalog));
+	var sql="";
+
+	if(parseInt(obj.catalog)>0){
+		sql+="and c.eid in (select eid from relationships r where r.mid="+this.pool.escape(obj.catalog)+" ) ";
 	}
 
-	//是否有关键词搜索
-	if (obj.seachWord) {
-		sql += searchWord;
-		sql2 += searchWord;
-		valueArry.push('%' + obj.seachWord + '%');
-		valueArry.push('%' + obj.seachWord + '%');
-		valueArry.push('%' + obj.seachWord + '%');
 
-		valueArry2.push('%' + obj.seachWord + '%');
-		valueArry2.push('%' + obj.seachWord + '%');
-		valueArry2.push('%' + obj.seachWord + '%');
+	if(obj.seachWord){
+		var searchWord=this.pool.escape('%'+obj.seachWord+'%');
+		sql+="  and  (title LIKE "+searchWord+" or excerpt LIKE "+searchWord+"  or content LIKE "+searchWord+"  or tags like "+searchWord+" )";	
 	}
 
+	//查询的结果集
+	sql1+=sql;
 	var eOffset = parseInt(obj.page) * 10 - 10;
-	valueArry.push(eOffset < 0 ? 0 : eOffset);
+	eOffset=eOffset>0?eOffset:0;
 
-	valueArry = valueArry.concat(valueArry2);
+	sql1+=" limit "+eOffset+",10;";
 
-	sql += " and d.uid=c.authorId   GROUP BY b.nid order by c.modified desc limit ?,10;";
-	sql2 += " and d.uid=c.authorId   GROUP BY b.nid order by c.modified ) f;";
-
-	this.query(sql + sql2, valueArry, function(result) {
+	//查询查询结果的总条数
+	sql2+=sql;
+	sql2+" ;";
+	this.query(sql1 + sql2, [], function(result) {
 		func(result);
 	});
-
 }
 
 //获取文章的一些数量信息

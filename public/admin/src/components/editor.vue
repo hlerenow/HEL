@@ -110,6 +110,7 @@
 					},
 					onload: function() {
 						this.unwatch();
+						self.$emit("oninit");
 					}		
 				});
 				self.editorMd = editor;

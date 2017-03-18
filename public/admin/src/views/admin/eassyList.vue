@@ -13,7 +13,7 @@
 			<el-select v-model="searchCatalog" placeholder="请选择">
 				<el-option label="全部目录" value="" check></el-option>
 				<el-option
-				  v-for="item in catalogs"
+				  v-for="item in catalogs.catalogs"
 				  :label="item.name"
 				  :value="item.mid">
 				</el-option>
@@ -204,7 +204,7 @@
 				this.getEassyList();
 			},
 			modifiedEassy:function(eid){
-				this.$router.push({name:"editorEassy",params:{eid:eid}});
+				this.$router.push({name:"modifyEassy",params:{eid:eid}});
 			}
 
 		},
@@ -214,6 +214,10 @@
 				return time.getFullYear()+" 年 "+(time.getMonth()+1)+" 月 "+time.getDate()+" 日 ";				
 			},
 			catalogFormat:function(value){
+				if(!value){
+					return "无";
+				}
+				
 				var catalogs=value.split(",");
 				var res=[];
 				catalogs.forEach(function(ite){
@@ -249,6 +253,10 @@
 		color:gray;
 		font-size: 12px;		
 	}
+	#eassyList{
+		padding-left: 10px;
+	}
+
 	#eassyList .el-input__inner{
 		border-radius: 2px !important;
 	}

@@ -20,13 +20,13 @@
 			}
 		},
 		computed:{
-			selectMidArry:function(){
-				var midArry=[];
-				this.selectObj.forEach(function(ite){
-					midArry.push(ite.mid);
-				});
-				return midArry;
-			},			
+			// selectMidArry:function(){
+			// 	var midArry=[];
+			// 	this.selectObj.forEach(function(ite){
+			// 		midArry.push(ite.mid);
+			// 	});
+			// 	return midArry;
+			// },			
 			...mapState({
 				catalogTemplates:state=>state.catalog.catalogTemplates,
 				catalogs:(state)=>state.catalog.catalogs

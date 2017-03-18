@@ -63,10 +63,10 @@ const routes = [
 	  		{
 	  			path:"editorEassy",
 	  			component:EditorEassy,
-	  			name:"editorEassy",
-	  			meta:{
-	  				keepAlive:true
-	  			}	  			
+	  			name:"editorEassy"
+	  			// meta:{
+	  			// 	keepAlive:true
+	  			// }	  			
 	  		},
 	  		{
 	  			path:"catalog",
@@ -87,6 +87,9 @@ const routes = [
 	  			path:"modifyEassy",
 	  			component:ModifyEassy,
 	  			name:"modifyEassy"
+	  			// meta:{
+	  			// 	keepAlive:true
+	  			// }		  			
 	  		},
 	  		{
 	  			path:"eassyList",

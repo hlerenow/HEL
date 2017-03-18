@@ -91,6 +91,8 @@ const actions = {
         Axios.post("catalog/create",catalog).
         then((res)=>{
           if(res.data.state===200){
+            console.log(catalog);
+            catalog.mid=res.data.insertId;
             commit(types.CATALOG_ADD,catalog);
             resolve(res);
           }else{

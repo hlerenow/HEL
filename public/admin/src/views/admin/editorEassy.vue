@@ -8,7 +8,7 @@
 			<el-button id="addFile-btn" @click="showFileSelect('editorInsert')"><i class="el-icon-picture"></i> 
 			添加媒体</el-button>
 
-			<editor ref="editor"></editor>
+			<editor ref="editor" @oninit="oninitEditor"></editor>
 		</div>
 		<div id="otherInfo">
 			<el-collapse id="thumbnailCollase">
@@ -34,7 +34,7 @@
 
 			<el-collapse id="tagCollapse">
 			  <el-collapse-item title="标签" name="1">
-				<eassy-tags :tags="tags" @tagsChange="tagsChange" ></eassy-tags>
+				<eassy-tags :tags="tags" @tagsChange="tagsChange" ref="tags"></eassy-tags>
 			  </el-collapse-item>
 			</el-collapse>
 
@@ -62,22 +62,10 @@
 				<catalog-create></catalog-create>
 			</el-dialog>											
 		</div>			
-		<file-select-dialog :visiable="fileSelectDialogVisible" :selectOver="selectFileChange" ></file-select-dialog>
-<!-- 		<el-dialog id="selectDialog" size="large" title="插入媒体" v-model="fileSelectDialog">
-			<el-button id="insertFile-btn" @click="insertFileEvent()">插入</el-button>
-			<el-tabs type="card">
-			  <el-tab-pane label="媒体库">
-			  	<file-select></file-select>
-			  </el-tab-pane>
-			  <el-tab-pane label="添加">
-					<media-add :pFileListShow="false"></media-add>
-			  </el-tab-pane>
-			</el-tabs>		
-		</el-dialog> -->		
+		<file-select-dialog :visiable="fileSelectDialogVisible" :selectOver="selectFileChange" ></file-select-dialog>	
 	</div>
 </template>
-<!-- <script type="text/javascript" src="./lib/markDownEditor/lib/jquery.min.js"></script>
-<script type="text/javascript" src="./lib/markDownEditor/editormd.min.js"></script> -->
+
 <script type="text/javascript">
 	// var jQuery=require("lib/markDownEditor/lib/jquery.min.js");
 	// var $=jQuery;
@@ -108,7 +96,8 @@
 			    selectFiles:[],
 			    fileInsertType:"editorInsert",
 			    tags:[],
-			    eid:""
+			    eid:"",
+			    templateContent:""
 			  }
 		},
 		methods: {
@@ -209,12 +198,12 @@
 			},
 			clearEassy:function(){
 				var self=this;
-
 				self.eassyTitle="";
 				self.eassyStatus="draft";
 				self.eassyExcpert="";
 				self.eassyCatalogs=[];
 				self.thumnail="";
+				self.tags=[];
 
 				//清除编辑器内容
 				var editorMd=self.$refs.editor.editorMd;
@@ -255,24 +244,30 @@
 						// console.log(self.initCatalog);
 						
 						self.thumnail=eassyInfo.thumbnail;
-
-						try{
-							var editorMd=self.$refs.editor.editorMd;									
-							editorMd.setMarkdown(eassyInfo.templateContent);
-		               		editorMd.focus();												
-						}catch(e){
-
-						}
+						self.templateContent=eassyInfo.templateContent;
 					}
 				})
-			}			
+			},
+			oninitEditor:function(){
+				var self=this;
+				var editorMd = self.$refs.editor.editorMd;
+				editorMd.setMarkdown(self.templateContent);
+				editorMd.focus();
+			}
 		},
 		components:{fileSelectDialog,eassyCatalog,catalogCreate,editor,eassyTags},
 		activated:function(){
+			console.log("激活");			
 			this.eid=parseInt(this.$route.params.eid);
 			if(this.eid>0){
 				this.getEassy();
 			}			
+		},
+		mounted:function(){
+			this.eid=parseInt(this.$route.params.eid);
+			if(this.eid>0){
+				this.getEassy();
+			}	
 		}
 
 }

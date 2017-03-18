@@ -23,10 +23,13 @@ var tagModel = function() {},
 		}
 
 		for(var i=0;i<tags.length;i++){
-			sql+="INSERT INTO `meta` (`name`, `slug`, `type`, `count`) VALUES ("+this.pool.escape(tags[i])+","+this.pool.escape(tags[i])+", 'tag','0');";
+			//记录存在时，忽略插入
+			sql+="INSERT IGNORE  INTO `meta` (`name`, `slug`, `type`, `count`) VALUES ("+this.pool.escape(tags[i])+","+this.pool.escape(tags[i])+", 'tag','0') ;";
 		}
+		debug(tags);
 		debug(sql);
 		this.query(sql,[],function(result){
+			debug(result);
 			func(result);
 		});
 	}
