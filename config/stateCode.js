@@ -30,6 +30,10 @@ const stateCode={
 		state:"001",
 		info:"参数不完整"
 	},
+	parFormatError:{
+		state:"002",
+		info:"参数格式不对"
+	},
 	//数据库错误 State:1xx;
 	notConectDb:{
 		state:101,

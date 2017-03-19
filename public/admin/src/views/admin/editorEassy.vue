@@ -100,6 +100,7 @@
 			    templateContent:""
 			  }
 		},
+		components:{fileSelectDialog,eassyCatalog,catalogCreate,editor,eassyTags},	
 		methods: {
 			tagsChange:function(tags){
 				this.tags=tags;
@@ -255,7 +256,6 @@
 				editorMd.focus();
 			}
 		},
-		components:{fileSelectDialog,eassyCatalog,catalogCreate,editor,eassyTags},
 		activated:function(){
 			console.log("激活");			
 			this.eid=parseInt(this.$route.params.eid);

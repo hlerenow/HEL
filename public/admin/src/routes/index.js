@@ -33,6 +33,8 @@ const EassyList = r=>require.ensure([],()=>r(require("views/admin/eassyList")),"
 
 const BaseSetting = r=>require.ensure([],()=>r(require("views/admin/baseSetting")),"baseSetting");
 
+const Menue = r=>require.ensure([],()=>r(require("views/admin/menue")),"menue");
+
 // 根目录
 const rootPath = '';
 
@@ -100,6 +102,11 @@ const routes = [
 	  			path:"baseSetting",
 	  			component:BaseSetting,
 	  			name:"baseSetting"
+	  		},
+	  		{
+	  			path:"menue",
+	  			component:Menue,
+	  			name:"menue"
 	  		}
 	  	]
 	  },

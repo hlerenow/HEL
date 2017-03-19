@@ -6,6 +6,7 @@
 
 <script type="text/javascript">
 	import { mapState } from 'vuex'
+	
 	export default{
 		data (){
 			return{
@@ -35,11 +36,14 @@
 		methods:{
 			selectCatalog:function(){
 				var self=this;
-				console.log("触发事件");
+				// console.log("触发事件");
 				self.$emit("catalogChange",self.eassyCatalogs);
 			},
 			initCatalog:function(){
 				this.eassyCatalogs=JSON.parse(this.checkCatalogs);
+			},
+			clear(){
+				this.eassyCatalogs=[];
 			}
 		},
 		created:function(){

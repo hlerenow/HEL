@@ -12,6 +12,9 @@ var express = require("express"),
 	fileRouter = require(path.join(__dirname, "./file")),
 	//option 路由
 	optionRouter = require(path.join(__dirname, "./option"));
+	//
+	menueRouter = require(path.join(__dirname, "./menue"));
+	
 
 adminRouter.post("/login", function(req, res, next) {
 	var userModel = new require(path.join(constVar.modelPath, "/admin/adminModel"));
@@ -80,6 +83,10 @@ adminRouter.use(/^\/file*/, fileRouter);
 
 //option api
 adminRouter.use(/^\/option*/, optionRouter);
+
+adminRouter.use(/^\/menue*/, menueRouter);
+
+
 
 
 module.exports = exports = adminRouter;
