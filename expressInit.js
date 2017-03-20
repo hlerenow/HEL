@@ -45,7 +45,8 @@ function expressInit(app, express) {
 
 	app.locals.Helper = tpFunc(app.locals);
 
-	debug(app.locals.system);
+	// debug(app.locals.system);
+	
 	app.use(favicon(path.join(constVar.themePath, "" + app.locals.blogConfig.system.nowTheme, "/favicon.png")));
 
 	app.engine('html', require('ejs').renderFile);
@@ -79,7 +80,7 @@ function expressInit(app, express) {
 
 	app.use(/^\/admin\/api*/, adminRouter);
 
-	debug(templateRouter.name);
+	// debug(templateRouter.name);
 
 	app.use("/", templateRouter);
 

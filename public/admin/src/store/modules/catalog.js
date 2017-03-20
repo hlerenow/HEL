@@ -55,7 +55,7 @@ const mutations = {
   [types.CATALOG_MODIFY](state,catalog){
     for(var i=0;i<state.catalogs.length;i++){
       var ite=state.catalogs[i];
-      if(ite.mid=catalog.mid){
+      if(ite.mid==catalog.mid){
         state.catalogs.splice(i,1,catalog);
         break;
       }

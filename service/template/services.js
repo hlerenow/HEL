@@ -27,9 +27,8 @@ fn.getIndexInfo=function(req,res,next){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===3){
 			resObj.pageType="index";
-			debug(resObj);
-			if(resObj.posts.postList.length>0){
-				res.render(themePath+themeName+"/index",resObj);								
+			if(resObj.posts.postList.length>0){				
+				res.render(themePath+themeName+"/index",resObj);
 			}else{
 				next();
 			}
@@ -49,7 +48,7 @@ fn.getIndexInfo=function(req,res,next){
 					req.app.locals.blogConfig.static.postPerPage,
 					function(result){
 			resObj["posts"]=result;
-			renderView();						
+			renderView();	
 	});
 
 }
@@ -71,8 +70,8 @@ fn.getCatalogInfo=function(req,res,next){
 		if(until.objLength(resObj)===2){
 			resObj.pageType="catalog";	
 			resObj.app=req.app;
-			var ss=req.app._router.stack;
-			debug(ss);
+			// var ss=req.app._router.stack;
+			// debug(ss);
 			// ss[ss.length-6].handle=function(res,req,next){
 			// 	debug("哈哈我被修改了");
 			// 	next();
@@ -93,6 +92,8 @@ fn.getCatalogInfo=function(req,res,next){
 
 			var postTemplatePath=path.join(themePath,themeName,"/catalog.html");
 			if(fs.existsSync(postTemplatePath)&&resObj.catalogInfo.postList.length>0){
+					// debug(JSON.stringify(resObj));
+								
 					res.render(themePath + themeName + "/catalog", resObj);
 			}else{
 				next();				
@@ -136,9 +137,10 @@ fn.getPostInfo=function(req,res,next){
 		//检测所需结果是否都已经拿到，拿到了就渲染视图
 		if(until.objLength(resObj)===2){
 			resObj.pageType="post";			
-			debug(resObj);
+			
 			var postTemplatePath=path.join(themePath,""+themeName,"/post.html");
 			if(fs.existsSync(postTemplatePath)&&until.objLength(resObj.post)>0){
+
 				res.render(themePath + themeName + "/post", resObj);
 			}else{
 				next();

@@ -14,7 +14,7 @@ var funcs = {
 	 * @return {[type]}        [description]
 	 */
 	getPostLink: function(postId) {
-		debug(this);
+		// debug(this);
 		return this.blogConfig.static.siteUrl + "/post/" + postId + ".html";
 	},
 	/**
@@ -80,6 +80,35 @@ var funcs = {
 		str = str.replace("ss", ss);
 
 		return str;
+	},
+	formatEassyCatalog:function(catalogs){
+		var catalogObj;
+		debug(catalogs);
+		try{
+			catalogObj=catalogs.split(",");
+			for(var i=0;i<catalogObj.length;i++){
+				var item=catalogObj[i];
+				item=item.split("&");
+				debug(item);
+				catalogObj[i]={
+					name:item[1],
+					mid:item[0]
+				}
+			}
+			
+		}catch(e){
+			catalogObj=[{
+				name:"无",
+				mid:0
+			}]
+		}
+		debug(catalogObj);
+		return catalogObj;
+
+	},
+	formatTag:function(tags){
+
+		return tags.split(",");
 	}
 };
 
@@ -91,7 +120,9 @@ var templateHelper = function(content) {
 	for (let i in funcs) {
 		res[i] = funcs[i].bind(content);
 	}
+	debug(res);
+
 	return res;
-}
+};
 
 module.exports = exports = templateHelper;

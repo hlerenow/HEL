@@ -70,6 +70,8 @@ fn.getPost=function(eid,func){
 				//判断是否有上下一篇文章
 				if(result.opRes[1].length>0){
 					postInfo.rencentPost=result.opRes[1];
+				}else{
+					postInfo.rencentPost=[];
 				}
 
 				func(postInfo);
@@ -82,4 +84,8 @@ fn.getPost=function(eid,func){
 	});
 };
 
+fn.getRecentPost=function(obj,func){
+	var count=parseInt(obj.count)||10;
+	var catalog=obj.catalogSlug;
+}
 module.exports=exports=postInfoModel;

@@ -7,6 +7,11 @@ var express = require("express"),
 
 
 
+//挂载一些通用的信息
+templateRouter.use("*",function(req,res,next){
+	res.locals.menue=JSON.parse(req.app.locals.blogConfig.system.menue);
+	next();
+});
 /**
  * 匹配首页
  * @param  {[type]} req                     [description]

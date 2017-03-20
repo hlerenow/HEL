@@ -1,15 +1,26 @@
 <template>
 <el-menu  theme="dark" default-active="1" class="el-menu-top" mode="horizontal">
-  <el-menu-item index="icon-hel">HEL</el-menu-item>
-  <el-menu-item index="1"><i class="el-icon-message"></i>0</el-menu-item>
+  <el-menu-item class="logoItem" index="icon-hel">
+    <a href="https://github.com/hlerenow/HEL" target="_blank">
+      <!-- <img id="hel_log" src="img/HEL.png" alt="">    -->   
+      HEL
+    </a>
+  </el-menu-item>
+  <!-- <el-menu-item index="1"><i class="el-icon-message"></i>0</el-menu-item> -->
   <el-submenu class="addPlus" index="newAdd">
     <template slot="title"><i class="el-icon-plus"></i>新建</template>
-    <el-menu-item index="/main/editorEassy">
-      <router-link to="/main/editorEassy">文章</router-link>  
-    </el-menu-item>
-    <el-menu-item index="/main/mediaAdd">
-      <router-link to="/main/mediaAdd">文件</router-link>       
-    </el-menu-item>
+    <router-link to="/main/editorEassy">
+      <el-menu-item index="/main/editorEassy">
+        文章 
+      </el-menu-item>
+    </router-link> 
+
+  
+      <router-link to="/main/mediaAdd">
+        <el-menu-item index="/main/mediaAdd">
+          文件
+        </el-menu-item>
+      </router-link>       
     <!-- <el-menu-item index="newAdd-3">页面</el-menu-item> -->
     <!-- <el-menu-item index="newAdd-4">链接</el-menu-item> -->
   </el-submenu>  
@@ -80,6 +91,21 @@
     font-size: 12px;
   }
   .el-menu-item a{
+    text-decoration: none;
+  }
+  
+  .logoItem{
+    font-size: 31px;  
+    border-bottom-width: 0px !important;      
+  }
+  .logoItem.is-active{
+    border-bottom-width: 0px !important;
+  }
+
+  .el-menu a{
+    display: block;
+    width: 100%;
+    box-sizing:border-box;
     text-decoration: none;
   }
 </style>

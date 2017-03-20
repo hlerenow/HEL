@@ -79,7 +79,12 @@
 				<% posts.postList.forEach(function(post){ %>
 
 				<div class="eassy">
-					<h2 class="eassyTitle" id="pid<%=post.eid%>"><%= post.title%></h2>
+					<h2 class="eassyTitle" id="pid<%=post.eid%>"><%- post.title%></h2>
+					<%= Helper.formatTime(post.created,"YY年MM月DD日 hh:mm:ss")%>
+					<%= Helper.formatTag(post.tags)[0]%>
+
+					<!-- <%=post.catalogs%> -->
+					<%- JSON.stringify(Helper.formatEassyCatalog(post.catalogs)) %>
 					<div class="content">
 						<%-post.content %>
 					</div>					
@@ -88,6 +93,12 @@
 				<% });%>
 			</div>
 		</div>
+		<%- JSON.stringify(menue) %>
+		
 		<!-- <% Helper.getPostLink()%> -->
 	</body>
+	<script type="text/javascript">
+		var allData=<%- JSON.stringify(locals) %>;
+		console.log(allData);
+	</script>
 </html>
