@@ -29,7 +29,19 @@
         return {
           username: '',
           password: '',
-          tips:""
+          tips:"",
+          timeHadle:""
+        }
+      },
+      watch:{
+        tips:function(){
+          if(this.timeHadle){
+            clearTimeout(this.timeHadle);
+          }
+
+          this.timeHadle=setTimeout(()=>{
+            this.tips="";
+          },2000);
         }
       },
       methods: {

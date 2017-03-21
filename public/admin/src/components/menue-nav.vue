@@ -14,7 +14,7 @@
       </el-submenu> -->
       <el-submenu index="3">
         <template slot="title"><i class="el-icon-menu "></i>外观</template>
-        <!-- <el-menu-item index="/main/eassyList">主题</el-menu-item> -->
+        <el-menu-item index="/main/theme">主题</el-menu-item>
         <el-menu-item index="/main/menue">菜单</el-menu-item>
         <!-- <el-menu-item index="/main/modifyEassy">修改文章</el-menu-item> -->        
       </el-submenu>           

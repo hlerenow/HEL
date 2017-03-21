@@ -71,6 +71,10 @@ const stateCode={
 		state:700,
 		info:"文件上传失败"
 	},
+	themeUploadFail:{
+		state:701,
+		info:"主题安装失败"
+	},
 	jsonParseFail:{
 		state:800,
 		info:"json字符串解析失败"

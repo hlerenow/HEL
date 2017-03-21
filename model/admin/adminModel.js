@@ -89,10 +89,16 @@ fn.modifyPassword = function(obj, func) {
 	let pas = crypto.createHmac("sha256", config.crypto.hash)
 		.update(obj.password)
 		.digest("hex");
+
+	let oldPassword=crypto.createHmac("sha256", config.crypto.hash)
+		.update(obj.oldPassword)
+		.digest("hex");
+		
 	self.updateOneRecord("users", {
-		password: obj.password
+		password:pas
 	}, {
-		name: obj.name
+		name: obj.name,
+		password:oldPassword
 	}, func);
 }
 

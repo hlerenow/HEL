@@ -2,7 +2,7 @@
 var	express=require("express"),
 	fs=require("fs"),
 	path=require("path"),
-	debug=require("debug")("file"),
+	debug=require("debug")("fileRouter"),
 	fileRouter=express.Router(),
 	constVar = require(path.join(constVarPath)),
 	stateCode = require(path.join(constVar.configPath, "stateCode")),

@@ -23,15 +23,20 @@ const Admin = r => require.ensure([],()=>r(require('views/admin/index')),'admin'
 const EditorEassy = r=>require.ensure([],()=>r(require("views/admin/editorEassy")),"editorEassy");
 
 const ModifyEassy = r=>require.ensure([],()=>r(require("views/admin/modifyEassy")),"modifyEassy");
+
 const Catalog= r=>require.ensure([],()=>r(require("views/admin/catalog")),"catalog");
 
 const Media = r=>require.ensure([],()=>r(require("views/admin/media")),"media");
+
+const Theme = r=>require.ensure([],()=>r(require("views/admin/theme")),"theme");
 
 const MediaAdd = r=>require.ensure([],()=>r(require("views/admin/mediaAdd")),"mediaAdd");
 
 const EassyList = r=>require.ensure([],()=>r(require("views/admin/eassyList")),"eassyList");
 
 const BaseSetting = r=>require.ensure([],()=>r(require("views/admin/baseSetting")),"baseSetting");
+
+const UserInfo = r=>require.ensure([],()=>r(require("views/admin/userInfo")),"userInfo");
 
 const Menue = r=>require.ensure([],()=>r(require("views/admin/menue")),"menue");
 
@@ -107,6 +112,16 @@ const routes = [
 	  			path:"menue",
 	  			component:Menue,
 	  			name:"menue"
+	  		},
+	  		{
+	  			path:"theme",
+	  			component:Theme,
+	  			name:"theme"
+	  		},
+	  		{
+	  			path:"userInfo",
+	  			component:UserInfo,
+	  			name:"userInfo"
 	  		}
 	  	]
 	  },

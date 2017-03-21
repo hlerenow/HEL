@@ -11,14 +11,17 @@ var express = require("express"),
 	//文件上传路由
 	fileRouter = require(path.join(__dirname, "./file")),
 	//option 路由
-	optionRouter = require(path.join(__dirname, "./option"));
+	optionRouter = require(path.join(__dirname, "./option")),
 	//
-	menueRouter = require(path.join(__dirname, "./menue"));
+	menueRouter = require(path.join(__dirname, "./menue")),
+
+	themeRouter = require(path.join(__dirname, "./theme")),
 	
+	adminModel = new require(path.join(constVar.modelPath, "/admin/adminModel"));
+
 
 adminRouter.post("/login", function(req, res, next) {
-	var userModel = new require(path.join(constVar.modelPath, "/admin/adminModel"));
-	userModel = new userModel;
+	userModel = new adminModel;
 	if (req.body.username && req.body.password) {
 		//登录验证
 		userModel.login({
@@ -72,6 +75,32 @@ adminRouter.get("/logout", function(req, res, next) {
 	});
 });
 
+adminRouter.post("/modifyPas", function(req, res, next) {
+	//密码长度检查
+	if(req.body.password.length<8){
+		res.json(stateCode.fail({
+			moreInfo:"密码长度少于8位"
+		}));
+
+		return;
+	}
+
+	userModel = new adminModel;
+	userModel.modifyPassword({
+		password:req.body.password||"",
+		oldPassword:req.body.oldPassword||"",
+		name:"admin"
+	},function(result){
+		if(result.state==200&&result.opRes.affectedRows>0){
+			res.json(stateCode.success());			
+		}else{
+			res.json(stateCode.fail({
+				moreInfo:"原密码错误"
+			}));	
+		}
+	})
+});
+
 //博文api
 adminRouter.use(/^\/eassy*/, eassyRouter);
 
@@ -86,7 +115,7 @@ adminRouter.use(/^\/option*/, optionRouter);
 
 adminRouter.use(/^\/menue*/, menueRouter);
 
-
+adminRouter.use(/^\/theme*/, themeRouter);
 
 
 module.exports = exports = adminRouter;
