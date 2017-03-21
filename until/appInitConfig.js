@@ -22,10 +22,10 @@ function appInitConfig(app, func) {
 			app.locals.blogConfig.system = rst;
 
 			//脚在当前主题的配置文件
-			var themePathConfig={};
+			var themePathConfig="";
 			try{
 				themePathConfig= path.join(constVar.themePath, app.locals.blogConfig.system.nowTheme, './config.json');				
-			}catch(e){
+			}catch(err){
 				debug(err);
 			}
 

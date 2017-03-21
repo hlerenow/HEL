@@ -25,7 +25,8 @@ fn.query = function(sql, val, func) {
 	pool.getConnection(function(err, con) {
 		if (err) {
 			debug(err);
-			func(stateCode.notConectDb());
+			console.error("\n数据库连接失败,请检查数据库配置,请按 Ctrl + C 退出");
+			// func(stateCode.notConectDb());
 			return;
 		}
 

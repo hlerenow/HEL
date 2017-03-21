@@ -1,17 +1,15 @@
 var express = require("express"),
 	path = require("path"),
-	templateRouter = express.Router(),
+	showContent = express.Router(),
 	debug = require("debug")("showContent"),
 	constVar = require(path.join(constVarPath)),
-	templateService = require(path.join(constVar.servicePath, "/template/services.js"));
+	templateService = require(path.join(constVar.servicePath, "/template/services.js")),
+
+	bim=new (require(path.join(constVar.modelPath,"template/blogInfoModel"))),
+	pim=new (require(path.join(constVar.modelPath,"template/postInfoModel"))),
+	cm=new (require(path.join(constVar.modelPath,"template/catalogModel")));	
 
 
-
-//挂载一些通用的信息
-templateRouter.use("*",function(req,res,next){
-	res.locals.menue=JSON.parse(req.app.locals.blogConfig.system.menue);
-	next();
-});
 /**
  * 匹配首页
  * @param  {[type]} req                     [description]
@@ -19,12 +17,12 @@ templateRouter.use("*",function(req,res,next){
  * @param  {[type]} next){	req.params.page [description]
  * @return {[type]}                         [description]
  */
-templateRouter.get("/", function(req, res, next) {
+showContent.get("/", function(req, res, next) {
 	req.params.page = 1;
 	templateService.getIndexInfo(req, res, next);
 });
 
-templateRouter.get("/index", function(req, res, next) {
+showContent.get("/index", function(req, res, next) {
 	req.params.page = 1;
 	templateService.getIndexInfo(req, res, next);
 });
@@ -35,14 +33,14 @@ templateRouter.get("/index", function(req, res, next) {
  * @param  {[type]} next){	req.params.page [description]
  * @return {[type]}                         [description]
  */
-templateRouter.get("/index/page", function(req, res, next) {
+showContent.get("/index/page", function(req, res, next) {
 	req.params.page = 1;
 	templateService.getIndexInfo(req, res, next);
 });
 
-templateRouter.get("/index/page/:page(\\d+)", function(req, res, next) {
+showContent.get("/index/page/:page(\\d+)", function(req, res, next) {
 	var page = parseInt(req.params.page);
 	templateService.getIndexInfo(req, res, next);
 });
 
-module.exports = templateRouter;
+module.exports = showContent;

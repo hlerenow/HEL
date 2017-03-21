@@ -9,24 +9,21 @@
 			"page":"tools.html"
 		}
 	],
-	"dataInject":[
-		{
-			"templateName":"post.html",
-			"data":[
-				{
-					"type":"catalogs"
-				},
-				{
-					"type":"recentPost",
-					"count":"10"
-				}
-			]
-		}
-	],
 	"catalogTemplate":[
 		{
 			"name":"目录模版一",
-			"path":"catalog-asd.html"
+			"path":"catalog-asd.html",
+			"dataInject":{
+				"catalogs":[
+					{
+						"type":"catalogs"
+					},
+					{
+						"type":"recentPost",
+						"count":"10"
+					}
+				]
+			}	
 		},
 		{
 			"name":"目录模版二",

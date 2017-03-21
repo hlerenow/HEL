@@ -84,8 +84,45 @@ fn.getPost=function(eid,func){
 	});
 };
 
+/**
+ * 获取最近的文章
+ * @param  {[type]} obj {
+ *                      	count,       //文章数(非必需)
+ *                      	catalogSlug //目录别名(非必需)
+ *                      }
+ * @param  {[type]} func [description]
+ * @return {[type]}      [description]
+ */
 fn.getRecentPost=function(obj,func){
-	var count=parseInt(obj.count)||10;
-	var catalog=obj.catalogSlug;
+	if(typeof obj =='function'){
+		func=obj;
+	};
+
+	var count=parseInt(obj.count)||10,
+		catalog=obj.catalogSlug;
+	var sql='select * FROM eassy ';
+	
+
+	var sql='select * from eassy where type="post" ';
+	if(catalog){
+		sql+= 'where eid in (select nid from relationships WHERE mid in (select mid from meta where type="catalog" and slug='+this.pool.escape(catalog)+' )) ';
+	}
+
+	sql+=' ORDER BY eassy.created LIMIT '+this.pool.escape(count)+';';
+
+	this.query(sql,[],function(result){
+			func(result);
+	});
 }
+
+fn.getAllPost=function(func){
+	var sql='select * from eassy where type="post";'
+
+	this.query(sql,[],function(result){
+
+		func(result);
+		
+	});
+}
+
 module.exports=exports=postInfoModel;

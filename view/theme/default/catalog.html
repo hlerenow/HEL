@@ -1,5 +1,9 @@
-<%= JSON.stringify(catalogInfo) %>
+<%= JSON.stringify(catalog) %>
 <br>
 <%= JSON.stringify(pageType) %>
 <br>
-<%= JSON.stringify(app) %>
+
+<script type="text/javascript">
+	var allData=<%- JSON.stringify(locals) %>;
+	console.log(allData);
+</script>

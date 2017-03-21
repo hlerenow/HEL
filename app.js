@@ -8,6 +8,9 @@ var constVar=require(path.join(constVarPath)),
 	debug=require("debug")("app"),
 	express=require("express"),
 	schedule=require('node-schedule'),	
+
+	hPromise=require(path.join(constVar.untilPath, "/hPromise.js")),
+	createMysqlTables=require(path.join(constVar.untilPath, "/createMysqlTables.js")),	
 	app=express(),
 	//主题配置
 	
@@ -29,23 +32,37 @@ var	timeRule=new schedule.RecurrenceRule();
 		});
 	});
 
-//bolog的一些全局配置
-aic(app,function(flage){
-	if(flage){
-		debug("系统设置加载成功");
-		debug(app.locals.blogConfig)		
-	}else{
-		debug("系统设置加载失败");		
-	}
+var hp=new hPromise();
+	
+	hp.add(function(){
+		//创建表
+		createMysqlTables(()=>{
+			debug("哈哈");
+			this.next();
+		});		
+	}).then(function(){
+		//bolog的一些全局配置
+			debug("哈哈 2");		
+		aic(app,function(flage){
+			if(flage){
+				debug("系统设置加载成功");
+				debug(app.locals.blogConfig)		
+			}else{
+				debug("系统设置加载失败");		
+			}
 
-	initExpress(app,express);
+			initExpress(app,express);
 
-	app.set("port",3000);
+			app.set("port",3000);
 
-	//开启express服务器
-	app.listen(parseInt(app.get("port")),function(){
-		console.log("Express 4.0 on http://localhost:%s",app.get("port"));
-	});	
-});
+			//开启express服务器
+			app.listen(parseInt(app.get("port")),function(){
+				console.log("Express 4.0 on http://localhost:%s",app.get("port"));
+			});	
+		});
+	});
+
+	hp.start();
+
 
 

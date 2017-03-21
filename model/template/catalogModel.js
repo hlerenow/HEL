@@ -37,25 +37,27 @@ fn.getCatalogPost = function(catalogSlug, page, perPage, func) {
 		"( select mid from meta where type='catalog' and slug=" + catalogSlugEscape + ")) " +
 		"ORDER BY created desc limit " + this.pool.escape(index) + "," + this.pool.escape(perPage) + ";";
 
-	//当前目录下总的文章数
-	var sql3 = "select count(nid) allEassyCount FROM relationships where type='postCatalog' and mid = ( select mid from meta where type='catalog' and slug=" + catalogSlugEscape + ");";
-
-	this.query(sql + sql2 + sql3, [], function(result) {
+	this.query(sql + sql2, [], function(result) {
 		var resObj = {
 			postList: [],
-			cataloginfo: {},
-			postCount: 0
+			catalogInfo: {}
 		};
 		if (result.state === 200) {
-			resObj.cataloginfo = result.opRes[0][0];
+			resObj.catalogInfo = result.opRes[0][0];
 			resObj.postList = result.opRes[1];
-			resObj.postCount = result.opRes[2][0].allEassyCount;
 		} else {
 			debug("目录文章查询失败");
 		}
 
 		func(resObj);
 
+	});
+}
+
+fn.getAllCatalogs=function(func){
+	var sql="select * from meta where type='catalog' ;";
+	this.query(sql,[],function(result){
+		func(result);
 	});
 }
 
