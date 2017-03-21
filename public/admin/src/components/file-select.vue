@@ -4,7 +4,7 @@
 			<div class="nofiles" v-show="!hasFiles">暂无文件</div>
 			<div class="fileCard ShowCon">
 			    <el-card  v-for="(ite,index) of files" :body-style="{ padding: '0px' }" :class="{delStyle:delShow}">
-			      <el-checkbox  v-model="checkArry[index].state"></el-checkbox>
+			     <el-checkbox @change="cardClick(index,true)"  v-model="checkArry[index].state"></el-checkbox>
 			      <div @click="cardClick(index)" class="imgCon">
 			      		<img :src="ite.thumbnail" class="image">		
 			      </div>
@@ -26,8 +26,6 @@
 	</div>
 </template>
 <script type="text/javascript">
-  	import fileShow from "components/file-show.vue";
-
 	export default{
 		data (){
 			return {
@@ -39,7 +37,6 @@
 				files:[],
 				nowFile:{},
 				checkArry:[],
-				uploadState:false,
 			};
 		},
 		propos:{
@@ -50,9 +47,12 @@
 				default:"fileSelectEvent"
 			}
 		},
-		components:{fileShow},
 		methods:{
-			createCheckArry:function(){
+			/**
+			 * 构造check 选择数据模型
+			 * @return {[type]} [description]
+			 */
+			initCheckArry:function(){
 				var resArry=[];
 				for(var i=0;i<this.files.length;i++){
 					resArry.push({
@@ -63,9 +63,22 @@
 				}
 				this.checkArry=resArry;
 			},
-			cardClick:function(index){
-				this.checkArry[index].state=!this.checkArry[index].state;			
+			/**
+			 * 文件被点击时更新 选择文件的状态
+			 * @param  {[type]} index [description]
+			 * @return {[type]}       [description]
+			 */
+			cardClick:function(index,flage){
+				if(!flage){
+					this.checkArry[index].state=!this.checkArry[index].state;						
+				}
+				var res=this.checkFiles();
+				this.$emit("fileChange",res);
 			},
+			/**
+			 * 获取文件根据页数和每页文件的个数
+			 * @return {[type]} [description]
+			 */
 			getFiles:function(){
 				var self=this;
 				self.$http.post("file/getList",{
@@ -79,7 +92,7 @@
 					}
 					self.files=res.data.opRes[0];
 					self.totalFilesCount=res.data.opRes[1][0].total;
-					self.createCheckArry();
+					self.initCheckArry();
 					self.formatImgUrl();
 					
 				});
@@ -93,15 +106,16 @@
 						break;
 					}
 				}
-
 				return res;
 			},		
+			/**
+			 * 翻页
+			 * @param  {[type]} currentPage [description]
+			 * @return {[type]}             [description]
+			 */
 			pageChange:function(currentPage){
 				this.page=currentPage;
 				this.getFiles();
-			},
-			uploadFile:function(){
-				this.uploadState=!this.uploadState;
 			},
 			formatImgUrl:function(){
 				for(var i=0;i<this.files.length;i++){
@@ -117,7 +131,17 @@
 						ite.thumbnail= "./img/file.png";
 					}					
 				}
-			},			
+			},
+			checkFiles:function(){
+				var self=this;
+				var res=[];
+				for(var i=0;i<self.checkArry.length;i++){
+					if(self.checkArry[i].state){
+						res.push(self.checkArry[i].data);
+					}
+				}
+				return res;
+			}	
 		},
 		computed:{
 			hasFiles:function(){
@@ -135,18 +159,6 @@
 			this.$bus.$on("fileUploadSuccess",function(){
 				self.getFiles();
 			});
-
-			//监听
-			this.$bus.$on("getSelectFile",function(){
-				var res=[];
-				for(var i=0;i<self.checkArry.length;i++){
-					if(self.checkArry[i].state){
-						res.push(self.checkArry[i].data);
-					}
-				}			
-				self.$bus.$emit("SendselectFile",res);
-				self.createCheckArry();
-			})
 		}
 	}
 </script>

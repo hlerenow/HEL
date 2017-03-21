@@ -12,7 +12,8 @@
         <el-input type="password" v-model.trim="password">
           <template slot="prepend">密&nbsp;码</template>
         </el-input>
-      </div>     
+      </div>
+        <span class="tipsLogin">{{tips}}</span>
           <el-button @click.prevent="login"  class="login__submit" type="primary submit" >
             登&nbsp;&nbsp;录
           </el-button>
@@ -24,66 +25,65 @@
 
 <script>
   export default {
-    data () {
-      return {
-        username:'',
-        password:'',
-        tips:""
-      }
-    },
-    methods: {
-      login: function() {
-        let self=this;
-
-        if(!this.validate){
-            self.$message({
-              message:"用户名或密码不能为空",
-              type:"error",
-              duration:0,
-              showClose:true
-            });
-            return;
+    data() {
+        return {
+          username: '',
+          password: '',
+          tips:"",
+          timeHadle:""
         }
-        this.$http.post("login", {
-          username: this.username,
-          password: this.password
-        }).
-        then(function(res) {
-
-          if(res.data.state===200){
-            self.$cookie.set("username",res.data.username);
-            self.$cookie.set("mail",res.data.mail);
-            self.$cookie.set("nickname",res.data.nickname);
-            self.$router.push("main");
-          }else{
-            self.$message({
-              message:res.data.info,
-              type:"error",
-              duration:2000,
-              showClose:true
-            });
+      },
+      watch:{
+        tips:function(){
+          if(this.timeHadle){
+            clearTimeout(this.timeHadle);
           }
-        },function(res){
-            self.$message({
-              message:"网络错误,请检查网络连接,稍后再试！",
-              type:"error",
-              duration:2000,
-              showClose:true
-            });
-        });
-      }
-    },
-    computed:{
-      validate:function(){
-        if(this.username&&this.password)
-          return true;
-        else
-          return false;
-      }
-    },
-    mounted:function(){
 
-    }
+          this.timeHadle=setTimeout(()=>{
+            this.tips="";
+          },2000);
+        }
+      },
+      methods: {
+        login: function() {
+          let self = this;
+
+          if (!this.validate) {
+            self.tips="用户名或密码不能为空";
+            return;
+          }
+
+          this.$http.post("login", {
+            username: this.username,
+            password: this.password
+          }).
+          then(function(res) {
+            if (res.data.state === 200) {
+              self.$cookie.set("username", res.data.username);
+              self.$cookie.set("mail", res.data.mail);
+              self.$cookie.set("nickname", res.data.nickname);
+              self.$router.push("main");
+            } else {
+              self.tips=res.data.info;
+            }
+          }).catch(function(error) {
+            console.log(error);
+            if (error.state) {
+              self.tips=error.info;
+            } else {
+              self.tips="网络错误,请稍后再试 !!!";
+            }
+          });
+        }
+      },
+      computed: {
+        validate: function() {
+          if (this.username && this.password)
+            return true;
+          else
+            return false;
+        }
+      }
   }
 
 </script>
@@ -140,6 +140,10 @@
   .login__submit{
     display: block;
     float: right;
+  }
+  .tipsLogin{
+    color: red;
+    font-size: 12px
   }
 
 

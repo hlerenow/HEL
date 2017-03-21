@@ -1,10 +1,12 @@
-var path=require("path");
-var fs=require("fs");
-var cmd=require("node-cmd");
-var os=require("os");
+var	path=require("path"),
+	fs=require("fs"),
+	cmd=require("node-cmd"),
+	os=require("os"),
+	constVar = require(path.join(constVarPath));
+
 
 module.exports=exports=function(func){
-	var dirPath=path.join(__dirname,"../public/uploadTemp");
+	var dirPath=path.join(constVar.publicPath,"/uploadTemp");
 	if(os.platform()=="win32"){
 		cmd.get("rd /s/q "+dirPath+" & mkdir "+dirPath,func);
 	}else{

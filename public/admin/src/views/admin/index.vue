@@ -1,14 +1,16 @@
 <template>
   <div id="admin">
     <div id="admin-content__layout">
-      <transition name="slide-fade" mode="out-in">
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive" class="admin-content__box"></router-view>      
-        </keep-alive>
-      </transition>
-      <transition name="slide-fade"  mode="out-in">
-        <router-view v-if="!$route.meta.keepAlive"  class="admin-content__box"></router-view>    
-      </transition>      
+      <div class="admin-content__box">
+        <transition name="slide-fade" mode="out-in">
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive" ></router-view>      
+          </keep-alive>
+        </transition>
+        <transition name="slide-fade"  mode="out-in">
+          <router-view v-if="!$route.meta.keepAlive"></router-view>    
+        </transition>              
+      </div>
     </div>
     <menue-nav id="menue-nav__left"></menue-nav>
     <head-bar id="menue-nav__top" :nickname="username" :mail="mail" :username="username"></head-bar>
@@ -71,7 +73,7 @@
     box-sizing:border-box;
     width: 100%;
     height: 100%;
-    padding: 60px 0 0 130px;
+    padding: 60px 0 0 120px;
     background-color: white;    
   }
   .admin-content__box{
@@ -100,11 +102,14 @@
   }
 
   html,body,#app{
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;    
     height: 100% !important;
   }
   body{
     padding:0 !important;
+  }
+
+  button{
+    border-radius: 2px !important;
   }
 /* 可以设置不同的进入和离开动画 */
 /* 设置持续时间和动画函数 */

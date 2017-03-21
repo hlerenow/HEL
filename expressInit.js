@@ -1,90 +1,94 @@
-module.exports = exports = function(app,express) {
-		var path = require("path");
+var path = require("path"),
+	constVar = require(path.join(constVarPath)),
+	debug = require("debug")("expressInit"),
+	helmet = require('helmet'),
+	favicon = require('express-favicon'),
+	// 路由
 
-		var debug = require("debug")("expressInit");
+	baseLoginCheck = require("./router/baseLogin"),
+	adminRouter = require("./router/admin/admin")
 
-		var favicon = require('express-favicon');
-		// 路由
-		var baseLoginCheck = require("./router/baseLogin");
-		var adminRouter = require("./router/admin/admin");
+	//模版路由
+	templateRouter = require("./router/template/template.js"),
 
-		//模版路由
-		var templateRouter = require("./router/template/template.js");
+	// 中间件
+	compression = require("compression"),
+	cookieParser = require("cookie-parser"),
+	bodyParser = require("body-parser"),
+	urlencoed = bodyParser.urlencoded({
+		extended: true
+	}),
+	jsonParser = bodyParser.json(),
+	session = require("express-session"),
+
+	//模版辅助函数挂载
+	tpFunc = require(path.join(__dirname, "service/templateFunctions.js"));
+
+function expressInit(app, express) {
+	//环境选择
+	// switch (app.get('env')) {
+	// 	case "development":
+	// 		{
+	// 			app.use(require("morgan")("dev"));
+	// 			break;
+	// 		}
+	// 	case 'production':
+	// 		{
+	// 			app.use(require("express-logger")({
+	// 				path: path.join(constVar.logPath,"/log.txt")
+	// 			}));
+	// 			break;
+	// 		}
+	// }
+	app.disable('x-powered-by');
+
+	app.use(helmet());
+
+	app.locals.Helper = tpFunc(app.locals);
+
+	// debug(app.locals.system);
+	
+	app.use(favicon(path.join(constVar.themePath, "" + app.locals.blogConfig.system.nowTheme, "/favicon.png")));
+
+	app.engine('html', require('ejs').renderFile);
+	app.set("view engine", "html");
+	app.set("views", constVar.viewPath);
+
+	app.use(cookieParser("595806119HL"));
+
+	app.use(session({
+		secret: "595806119HL",
+		cookie: {
+			secure: false
+		},
+		name: "mySid",
+		resave: false,
+		saveUninitialized: true
+	}));
 
 
-		// 中间件
-		var compression = require("compression");
-		var cookieParser = require("cookie-parser");
+	app.use(urlencoed);
 
-		var bodyParser = require("body-parser");
-		var urlencoed = bodyParser.urlencoded({
-			extended: true
-		});
-		var jsonParser = bodyParser.json();
+	app.use(jsonParser);
 
-		var session = require("express-session");
-		//模版函数挂载
-		var tpFunc = require(path.join(__dirname, "services/templateFunctions.js"));
-		app.locals.Helper = tpFunc(app.locals);
+	app.use(compression());
+	
+	app.use(express.static(constVar.publicPath));
+	// app.use(express.static(path.join(__dirname, "views/theme/defaule")));
 
-		debug(app.locals.system);
-		app.use(favicon(path.join(__dirname, '/views/theme/',""+app.locals.blogConfig.system.nowTheme,"/favicon.png")));
+	//登录过滤
+	app.use(baseLoginCheck);
 
+	app.use(/^\/admin\/api*/, adminRouter);
 
-			app.engine('html', require('ejs').renderFile); 
-			app.set("view engine", "html"); 
-			app.set("views", path.join(__dirname, "views"));
+	// debug(templateRouter.name);
 
-			app.use(cookieParser("595806119HL"));
+	app.use("/", templateRouter);
 
-			app.use(session({
-				secret: "595806119HL",
-				cookie: {
-					secure: false
-				},
-				name: "mySid",
-				resave: false,
-				saveUninitialized: true
-			}));
-
-
-			app.use(urlencoed);
-
-			app.use(jsonParser);
-
-			app.use(compression());
-
-			app.use(express.static(path.join(__dirname, "public")));
-			// app.use(express.static(path.join(__dirname, "views/theme/defaule")));
-
-			//环境选择
-			switch (app.get('env')) {
-				case "development":
-					{
-						app.use(require("morgan")("dev"));
-						break;
-					}
-				case 'production':
-					{
-						app.use(require("express-logger")({
-							path: __dirname + "/log/log.txt"
-						}));
-						break;
-					}
-			}
-			
-			//登录过滤
-			app.use(baseLoginCheck);
-
-			app.use(/^\/admin\/api*/, adminRouter);
-
-			debug(templateRouter.name);
-
-			app.use("/", templateRouter);
-
-			//404 
-			app.all("*", function(req, res, next) {
-				// res.redirect("/");
-				res.send("404 not found");
-			});
-		}
+	//404 
+	app.all("*", function(req, res, next) {
+		// res.redirect("/");
+		res.send("404 not found");
+	});
+}
+module.exports = exports = expressInit;

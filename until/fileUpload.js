@@ -1,16 +1,18 @@
-var path=require('path');
-var debug=require("debug")("fileUpload");
-var multiparty = require('multiparty');
-var sizeOfImg=require('image-size');
-var stateCode=require(path.join(__dirname,'../stateCode'));
+/**
+ * 文件上传设置
+ * @type {[type]}
+ */
+var path = require('path'),
+	constVar = require(path.join(constVarPath)),
+	fs=require("fs"),
+	debug = require("debug")("fileUpload"),
+	multiparty = require('multiparty'),
+	sizeOfImg = require('image-size'),
+	stateCode = require(path.join(constVar.configPath, 'stateCode'));
 
+function fileUpload(req,fieldName,options,func) {
 
-
-function fileUpload(req,tempPath,func) {
-
-	var form = new multiparty.Form({
-		uploadDir: tempPath
-	});	
+	var form = new multiparty.Form(options);	
 
 	form.parse(req, function(err, fields, files) {
 
@@ -22,8 +24,9 @@ function fileUpload(req,tempPath,func) {
 		let filesObj={};
 		debug(files);
 		Object.keys(files).forEach(function(name) {
+			debug(name);
 
-			if(files[name][0]!='undefined'){
+			if(files[name][0]!='undefined'&&files[name][0].fieldName==fieldName){
 				let nowFile=files[name][0];
 				let fileType=nowFile.headers['content-type'].indexOf('image');
 
@@ -44,12 +47,13 @@ function fileUpload(req,tempPath,func) {
 					width:imageSize.width||0,
 					height:imageSize.height||0
 				};				
+			}else if(files[name][0]!='undefined'){
+				fs.unlinkSync(files[name][0].path);
+				debug("不是目标字段文件，删除 "+files[name][0].path);
 			}
 		});
-
 		debug(fields);
 		debug(filesObj);
-
 		func(stateCode.success({files:filesObj,fields:fields,moreInfo:"文件保存到磁盘成功"}));
 	});
 }
@@ -66,4 +70,4 @@ filw1 [ { fieldName: 'filw1',
     size: 30718 } ]
  */
 
-module.exports=exports=fileUpload;
+module.exports = exports = fileUpload;

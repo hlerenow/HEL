@@ -1,20 +1,21 @@
 //路由公用
-var express=require("express");
-var router=express.Router();
-var path=require("path");
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until=require(path.join(__dirname, "../../until/until"));
-var debug=require("debug")("file");
-var fileUpload=require(path.join(__dirname,'../../until/fileUpload'));
-
-//自定义
-var fileModel=require(path.join(__dirname,"../../models/admin/fileModel"));
-
-var fs=require("fs");
-
+var	express=require("express"),
+	fs=require("fs"),
+	path=require("path"),
+	debug=require("debug")("fileRouter"),
+	fileRouter=express.Router(),
+	constVar = require(path.join(constVarPath)),
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until=require(path.join(constVar.untilPath, "/until")),
+	fileUpload=require(path.join(constVar.untilPath,'fileUpload')),
+	//自定义
+	fileModel=require(path.join(constVar.modelPath,"admin/fileModel"));
 
 
-router.post("/upload",function(req,res,next){
+
+
+
+fileRouter.post("/upload",function(req,res,next){
 	let fm=new fileModel;
 
 	debug("文件上传");
@@ -22,8 +23,13 @@ router.post("/upload",function(req,res,next){
 		res.json(stateCode.notAuthority());
 		return;
 	};
+
 	//保存图片到本地磁盘缓存
-	fileUpload(req,path.join(__dirname, '../../public/uploadTemp'),function(fileResult){
+	var fileOptions = {
+		uploadDir: path.join(constVar.publicPath, "./uploadTemp"),
+		maxFilesSize: 1024 * 1024*12,
+	};	
+	fileUpload(req,"file",fileOptions,function(fileResult){
 
 		if(fileResult.state!==200){
 			res.json(fileResult);
@@ -74,7 +80,7 @@ router.post("/upload",function(req,res,next){
 	});
 });
 
-router.post("/delete",function(req,res,next){
+fileRouter.post("/delete",function(req,res,next){
 	let fm=new fileModel;
 	if(req.session.role!=='admin'){
 		res.json(stateCode.notAuthority());
@@ -133,7 +139,7 @@ router.post("/delete",function(req,res,next){
 	}
 });
 
-router.post("/getList",function(req,res,next){
+fileRouter.post("/getList",function(req,res,next){
 	let fm=new fileModel;
 	fm.getFileList({page:req.body.page,size:req.body.size},function(result){
 		if(result.state===200){
@@ -143,4 +149,4 @@ router.post("/getList",function(req,res,next){
 		}
 	});
 });
-module.exports=exports=router;
+module.exports=exports=fileRouter;

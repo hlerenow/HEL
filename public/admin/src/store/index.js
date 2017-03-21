@@ -1,16 +1,20 @@
-/**
- * Created by an.han on 16/10/15.
- */
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as actions from './actions'
+import * as getters from './getters'
+import * as mutations from './mutations'
+import catalog from './modules/catalog'
 
-export default {
-  state: {
-    username:"",
-    role:"",
-    token:false
-  },
-  mutations: {
-    loginTokenMuta (state, payLoad) {
-      state.token = payLoad.value || state.token;
-    }
-  }
-}
+// const debug = process.env.NODE_ENV !== 'production'
+
+export default new Vuex.Store({
+	state:{
+		componentUid:0
+	},
+	mutations,
+	actions,
+	getters,
+	modules: {
+		catalog
+	}
+})

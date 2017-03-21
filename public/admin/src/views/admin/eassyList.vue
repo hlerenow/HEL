@@ -13,7 +13,7 @@
 			<el-select v-model="searchCatalog" placeholder="请选择">
 				<el-option label="全部目录" value="" check></el-option>
 				<el-option
-				  v-for="item in catalogs"
+				  v-for="item in catalogs.catalogs"
 				  :label="item.name"
 				  :value="item.mid">
 				</el-option>
@@ -107,7 +107,7 @@
 				var self=this;
 				self.$http.post("eassy/getInfo").
 				then(function(res){
-					if(res.data.state===200){
+					if(res.data&&res.data.state===200){
 						self.eassysInfo=res.data.opRes[0];
 					}else{
 						self.$message.error("文章数量信息获取失败,"+res.data.info);
@@ -122,14 +122,18 @@
 					seachWord:self.searchWordTemp
 				}).
 				then(function(res){
-					if(res.data.state===200){
+					if(res.data&&res.data.state===200){
 						//列表信息
+						// console.log(res.data);
+						
 						self.eassyList	=res.data.opRes[0];
 						//文章总数
 						self.totalEassysCount=res.data.opRes[1][0].resCount;
 					}else{
 						self.$message.error("文章列表请求失败，请稍后再试");
 					}
+				}).catch(function(erro){
+					console.log(erro);
 				});
 			},
 			eassyPageChange:function(page){
@@ -167,7 +171,7 @@
 					eids:eids.toString()
 				}).
 				then(function(res){
-					if(res.data.state===200){
+					if(res.data&&res.data.state===200){
 						self.$message.success("文章删除成功");
 						self.getEassyList();
 						self.getEassysInfo();
@@ -210,6 +214,10 @@
 				return time.getFullYear()+" 年 "+(time.getMonth()+1)+" 月 "+time.getDate()+" 日 ";				
 			},
 			catalogFormat:function(value){
+				if(!value){
+					return "无";
+				}
+				
 				var catalogs=value.split(",");
 				var res=[];
 				catalogs.forEach(function(ite){
@@ -245,6 +253,10 @@
 		color:gray;
 		font-size: 12px;		
 	}
+	#eassyList{
+		padding-left: 10px;
+	}
+
 	#eassyList .el-input__inner{
 		border-radius: 2px !important;
 	}

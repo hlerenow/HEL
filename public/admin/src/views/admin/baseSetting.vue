@@ -62,6 +62,10 @@
 	}
 </script>
 <style type="text/css">
+	#baseSetting {
+		padding-left: 10px;
+	}
+
 	#baseSetting table{
 		width: 100%;
 	}

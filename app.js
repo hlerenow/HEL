@@ -1,48 +1,68 @@
+//常用路径
+
 var path=require("path");
 
-var debug=require("debug")("app");
+	global.constVarPath=path.join(__dirname, "config/constVar");
 
-//主题配置
-var json2=require("./views/theme/default/config.json");
+var constVar=require(path.join(constVarPath)),
+	debug=require("debug")("app"),
+	express=require("express"),
+	schedule=require('node-schedule'),	
 
-//开启定时任务，定时清理 用户上的传缓存文件
-var schedule=require('node-schedule');
-//设置定时job规则，每天凌晨2点清除缓存数据
-var timeRule=new schedule.RecurrenceRule();
-timeRule.dayOfWeek=[0,new schedule.Range(1,6)];
-timeRule.hour=2;
-timeRule.minute=0;
+	hPromise=require(path.join(constVar.untilPath, "/hPromise.js")),
+	createMysqlTables=require(path.join(constVar.untilPath, "/createMysqlTables.js")),	
+	app=express(),
+	//主题配置
+	
+	themeConfig=require(path.join(constVar.viewPath,"/theme/default/config.json")),
+	clearTempFile=require(path.join(constVar.untilPath,"/clearTempFile")),
+	aic=require(path.join(constVar.untilPath,"appInitConfig.js")),
+	initExpress=require("./expressInit.js");
 
-var clearTempFile=require("./until/clearTempFile");
-var clearFilejob=schedule.scheduleJob(timeRule, function(result){
+
+	//开启定时任务，定时清理 用户上的传缓存文件
+	//设置定时job规则，每天凌晨2点清除缓存数据
+var	timeRule=new schedule.RecurrenceRule();
+	timeRule.dayOfWeek=[0,new schedule.Range(1,6)];
+	timeRule.hour=2;
+	timeRule.minute=0;
+	schedule.scheduleJob(timeRule, function(result){
 		clearTempFile(function(){
 			debug("文件缓存目录已经清除. ",result);
 		});
 	});
 
-//开启express服务器
-var express=require("express");
-var app=express();
+var hp=new hPromise();
+	
+	hp.add(function(){
+		//创建表
+		createMysqlTables(()=>{
+			debug("哈哈");
+			this.next();
+		});		
+	}).then(function(){
+		//bolog的一些全局配置
+			debug("哈哈 2");		
+		aic(app,function(flage){
+			if(flage){
+				debug("系统设置加载成功");
+				debug(app.locals.blogConfig)		
+			}else{
+				debug("系统设置加载失败");		
+			}
 
-//bolog的一些全局配置
-var aic=require(path.join(__dirname,"./until/appInitConfig.js"));
-aic(app,function(flage){
-	if(flage){
-		debug("系统设置加载成功");
-		debug(app.locals.blogConfig)		
-	}else{
-		debug("系统设置加载失败");		
-	}
+			initExpress(app,express);
 
-	var initExpress=require("./expressInit.js");
+			app.set("port",3000);
 
-	initExpress(app,express);
+			//开启express服务器
+			app.listen(parseInt(app.get("port")),function(){
+				console.log("Express 4.0 on http://localhost:%s",app.get("port"));
+			});	
+		});
+	});
 
-	app.set("port",3000);
+	hp.start();
 
-	app.listen(parseInt(app.get("port")),function(){
-		console.log("Express 4.0 on http://localhost:%s",app.get("port"));
-	});	
-});
 
 

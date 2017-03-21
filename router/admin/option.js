@@ -1,18 +1,17 @@
 //路由公用
-var express = require("express");
-var router = express.Router();
-var path = require("path");
-var stateCode = require(path.join(__dirname, "../../stateCode"));
-var until = require(path.join(__dirname, "../../until/until"));
-var debug = require("debug")("option");
-var aic=require(path.join(__dirname,"../../until/appInitConfig.js"));
+var path = require("path"),
+	express = require("express"),
+	optionRouter = express.Router(),
+	debug = require("debug")("option"),
+	constVar = require(path.join(constVarPath)),		
+	stateCode = require(path.join(constVar.configPath, "stateCode")),
+	until = require(path.join(constVar.untilPath, "/until")),
+	aic=require(path.join(constVar.untilPath,"appInitConfig.js")),
+	//自定义
+	optionModel = require(path.join(constVar.modelPath, "/admin/optionModel"));
 
 
-//自定义
-var optionModel = require(path.join(__dirname, "../../models/admin/optionModel"));
-
-
-router.post("/create", function(req, res, next) {
+optionRouter.post("/create", function(req, res, next) {
 	let om = new optionModel;
 	let objArry = until.jsonParse(req.body.options);
 
@@ -26,7 +25,7 @@ router.post("/create", function(req, res, next) {
 	});
 });
 
-router.post("/delete", function(req, res, next) {
+optionRouter.post("/delete", function(req, res, next) {
 	let om = new optionModel;
 	let oidArry = until.jsonParse(req.body.optionsId);
 
@@ -40,7 +39,7 @@ router.post("/delete", function(req, res, next) {
 	});
 });
 
-router.post("/modify",function(req,res,next){
+optionRouter.post("/modify",function(req,res,next){
 	let om=new optionModel;
 	let objArry=until.jsonParse(req.body.options);
 
@@ -62,11 +61,11 @@ router.post("/modify",function(req,res,next){
 
 });
 
-router.post("/getStatic",function(req,res,next){
+optionRouter.post("/getStatic",function(req,res,next){
 	let om=new optionModel;
 	om.getStaticOptions(function(result){
 		res.json(result);
 	});
 });
 
-module.exports = exports = router;
+module.exports = exports = optionRouter;

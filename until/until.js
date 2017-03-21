@@ -1,7 +1,7 @@
 var debug = require("debug")("until"),
 	fs=require("fs");
 const until = {
-	//判断对象是否为空
+	//判断对象是否为空,空 返 true
 	isEmptyObj: function(obj) {
 		for (let i in obj) {
 			return false;
@@ -231,6 +231,15 @@ const until = {
 		}
 
 		return res;
+	},
+	getExitsPath:function(pathArry){
+		for(var i=0;i<pathArry.length;i++){
+			var item=pathArry[i];
+			if(fs.existsSync(item)){
+				return item;
+				break;
+			}		
+		}
 	}
 
 };

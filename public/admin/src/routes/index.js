@@ -23,15 +23,22 @@ const Admin = r => require.ensure([],()=>r(require('views/admin/index')),'admin'
 const EditorEassy = r=>require.ensure([],()=>r(require("views/admin/editorEassy")),"editorEassy");
 
 const ModifyEassy = r=>require.ensure([],()=>r(require("views/admin/modifyEassy")),"modifyEassy");
-const CatalogCreate = r=>require.ensure([],()=>r(require("views/admin/catalog/create")),"catalogCreate");
+
+const Catalog= r=>require.ensure([],()=>r(require("views/admin/catalog")),"catalog");
 
 const Media = r=>require.ensure([],()=>r(require("views/admin/media")),"media");
+
+const Theme = r=>require.ensure([],()=>r(require("views/admin/theme")),"theme");
 
 const MediaAdd = r=>require.ensure([],()=>r(require("views/admin/mediaAdd")),"mediaAdd");
 
 const EassyList = r=>require.ensure([],()=>r(require("views/admin/eassyList")),"eassyList");
 
 const BaseSetting = r=>require.ensure([],()=>r(require("views/admin/baseSetting")),"baseSetting");
+
+const UserInfo = r=>require.ensure([],()=>r(require("views/admin/userInfo")),"userInfo");
+
+const Menue = r=>require.ensure([],()=>r(require("views/admin/menue")),"menue");
 
 // 根目录
 const rootPath = '';
@@ -63,15 +70,15 @@ const routes = [
 	  		{
 	  			path:"editorEassy",
 	  			component:EditorEassy,
-	  			name:"editorEassy",
-	  			meta:{
-	  				keepAlive:true
-	  			}	  			
+	  			name:"editorEassy"
+	  			// meta:{
+	  			// 	keepAlive:true
+	  			// }	  			
 	  		},
 	  		{
-	  			path:"catalog/create",
-	  			component:CatalogCreate,
-	  			name:"catalogCreate"
+	  			path:"catalog",
+	  			component:Catalog,
+	  			name:"catalog"
 	  		},
 	  		{
 	  			path:"media",
@@ -87,6 +94,9 @@ const routes = [
 	  			path:"modifyEassy",
 	  			component:ModifyEassy,
 	  			name:"modifyEassy"
+	  			// meta:{
+	  			// 	keepAlive:true
+	  			// }		  			
 	  		},
 	  		{
 	  			path:"eassyList",
@@ -97,6 +107,21 @@ const routes = [
 	  			path:"baseSetting",
 	  			component:BaseSetting,
 	  			name:"baseSetting"
+	  		},
+	  		{
+	  			path:"menue",
+	  			component:Menue,
+	  			name:"menue"
+	  		},
+	  		{
+	  			path:"theme",
+	  			component:Theme,
+	  			name:"theme"
+	  		},
+	  		{
+	  			path:"userInfo",
+	  			component:UserInfo,
+	  			name:"userInfo"
 	  		}
 	  	]
 	  },

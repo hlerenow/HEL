@@ -12,3 +12,8 @@
 		components:{mediaAdd}
 	}	
 </script>
+<style type="text/css">
+	#mediaAdd{
+		padding-left: 10px;
+	}
+</style>

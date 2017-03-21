@@ -1,10 +1,11 @@
-var express=require("express");
-var router=express.Router();
-var debug=require("debug")("baseLogin");
-var path=require("path");
-var stateCode=require(path.join(__dirname,"../stateCode"));
+var path=require("path"),
+	constVar = require(path.join(constVarPath)),
+	express=require("express"),
+	debug=require("debug")("baseLoginRouter"),
+	baseLoginRouter=express.Router(),
+	stateCode=require(path.join(constVar.configPath,"stateCode"));
 
-router.use(/^\/admin\/api*/,function(req,res,next){
+baseLoginRouter.use(/^\/admin\/api*/,function(req,res,next){
 	debug(req.path);
 	if(req.path==="/login"){
 		next();
@@ -13,11 +14,10 @@ router.use(/^\/admin\/api*/,function(req,res,next){
 		debug("登录过滤");
 		
 		// //开发需要写入session,模拟登录,开发完成后删掉,
-		req.session.loginState=1;
-		req.session.uid=2;
-		req.session.name='admin';
-		req.session.role='admin';
-	
+		// req.session.loginState=1;
+		// req.session.uid=1;
+		// req.session.name='admin';
+		// req.session.role='admin';
 
 		if(req.session.loginState===1){
 			next();			
@@ -30,4 +30,4 @@ router.use(/^\/admin\/api*/,function(req,res,next){
 });
 
 
-module.exports=router;
+module.exports=baseLoginRouter;
