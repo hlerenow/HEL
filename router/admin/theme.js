@@ -9,6 +9,7 @@ var	express=require("express"),
 	until=require(path.join(constVar.untilPath, "/until")),
 	fileUpload=require(path.join(constVar.untilPath,'fileUpload')),
 	hPromise=require(path.join(constVar.untilPath, "/hPromise.js")),
+	aic=require(path.join(constVar.untilPath,"appInitConfig.js")),
 	unzip=require("unzip"),
 	themeModel=require(path.join(constVar.modelPath,"admin/themeModel"));	
 
@@ -75,6 +76,9 @@ themeRouter.post("/add",function(req,res,next){
 			try{
 				fs.createReadStream(files.file.path).pipe(unzip.Extract({
 					path: path.join(constVar.themePath, files.file.originalFilename.replace(".zip",""))
+				}).on("close",()=>{
+					debug("解压完成");
+					this.next(files);					
 				}));
 				
 			}catch(e){
@@ -83,7 +87,6 @@ themeRouter.post("/add",function(req,res,next){
 				return ;
 			}
 		
-		this.next(files);
 		
 	}).then(function(files) {
 		debug("主题写入数据库", files);
@@ -94,10 +97,21 @@ themeRouter.post("/add",function(req,res,next){
 			fs.unlinkSync(files.file.path);
 
 			if(result.state==200){
+				//更新全局配置
+				aic(req.app,function(flage){
+					if(flage){
+						debug("系统设置更新成功");
+					}else{
+						debug("系统设置更新失败");								
+					}
+				});				
+
+				//映射主题静态资源
+				until.updateStaticRouter(req,"");
+
 				res.json(stateCode.success({"moreInf":"主题安装成功"}));
 			}else{
 				//删除解压后的文件夹
-				//
 				res.json(stateCode.themeUploadFail());
 			}
 		});

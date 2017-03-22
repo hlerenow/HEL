@@ -108,7 +108,11 @@ var funcs = {
 	},
 	formatTag:function(tags){
 
-		return tags.split(",");
+		if(tags){
+			return tags.split(",");			
+		}else{
+			return [];
+		}
 	}
 };
 

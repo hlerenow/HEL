@@ -2,7 +2,7 @@ var path = require("path"),
 	constVar = require(path.join(constVarPath)),
 	debug = require("debug")("expressInit"),
 	helmet = require('helmet'),
-	favicon = require('express-favicon'),
+	favicon = require('serve-favicon'),
 	// 路由
 
 	baseLoginCheck = require("./router/baseLogin"),
@@ -40,15 +40,18 @@ function expressInit(app, express) {
 	// 			break;
 	// 		}
 	// }
+	
+	try{
+		app.use(favicon(path.join(constVar.publicPath,"/favicon.ico")));
+	}catch(e){
+			
+	}
+
 	app.disable('x-powered-by');
 
 	app.use(helmet());
 
-	app.locals.Helper = tpFunc(app.locals);
-
-	// debug(app.locals.system);
-	
-	app.use(favicon(path.join(constVar.themePath, "" + app.locals.blogConfig.system.nowTheme, "/favicon.png")));
+	app.locals.Helper = tpFunc(app.locals);	
 
 	app.engine('html', require('ejs').renderFile);
 	app.set("view engine", "html");
@@ -74,7 +77,11 @@ function expressInit(app, express) {
 	app.use(compression());
 	
 	app.use(express.static(constVar.publicPath));
-	// app.use(express.static(path.join(__dirname, "views/theme/defaule")));
+	//挂载主题静态资源
+	app.use(function themeStatic(req,res,next){
+		// debug(path.join(__dirname, "view/theme",app.locals.blogConfig.system.nowTheme,"public"));
+		express.static(path.join(__dirname, "view/theme",app.locals.blogConfig.system.nowTheme,"public"))(req,res,next);
+	});
 
 	//登录过滤
 	app.use(baseLoginCheck);
