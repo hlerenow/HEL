@@ -99,7 +99,7 @@ fn.mergeObj=function(obj,more){
 		more[i]=obj[i];
 	}
 
-	debug(more);
+	// debug(more);
 	return more;
 }
 

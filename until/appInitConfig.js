@@ -21,15 +21,16 @@ function appInitConfig(app, func) {
 
 			app.locals.blogConfig.system = rst;
 
-			//脚在当前主题的配置文件
+			//加载当前主题的配置文件
 			var themePathConfig="";
 			try{
 				themePathConfig= path.join(constVar.themePath, app.locals.blogConfig.system.nowTheme, './config.json');				
+				app.locals.blogConfig.themeConfig = require(themePathConfig);
 			}catch(err){
+				app.locals.blogConfig.themeConfig={};
 				debug(err);
 			}
 
-			app.locals.blogConfig.themeConfig = require(themePathConfig);
 
 			var sql2 = "select name,value from options where user=0 and (type='static' or type=?);";
 

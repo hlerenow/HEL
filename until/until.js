@@ -1,4 +1,5 @@
 var debug = require("debug")("until"),
+	express=require("express"),
 	fs=require("fs");
 const until = {
 	//判断对象是否为空,空 返 true
@@ -235,11 +236,28 @@ const until = {
 	getExitsPath:function(pathArry){
 		for(var i=0;i<pathArry.length;i++){
 			var item=pathArry[i];
-			if(fs.existsSync(item)){
+
+			var stat = fs.lstatSync(item);
+			if(item&&!stat.isDirectory()){
+				debug(item);
 				return item;
 				break;
 			}		
 		}
+	},
+	//动态更改主题静态资源映射
+	updateStaticRouter:function(req,newThemeStatic){
+		var stackRouter=req.app._router.stack;
+		var app=req.app;
+		debug(stackRouter);
+		for(let i=0;i<stackRouter.length;i++){
+			if(stackRouter[i].name="themeStatic"){
+				debug(stackRouter[i]);
+				stackRouter[i].handle=express.static(path.join(__dirname, "view/theme",app.locals.blogConfig.system.nowTheme,"public"));
+				break;
+			}
+		}
+
 	}
 
 };

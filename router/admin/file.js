@@ -49,7 +49,7 @@ fileRouter.post("/upload",function(req,res,next){
 				width:nowFile.width,
 				height:nowFile.height,
 				//格式化url，变为相对url
-				url:nowFile.path.split("").slice(urlIndex).join("").replace("Temp",""),
+				url:path.join('publi',nowFile.path.split("").slice(urlIndex).join("").replace("Temp","")),
 				size:nowFile.size,
 				created:until.getNowTimeSecondInt()
 			};

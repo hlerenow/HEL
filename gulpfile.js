@@ -5,7 +5,7 @@ var nodemon = require('gulp-nodemon');
 var path = require("path");
 var cmd=require("node-cmd");
 
-var webpackConfig = require(path.join(__dirname, "public/admin/webpack.config"));
+var webpackConfig = require(path.join(__dirname, "admin/webpack.config"));
 var appIndex = path.join(__dirname, "public/admin/src/index.js");
 var webpackBulidPath=path.join(__dirname,"public/admin");
 
@@ -48,7 +48,7 @@ gulp.task('nodemon', function() {
 	return nodemon({
 		script: 'app',
 		ext: "js",
-		ignore: ["views/*", "public/admin/*"],
+		ignore: ["views/*", "admin/*"],
 		watch: "./"
 			// tasks:["bowserSync"]
 	}).on('start', function() {

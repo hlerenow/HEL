@@ -34,7 +34,7 @@ fn.query = function(sql, val, func) {
 
 		con.query(sql, val, function(err, data, fields) {
 			debug("基本查询");
-			debug(data);
+			// debug(data);
 			con.release();
 			if (err) {
 				debug(err);
@@ -104,7 +104,7 @@ fn.insert = function(tableName, obj, func) {
 		return;
 	}
 
-	debug(obj);
+	// debug(obj);
 
 	pool.getConnection(function(err, con) {
 		if (err) {
@@ -186,14 +186,14 @@ fn.insertMulti = function(tableName, objArry, func) {
 				//说明全部插入完毕了并且都成功
 				if (sqlInsertState === sqlQueryLength && sqlSuccessState === sqlQueryLength) {
 					con.release();
-					debug("成功条数%d条", sqlSuccessState);
+					// debug("成功条数%d条", sqlSuccessState);
 					func(stateCode.success({
 						opRes: data,
 						insertId: data.insertId
 					}));
 				} else if (sqlInsertState === sqlQueryLength) {
 					con.release();
-					debug("成功条数%d条,未成功%d", sqlSuccessState, sqlInsertState - sqlSuccessState);
+					// debug("成功条数%d条,未成功%d", sqlSuccessState, sqlInsertState - sqlSuccessState);
 					func(stateCode.sqlFail({
 						successCount: sqlSuccessState,
 						failCount: sqlInsertState - sqlSuccessState
@@ -294,11 +294,11 @@ fn.deleteMultiById = function(tableName, id, conditionArry, func) {
 				//说明全部插入完毕了并且都成功
 				if (sucessState === totalState && sucessState === conditionArry.length) {
 					con.release();
-					debug("成功条数%d条", sucessState);
+					// debug("成功条数%d条", sucessState);
 					func(stateCode.success());
 				} else if (totalState === conditionArry.length) {
 					con.release();
-					debug("成功条数%d条,未成功%d", sucessState, totalState - sucessState);
+					// debug("成功条数%d条,未成功%d", sucessState, totalState - sucessState);
 					func(stateCode.sqlFail({
 						successCount: sucessState,
 						failCount: totalState - sucessState

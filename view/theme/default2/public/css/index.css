@@ -1,0 +1,268 @@
+
+body{
+	background-color: whitesmoke;
+	font-family:  "微软雅黑","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+}
+
+a{
+	text-decoration: none;
+}
+
+/*布局*/
+
+.overlay{
+	position: absolute;
+	height: 11.5rem;
+	background-color: #4d4d4d;
+	width: 100%;
+}
+#index_left{
+	position: fixed;
+	width: 18.75rem;
+	background-color:#fdfdfd ;
+	height: 100%;
+	overflow: hidden;
+	opacity: 1;
+}
+
+#index_right{
+	overflow: hidden;
+}
+/*头像*/
+#header{
+	position: relative;
+	margin:8rem auto 0;
+}
+
+#headImg{
+	display: block;
+	margin: 0 auto ;
+	width: 8rem;
+	height: 8rem;
+	border-radius: 100%;
+	border: 1px solid #f1f0f0;
+}
+
+.head_link{
+	display: block;
+	width: 9rem;
+	height: 9rem;
+	border-radius: 100%;
+	background-color: #fdfdfd;
+	margin: 0 auto;
+	padding-top: 0.5rem;
+
+}
+#header p,#header a{
+	font-size: 0.85rem;
+	color: #9e9c9c;
+}
+
+#header p{
+	text-align: center;
+	letter-spacing: 8px;
+	padding:5px 0;
+}
+#header a{
+	transition: all 0.5s;
+}
+
+#header .helLink{
+	font-size: 2rem;
+	color: #807f7f;
+}
+#menue_index{
+	list-style: none;
+	text-align: center;
+	padding-left: 0;
+}
+#menue_index li{
+	padding: 0.35rem 0;
+	position: relative;
+}
+#menue_index li:after{
+	top: 0.5rem;
+    display: none;
+    content: "";
+    position: absolute;
+    height: 1rem;
+    width: 1rem;
+    right: -0.5rem;
+    transform: rotate(45deg);
+}
+/*#menue_index li:hover{
+	background-color: #e4e2e2;
+}
+
+#menue_index li:hover:after{
+	display: block;
+	background-color: #bfbfbf;
+}*/
+
+#menue_index li:hover a{
+	color: #4d4d4d;
+}
+/*右边布局*/
+#index_right{
+	margin-left: 18.75rem;
+}
+
+.singleEassy{
+    margin: 20px;
+    border: 1px solid #e2e2e2;
+    background: white;
+    color:#4d4d4d;
+    overflow: auto;
+    padding-bottom: 10px;
+    border-radius: 3px;
+}
+.eassyTitle{
+    padding: 20px 20px;;
+    margin: 0;
+    border-left: 5px solid #4d4d4d;	
+}
+.eassyExpert{
+    padding:0  25px 20px;	
+    font-size: 0.8rem;
+    color: #943721;  
+    overflow: hidden;  
+}
+.eassyThumbnail{
+	margin-right: 10px;
+	margin-bottom: 10px;
+    max-width: 150px;
+    height: auto;
+    float: left;
+    border: 1px solid #efefef;
+}
+
+.EassyTime{
+	float: right;
+	font-size: 0.8rem;
+	color: #bdbcbc;
+	font-weight:lighter;
+}
+.otherInfo{
+	padding: 10px 20px;	
+}
+.expertTip{
+	margin-left: 25px;
+	display: block;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #f5f2f2;
+}
+.tags{
+	display: inline-block;
+	font-size: 0.6rem;
+	background-color: gray;
+	padding: 3px 15px;
+	color: white;
+	position: relative;
+	border-radius: 2px;
+	margin-bottom: 5px;
+}
+
+.tags:before{
+	display: block;
+	content: "";
+	background-color:white;
+	width: 5px;
+	height: 5px;
+	border-radius: 5px;
+	position: absolute;
+	left: 3px;
+	top: 3px;
+}
+.moreRead a{
+    letter-spacing: 5px;
+    font-size: 0.8rem;
+    float: right;
+    background: #78909C;
+    padding: 3px 10px 4px;
+    color: white;
+    border-radius: 2px;
+}
+
+.color1{
+	background-color: #00BCD4;
+}
+.color2{
+	background-color: #4CAF50;
+}
+.color3{
+	background-color: #795548;
+}
+.color4{
+	background-color: #FF5722;
+}
+.color5{
+	background-color: #8BC34A;
+}
+.color6{
+	background-color: #607D8B;
+}
+
+
+#footer{
+	padding: 0 0 20px;
+}
+#footer,#footer a{
+    font-size: 0.6rem;
+    color: #4d4d4d;
+    text-align: center;		
+}
+
+.pages{
+	display: block;
+	list-style: none;
+	padding-left: 0;
+	overflow: hidden;
+	text-align: center;
+}
+
+.pages li{
+	display: inline-block;
+}
+
+.pages .active{
+	background-color: #f57979;
+}
+
+.pages li a{
+	color: white;
+	background-color: #4d4d4d;
+	display: block;
+	padding: 5px 10px;
+	border-radius: 50%;
+}
+
+/*文章页*/
+.eassyDetail{
+	margin:20px;
+	padding: 0 0 20px;
+	background-color: white;
+	overflow: hidden;
+}
+
+.eassyBody{
+    padding: 10px 20px;	
+}
+
+.recentEassy{
+	overflow: hidden;
+	padding: 0 20px;
+    font-size: 0.7rem;
+    color: gray;
+}
+
+.recentEassy a{
+	color: black;
+}
+
+.pre{
+	float: left;
+}
+.next{
+	float: right;
+}
