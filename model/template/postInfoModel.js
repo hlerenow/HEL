@@ -61,7 +61,7 @@ fn.getPostList=function(page,perPage,func){
  */
 fn.getPost=function(eid,func){	
 	var postSql="select * from eassy where type='post' and eid= ?;";
-	var recentPostSql="select * from eassy where eid in ((select eid from eassy where eid < 71 limit 1 ),(select eid from eassy where eid > ? limit 1));"
+	var recentPostSql="select * from eassy where eid in ((select eid from eassy where eid < ? limit 1 ),(select eid from eassy where eid > ? limit 1));"
 	this.query(postSql+recentPostSql,[eid,eid,eid],function(result){
 		// debug(result);
 		if(result.state===200&&result.opRes.length>0){
