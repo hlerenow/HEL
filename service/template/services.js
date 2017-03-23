@@ -22,6 +22,7 @@ var fn=showContent.prototype;
  * @return {[type]} [description]
  */
 fn.getIndexInfo=function(req,res,next){
+	debug("获取艘也信息");
 	var resObj={page:req.params.page};
 	var themeName=req.app.locals.blogConfig.system.nowTheme+"";
 		themeName=themeName.replace(/\//ig,"");
@@ -59,6 +60,7 @@ fn.getIndexInfo=function(req,res,next){
  * @return {[type]}        [description]
  */
 fn.getCatalogInfo=function(req,res,next){
+	debug("获取目录页面信息");
 	var themeName=req.app.locals.blogConfig.system.nowTheme+"";
 		themeName=themeName.replace(/\//ig,"");
 
@@ -78,8 +80,8 @@ fn.getCatalogInfo=function(req,res,next){
 		});
 	}).allDone(function(){
 			res.locals.pageType="catalog";
-			debug(res.locals.catalog.catalogInfo);
-			var template={};
+			res.locals.page=req.params.page;
+			var template={path:""};
 			if(res.locals.catalog.catalogInfo){
 				template=until.jsonParse(res.locals.catalog.catalogInfo.value);
 			}
@@ -93,9 +95,16 @@ fn.getCatalogInfo=function(req,res,next){
 					path.join(themePath,themeName,template.path+""),
 					path.join(themePath,themeName,"/catalog.html")
 				]);
-
+			debug(templatePath);
 			if(res.locals.catalog.postList.length>0){							
-				res.render(templatePath);
+				res.render(templatePath,function(err,data){
+					if(err){
+						debug(err);
+						res.send(err);
+					}else{
+						res.send(data);
+					}
+				});
 			}else{
 				next();				
 			}

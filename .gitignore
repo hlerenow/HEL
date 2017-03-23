@@ -88,8 +88,9 @@ $RECYCLE.BIN/
 
 HEL_FW
 
-public/admin/node_modules
+admin/node_modules
 
 public/upload
 
 public/uploadTemp
+config/config.json

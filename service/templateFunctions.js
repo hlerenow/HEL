@@ -23,13 +23,13 @@ var funcs = {
 	 * @return {[type]}      [description]
 	 */
 	getPageLink: function(page) {
-		return this.blogConfig.static.siteUrl + "/page/" + page;
+		return this.blogConfig.static.siteUrl + "/index/page/" + page;
 	},
 	getCatalogPageLink: function(page,catalogSlug) {
-		return this.blogConfig.static.siteUrl + "/catalog/"+catalogSlug+"/page/" + page;
+		return this.blogConfig.static.siteUrl + "/catalog/"+catalogSlug+"/" + page;
 	},
 	getCatalogLink: function(catalogSlug) {
-		return this.blogConfig.static.siteUrl + "/catalog/" + catalogSlug + ".html";
+		return this.blogConfig.static.siteUrl + "/catalog/" + catalogSlug ;
 	},
 	getAdminLink: function() {
 		return this.blogConfig.static.siteUrl + "/admin";
@@ -113,6 +113,13 @@ var funcs = {
 		}else{
 			return [];
 		}
+	},
+	rand:function(from,to){
+		from=parseInt(from,10);
+		to=parseInt(to, 10);
+		var rand=Math.random();
+		debug(parseInt(rand*(to-from))+from);
+		return parseInt(rand*(to-from))+from;
 	}
 };
 

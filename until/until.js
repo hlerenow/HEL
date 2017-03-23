@@ -236,7 +236,10 @@ const until = {
 	getExitsPath:function(pathArry){
 		for(var i=0;i<pathArry.length;i++){
 			var item=pathArry[i];
-			if(fs.existsSync(item)){
+
+			var stat = fs.lstatSync(item);
+			if(item&&!stat.isDirectory()){
+				debug(item);
 				return item;
 				break;
 			}		

@@ -1,0 +1,30 @@
+		<div id="index_left">
+			<div class="overlay"></div>
+			<header id="header">
+				<a class="head_link"  href="">
+					<img id="headImg" src="<%=baseInfo.siteUrl%>/public/img/head_img.jpeg" alt="">
+				</a>
+				<p>
+					<a class="helLink" href="">
+						HEL
+					</a>					
+				</p>
+				<p>未遇，遇见未遇见的你</p>
+				<ul id="menue_index">
+					<% 
+						for(var i=0;i<menue.length;i++){
+							if(menue[i].type=='link'){
+								%>
+								<li><a href="<%=menue[i].url %>"><%= menue[i].name%></a></li>
+								<%
+
+							}else if(menue[i].type=='catalog'){
+									var slug=menue[i].slug;
+								%>
+								<li><a href="<%=Helper.getCatalogLink(slug) %>"><%= menue[i].name%></a></li>			
+								<%
+							}
+						}%>
+				</ul>
+			</header>
+		</div>

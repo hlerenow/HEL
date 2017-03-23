@@ -32,8 +32,8 @@ fn.getPostList=function(page,perPage,func){
 	var index=(page-1)*perPage;
 		index=index>0?index:0;
 
-	var sql="select * from eassy where type='post' order by created desc limit "+this.pool.escape(index)+","+perPage+";";
-		sql+="select count(eid) allEassyCount from eassy where type='post';";
+	var sql="select * from eassy where type='post' and status='publish' order by created desc limit "+this.pool.escape(index)+","+perPage+";";
+		sql+="select count(eid) allEassyCount from eassy where type='post' and status='publish';";
 	this.query(sql,[],function(result){
 		var opRs={
 			postList:[],
