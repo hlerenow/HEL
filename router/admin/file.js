@@ -8,11 +8,9 @@ var	express=require("express"),
 	stateCode = require(path.join(constVar.configPath, "stateCode")),
 	until=require(path.join(constVar.untilPath, "/until")),
 	fileUpload=require(path.join(constVar.untilPath,'fileUpload')),
+	url=require("url"),
 	//自定义
 	fileModel=require(path.join(constVar.modelPath,"admin/fileModel"));
-
-
-
 
 
 fileRouter.post("/upload",function(req,res,next){
@@ -49,7 +47,7 @@ fileRouter.post("/upload",function(req,res,next){
 				width:nowFile.width,
 				height:nowFile.height,
 				//格式化url，变为相对url
-				url:path.join('public',nowFile.path.split("").slice(urlIndex).join("").replace("Temp","")),
+				url:url.resolve(req.app.locals.blogConfig.static.siteUrl,path.join('/public',nowFile.path.split("").slice(urlIndex).join("").replace("Temp",""))),
 				size:nowFile.size,
 				created:until.getNowTimeSecondInt()
 			};

@@ -237,11 +237,14 @@ const until = {
 		for(var i=0;i<pathArry.length;i++){
 			var item=pathArry[i];
 
-			var stat = fs.lstatSync(item);
-			if(item&&!stat.isDirectory()){
-				debug(item);
-				return item;
-				break;
+			let isExit=fs.existsSync(item);
+			if(isExit){
+				var stat = fs.lstatSync(item);
+				if(!stat.isDirectory()){
+					debug(item);
+					return item;
+					break;					
+				}
 			}		
 		}
 	},

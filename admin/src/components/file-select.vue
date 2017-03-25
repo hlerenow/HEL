@@ -6,7 +6,7 @@
 			    <el-card  v-for="(ite,index) of files" :body-style="{ padding: '0px' }" :class="{delStyle:delShow}">
 			     <el-checkbox @change="cardClick(index,true)"  v-model="checkArry[index].state"></el-checkbox>
 			      <div @click="cardClick(index)" class="imgCon">
-			      		<img :src="'../'+ite.thumbnail" class="image">		
+			      		<img :src="ite.thumbnail" class="image">		
 			      </div>
 			      <div class="fileName">
 				      	<a :title="ite.name">{{ite.name}}</a>

@@ -17,7 +17,7 @@
 			      缩略图<i @click.capture.stop ="thumnail=''" class="el-icon-delete2 addCatalog"></i>
 			    </template>				  
 			  	<div class="thumbnailCkick" @click="showFileSelect('thumbnailInsertType')">
-					<img v-if="thumnail!=''" :src="'../'+thumnail" alt="" />
+					<img v-if="thumnail!=''" :src="thumnail" alt="" />
 					<i v-else class='el-icon-plus addThumbnail'></i>		  		
 			  	</div>
 			  </el-collapse-item>
