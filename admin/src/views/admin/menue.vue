@@ -22,12 +22,14 @@
 					</div>
 					<draggable v-model="myArray" v-show="designMenus.length>0" @end="con">
 					    <transition-group>
-					        <div v-for="element in designMenus" :key="element.name+element.type" class="menue_item">
-					            {{element.name}} <i class="el-icon-delete" @click="deleteMenue(element)"></i> <span class="menueType">{{element.type | filteMenueType}}</span>
+					        <div v-for="(element,index) in designMenus" :key="index+element.type" class="menue_item">
+					        <!-- <span class="menueName" @click="changeMenueName">{{element.name}}</span> -->
+					        	<input type="text" v-model="element.name">
+					             <i class="el-icon-delete" @click="deleteMenue(element)"></i> <span class="menueType">{{element.type | filteMenueType}}</span>
 					        </div>
 					    </transition-group>
 					</draggable>
-					<div class="menue_btn_submit">
+					<div class="menue_btn_submit save">
 						<el-button @click="modifyMenue" >保存</el-button>
 					</div>					
 				</div>
@@ -41,6 +43,9 @@
 
 	import draggable from 'vuedraggable';
 
+	var jQuery=require("jQuery"),
+		$=jQuery,
+		jquery=jQuery;
 
 
 	export default{
@@ -73,6 +78,8 @@
 				var temp=this.designMenus[a.oldIndex];
 				this.designMenus[a.oldIndex]=this.designMenus[a.newIndex];
 				this.designMenus[a.newIndex]=temp;
+			},
+			changeMenueName:function(e){
 			}
 		},
 		filters:{
@@ -157,10 +164,19 @@
 	padding: 1px 5px;
 	display: inline-block;
 }
+.menue_item input{
+	border: none;
+	padding: 5px 10px;
+	width: 200px;
+}
+
 .el-collapse-item__content{
 	overflow: hidden;
 }
 .menue_btn_submit button{
 	float: right;
+}
+.menue_btn_submit.save{
+	border-top: 0px;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
-	<modify-eassy></modify-eassy>
+	<editor-eassy></editor-eassy>
 </template>
 
 <script type="text/javascript">
-  	import modifyEassy from "views/admin/editorEassy.vue";
+  	import editorEassy from "views/admin/editorEassy.vue";
 	export default {
-		components:{modifyEassy}
+		components:{editorEassy}
 	}
 </script>

@@ -38,9 +38,11 @@
 </script>
 <style type="text/css">
 	
-	.menue_btn_submit{
-		margin-top: 10px;
+	.selfDesignLink .menue_btn_submit{
 		float: right;
+    	padding-top: 10px;	
+    	width: 100%;	
+    	border-top: 1px solid #dfe6ec;			
 	}
 	.selfDesignLink .label{
 	    font-size: 12px;

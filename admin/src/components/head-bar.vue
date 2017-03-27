@@ -51,7 +51,6 @@
       mainUrl:function(){
         var data =this.allBaseInfo;
         for(let i in data){
-          console.log(data[i].name);
           if(data[i].name=="siteUrl"){
             return data[i].value;
             break;

@@ -41,10 +41,18 @@
 	}	
 </script>
 <style type="text/css">
+	.menueCatalog .el-checkbox-group{
+		margin-bottom: 10px;
+	}
 	.menueCatalog .el-checkbox{
 		display: block;
 		margin: 0;
 	}
+	.menue_btn_submit{
+	    padding-top: 10px;
+	    width: 100%;
+	}
+
 	.menue_btn_submit button{
 		float: right;
 	}
