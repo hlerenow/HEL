@@ -40,4 +40,5 @@ hel 是一款基于nodejs构建的轻量级单用户blog系统，它体积小，
 * 在 HEL(项目根目录)目录下运行npm install 
 * 依赖包安装完成后，启动程序,在 HEL(项目根目录)目录下运行 node app ,打开浏览器 http://localhost:3000即可查看效果，后台管理地址http://localhost:3000/admin
 * 初始化帐号admin,密码：123456
+
 功能还在开发中，这只是测试版~~~,模版制作文档后续会编写
