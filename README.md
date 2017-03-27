@@ -35,9 +35,9 @@ hel 是一款基于nodejs构建的轻量级单用户blog系统，它体积小，
 	"isInstall": false	//改为false，
 }
 ```
-	> config.json 文件里面不要带有注释，上面只是为了解释说明，保存时应该把注释信息去掉
+> config.json 文件里面不要带有注释，上面只是为了解释说明，保存时应该把注释信息去掉
 * 在 HEL/public/下面创建两个文件夹，upload和uploadTemp,如果存在就不用创建
-* 在 在HEL(项目根目录)目录下运行npm install 
-* 依赖包安装完成后，启动程序 node app ,打开浏览器 http://localhost:3000即可查看效果，后台管理地址http://localhost:3000/admin
+* 在 HEL(项目根目录)目录下运行npm install 
+* 依赖包安装完成后，启动程序,在 HEL(项目根目录)目录下运行 node app ,打开浏览器 http://localhost:3000即可查看效果，后台管理地址http://localhost:3000/admin
 
 功能还在开发中，这只是测试版~~~,模版制作文档后续会编写
