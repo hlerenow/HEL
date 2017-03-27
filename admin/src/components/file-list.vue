@@ -108,6 +108,8 @@
 					//格式化缩略图
 					self.formatImgUrl();
 					
+				}).catch(function(e){
+					
 				});
 
 			},

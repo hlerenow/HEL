@@ -7,8 +7,6 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
 	entry: {
 		index: path.join(__dirname,"src/index.js")
-		// vue:"src/vue.js",
-		// eleui:'src/ele-ui.js'
 	},
 	devtool: false,//source-map
 	output: {
@@ -69,7 +67,7 @@ module.exports = {
 		]
 	},
 	plugins: [
-		// new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
+		new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
 	    new webpack.DefinePlugin({
 	      'process.env': {
 	        NODE_ENV: '"production"'

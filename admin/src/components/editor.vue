@@ -16,12 +16,7 @@
 		jquery=jQuery;
 
 	var editormd=require('editormd');
-	// 
-	// var jQuery=require("lib/markDownEditor/lib/jquery.min.js");
-	// var $=jQuery;
-	// var jquery=jQuery;
 	
-
 	export default{
 		data (){
 			return {

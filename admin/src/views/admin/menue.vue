@@ -9,7 +9,7 @@
 			  </el-collapse-item>
 			  <el-collapse-item  title="自定义链接" name="1">
 					<design-menue-link @submit="addCatalog" ></design-menue-link>
-			  </el-collapse-item>
+			  </el-collapse-item>		  
 			</el-collapse>			
 		</div>
 		<div class="menue-right">
@@ -37,10 +37,10 @@
 <script type="text/javascript">
 	import designMenueLink from 'components/design-menue-link';
 	import menueCatalog from 'components/menue-catalog';
-
   	import eassyTags from "components/eassy-tags.vue";
 
-	import draggable from 'vuedraggable'	
+	import draggable from 'vuedraggable';
+
 
 
 	export default{

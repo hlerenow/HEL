@@ -155,13 +155,13 @@
 			              showClose:true
 			            });
 					}
-				},function(res){
-		            self.$message({
-		              message:"网络错误,请检查网络连接,稍后再试！",
-		              type:"error",
-		              duration:2000,
-		              showClose:true
-		            });					
+				}).catch(function(res){
+		            // self.$message({
+		            //   message:"网络错误,请检查网络连接,稍后再试！",
+		            //   type:"error",
+		            //   duration:2000,
+		            //   showClose:true
+		            // });					
 				});
 
 			},

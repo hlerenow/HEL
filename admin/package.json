@@ -4,8 +4,9 @@
   "description": "hel博客前台页面",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --inline --hot",
-    "build":"webpack --config webpack.build.js"
+    "dev-server": "webpack-dev-server --inline --hot",
+    "build":"webpack --config webpack.pro.js --colors --display--reasons",
+    "dev":"webpack "
   },
   "author": "",
   "license": "ISC",

@@ -1,10 +1,11 @@
 	<%- include('header.html') %>
 	</head>
 	<body>
+		是目录模版一
 		<%- include('nav.html') %>
 		<div id="index_right">
-			<% for(let i=0;i<posts.postList.length;i++){
-				var post=posts.postList[i];
+			<% for(let i=0;i<catalog.postList.length;i++){
+				var post=catalog.postList[i];
 			%>
 			<div class="singleEassy">
 				<h2 class="eassyTitle"><%= post.title%>
@@ -25,6 +26,7 @@
 				</div>
 				<div class="otherInfo">
 					<% 
+					
 					var tags=Helper.formatTag(post.tags);
 					for(let i in tags){
 					%>
@@ -36,11 +38,12 @@
 					</a>
 					</span>
 				</div>
-			</div>
+			</div>	
 			<% }%>	
+
 			<!-- 分页啊 -->
 			<% 
-				var allPost=posts.postCount;
+				var allPost=catalog.catalogInfo.count;
 				var perPage=baseInfo.postPerPage;
 				var allPage=allPost/perPage;
 				if(allPost%perPage>0){
@@ -55,11 +58,12 @@
 			<ul class="pages">
 				<% for(let i=minPage;i<=maxPage;i++){
 				%>
-					<li><a class="<%= i==page?'active':''%>" href="<%=Helper.getPageLink(i) %>"><%=i%></a></li>
+					<li><a class="<%= i==page?'active':''%>" href="<%=Helper.getCatalogPageLink(i,catalog.catalogInfo.slug) %>"><%=i%></a></li>
 
 				<%}%>
 			</ul>
-			<!-- 分页结束 -->
+			<!-- 分页结束 -->	
+						
 			<%- include('footer.html') %>								
 		</div>
 	</body>

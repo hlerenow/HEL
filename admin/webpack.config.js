@@ -7,8 +7,6 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
 	entry: {
 		index: path.join(__dirname,"src/index.js")
-		// vue:"src/vue.js",
-		// eleui:'src/ele-ui.js'
 	},
 	devtool: "source-map",//source-map
 	watch:true,
@@ -70,16 +68,10 @@ module.exports = {
 		]
 	},
 	plugins: [
-		// new webpack.BannerPlugin("**********Created By HL ;*********\n"),	
 		new HtmlWebpackPlugin({
 			filename: path.join(__dirname,"index.html"),
 			template: path.join(__dirname , "src/index_tmp.html"),
 			inject: true
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
 		}),
  		new ExtractTextPlugin("common.css")
 	]	

@@ -40,14 +40,7 @@
 			          type: 'error',
 			          duration:2000
 
-			        });					
-					// // self.$message.error(file.name+" 文件上传失败");
-					// for(var i=0;i<files.length;i++){
-					// 	if(files[i].name=file.name){
-					// 		files=files.splice(i,1);
-					// 		return;
-					// 	}
-					// }
+			        });	
 
 				}else{
 			        self.$notify({
@@ -69,8 +62,6 @@
 			          duration:2000
 			        });			
 			}
-		},
-		mounted:function(){
 		}
 	}	
 </script>

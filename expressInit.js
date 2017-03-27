@@ -51,7 +51,7 @@ function expressInit(app, express) {
 
 	app.use(helmet());
 
-	app.locals.Helper = tpFunc(app.locals);	
+	app.locals.Helper = tpFunc(app.locals);
 
 	app.engine('html', require('ejs').renderFile);
 	app.set("view engine", "html");

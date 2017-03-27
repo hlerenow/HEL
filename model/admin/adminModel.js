@@ -56,7 +56,6 @@ fn.login = function(obj, func) {
 
 	this.getUser(obj.name, function(result) {
 		debug("登录验证");
-		console.log(result);
 		if (result.state == 200) {
 
 			let pas = crypto.createHmac("sha256", config.crypto.hash)

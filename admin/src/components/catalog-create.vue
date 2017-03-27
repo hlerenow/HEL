@@ -143,7 +143,7 @@
 		created:function(){
 			this.$store.dispatch("catalogRequest").then(()=>{
 			}).catch((err)=>{
-				this.$message.error("目录拉取失败");
+				// this.$message.error("目录拉取失败");
 			});
 		}
 	}

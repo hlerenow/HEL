@@ -95,8 +95,9 @@
 					self.initCheckArry();
 					self.formatImgUrl();
 					
-				});
+				}).catch(function(err){
 
+				});
 			},
 			getFilesIndexByFid:function(fid){
 				var res=-1;

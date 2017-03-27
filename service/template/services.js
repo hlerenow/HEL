@@ -95,6 +95,7 @@ fn.getCatalogInfo=function(req,res,next){
 					path.join(themePath,themeName,template.path+""),
 					path.join(themePath,themeName,"/catalog.html")
 				]);
+			
 			debug(templatePath);
 			if(res.locals.catalog.postList.length>0){							
 				res.render(templatePath,function(err,data){

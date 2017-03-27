@@ -144,7 +144,8 @@
 					}else{
 						self.$message.error("目录删除失败");					
 					}
-				})				
+				}).catch(function(err){
+				});
 			},
 			multiOp:function(){
 				if(this.opValue=="delete"){

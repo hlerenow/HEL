@@ -120,5 +120,16 @@ themeRouter.post("/add",function(req,res,next){
 	hp.start();
 
 });
+themeRouter.post("/update",function(req,res,next){
+	aic(req.app,function(flage){
+		if(flage){
+			debug("系统设置更新成功");
+			res.json(stateCode.success());
+		}else{
+			debug("系统设置更新失败");
+			res.json(stateCode.fail());
+		}
+	});			
+})
 
 module.exports=exports=themeRouter;

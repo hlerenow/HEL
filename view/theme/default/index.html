@@ -1,104 +1,69 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-	<head>
-		<meta charset="utf-8" />
-		<title>我是模版啦</title>
-		<!-- <link rel="stylesheet" type="text/css" href="https://pandao.github.io/editor.md/css/editormd.preview.css"/>	 -->
-		<style type="text/css">
-			*{
-				font-family: "Microsoft YaHei", 微软雅黑, sans-serif;
-			}
-			.blogName{
-				font-size: 30px;
-				color: #607D8B;
-				border-left: 5px solid #cbcdcf;
-				padding: 10px;
-				font-weight: bold;
-				margin-bottom: 20px;
-			}
-
-			.eassyTip{
-				color:gray;
-				font-size: 15px;
-			}
-
-			.eassyList{
-				list-style: none;
-				padding:0 0 0 15px;
-
-			}
-
-			.eassyList li{
-				margin:10px 0;				
-			}
-
-			.eassyList a{
-				text-decoration: none;
-				color:#312f2f;				
-			}
-
-			#contentBox{
-				margin-top: 20px;
-				border-top: 1px dashed gray;
-			}
-
-			.eassyTitle{
-				color: #ee5f5f;
-				font-size: 30px;
-				border-bottom: 1px solid #e2dfdf;
-				padding-bottom: 5px;				
-			}
-			
-			.content{
-				padding-left: 30px;
-			}
-			
-			.eassySplice{
-				padding: 10px;
-				border-bottom: 1px dashed #f1c3c3;
-				margin: 50px 20px;
-			}
-
-		</style>		
+	<%- include('header.html') %>
 	</head>
 	<body>
-		<div class="blogName">
-			<%= baseInfo.blogname %>	
-			link:<a href="<%= Helper.getPostLink(posts.postList[0].eid)%>" >post</a>
-		</div>
-		<div>
-			<span class="eassyTip">
-				文章列表(<%=posts.postCount %>)				
-			</span>
-			<ul class="eassyList">
-				<% posts.postList.forEach(function(post){ %>
-					<li><a href="#pid<%=post.eid%>"><%=post.title %></a></li>
-				<% }); %>
-			</ul>
-			<div id="contentBox">
-				<% posts.postList.forEach(function(post){ %>
-
-				<div class="eassy">
-					<h2 class="eassyTitle" id="pid<%=post.eid%>"><%- post.title%></h2>
-					<%= Helper.formatTime(post.created,"YY年MM月DD日 hh:mm:ss")%>
-					<%= Helper.formatTag(post.tags)[0]%>
-
-					<!-- <%=post.catalogs%> -->
-					<%- JSON.stringify(Helper.formatEassyCatalog(post.catalogs)) %>
-					<div class="content">
-						<%-post.content %>
-					</div>					
+		<%- include('nav.html') %>
+		<div id="index_right">
+			<% for(let i=0;i<posts.postList.length;i++){
+				var post=posts.postList[i];
+			%>
+			<div class="singleEassy">
+				<h2 class="eassyTitle"><%= post.title%>
+					<span class="EassyTime">
+					<%=	Helper.formatTime(post.created,"YYYY/MM/DD") %>
+					</span>
+				</h2>
+				<p class="expertTip">摘要</p>
+				<div class="eassyExpert">
+					<% 
+						if(post.thumbnail){
+					%>
+						<img src="<%=baseInfo.siteUrl+post.thumbnail %>" alt="" class="eassyThumbnail">
+					<%
+						}
+					%>
+					<%=post.excerpt%>
 				</div>
-				<div class="eassySplice"></div>
-				<% });%>
+				<div class="otherInfo">
+					<% 
+					var tags=Helper.formatTag(post.tags);
+					for(let i in tags){
+					%>
+					<span class="tags color<%= Helper.rand(1,5)%>"><%= tags[i]%></span>
+
+					<% }%>
+					<span class="moreRead"><a href="<%= Helper.getPostLink(post.eid)%>">
+						阅读					
+					</a>
+					</span>
+				</div>
 			</div>
+			<% }%>	
+			<!-- 分页啊 -->
+			<% 
+				var allPost=posts.postCount;
+				var perPage=baseInfo.postPerPage;
+				var allPage=allPost/perPage;
+				if(allPost%perPage>0){
+					allPage++;
+				}
+
+				var maxPage=page+2;
+					maxPage=maxPage>allPage?allPage:maxPage;
+				var minPage=page-2;
+					minPage=minPage<0?1:minPage;
+			%>
+			<ul class="pages">
+				<% for(let i=minPage;i<=maxPage;i++){
+				%>
+					<li><a class="<%= i==page?'active':''%>" href="<%=i!=page?Helper.getPageLink(i):"" %>"><%=i%></a></li>
+				<%}%>
+			</ul>
+			<!-- 分页结束 -->
+			<%- include('footer.html') %>							
 		</div>
-		<%- JSON.stringify(menue) %>
-		
-		<!-- <% Helper.getPostLink()%> -->
 	</body>
-	<script type="text/javascript">
-		var allData=<%- JSON.stringify(locals) %>;
-		console.log(allData);
-	</script>
+<script type="text/javascript">
+	var allData=<%- JSON.stringify(locals) %>;
+	console.log(allData);
+</script>
 </html>

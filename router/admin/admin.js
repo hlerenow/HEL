@@ -101,6 +101,14 @@ adminRouter.post("/modifyPas", function(req, res, next) {
 	})
 });
 
+adminRouter.post("isLogin",function(req,res,next){
+	if(req.session.loginState ==1){
+		res.json(stateCode.success());
+	}else{
+		res.json(stateCode.fail());
+	}
+})
+
 //博文api
 adminRouter.use(/^\/eassy*/, eassyRouter);
 

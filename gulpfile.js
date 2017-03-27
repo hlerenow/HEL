@@ -4,6 +4,7 @@ var reload=bowserSync.reload;
 var nodemon = require('gulp-nodemon');
 var path = require("path");
 var cmd=require("node-cmd");
+var del=require("del");
 
 var webpackConfig = require(path.join(__dirname, "admin/webpack.config"));
 var appIndex = path.join(__dirname, "public/admin/src/index.js");
@@ -73,6 +74,13 @@ gulp.task("app_run",function(){
 		console.log(data);
 	});
 })
+
+gulp.task("clear_map",function(cb){
+	del([
+			'admin/*.map',
+			'admin/js/chunk/*.map'
+		],cb);
+});
 
 gulp.task("webpack",function(){
 	gulp.watch(path.join(webpackBulidPath,"src/**")).on("change",function(cb){

@@ -12,9 +12,7 @@ var constVar=require(path.join(constVarPath)),
 	hPromise=require(path.join(constVar.untilPath, "/hPromise.js")),
 	createMysqlTables=require(path.join(constVar.untilPath, "/createMysqlTables.js")),	
 	app=express(),
-	//主题配置
 	
-	themeConfig=require(path.join(constVar.viewPath,"/theme/default/config.json")),
 	clearTempFile=require(path.join(constVar.untilPath,"/clearTempFile")),
 	aic=require(path.join(constVar.untilPath,"appInitConfig.js")),
 	initExpress=require("./expressInit.js");

@@ -6,6 +6,11 @@
         HEL
       </a>
     </el-menu-item>
+    <el-menu-item index="index_main" class="mainUrl">
+      <a :href="mainUrl" target="_blank" >        
+        主页
+      </a>
+    </el-menu-item>    
     <!-- <el-menu-item index="1"><i class="el-icon-message"></i>0</el-menu-item> -->
     <el-submenu class="addPlus" index="newAdd">
       <template slot="title"><i class="el-icon-plus"></i>新建</template>
@@ -36,6 +41,24 @@
 
 <script>
   export default {
+    data(){
+      return {
+        allBaseInfo:""
+      }
+    },
+    props:['username','mail','nickname'],    
+    computed:{
+      mainUrl:function(){
+        var data =this.allBaseInfo;
+        for(let i in data){
+          console.log(data[i].name);
+          if(data[i].name=="siteUrl"){
+            return data[i].value;
+            break;
+          }
+        }
+      }
+    },
     methods: {
       logout:function(){
         var self=this;
@@ -54,19 +77,33 @@
             self.$message.error("退出登录失败,请稍后再试！");
           }
         });
+      },
+      getBaseInfo:function(){
+          this.$http.post("option/getStatic").then((result)=>{
+            if(result.data.state==200){
+                this.allBaseInfo=result.data.opRes;
+
+            }
+          })
       }
     },
-    props:['username','mail','nickname']
+    mounted:function(){
+        this.getBaseInfo();
+    }
   }
 </script>
 
 <style type="text/css">
+  .mainUrl a{
+    font-size: 14px;
 
+  }
+  
   .el-menu-top .addPlus{
     padding: 0;
   }
   .el-menu-top .el-icon-plus{
-    margin: 0 5px;
+    margin: 0 10px;
   }
 
   .el-menu-top .el-submenu__title{
@@ -74,7 +111,7 @@
   }
   .el-menu-top > li{
     padding: 0;
-    margin: 0 10px;
+    margin: 0 5px;
   }
   #user--info{
     position: absolute;
@@ -98,6 +135,10 @@
   .logoItem{
     font-size: 31px;  
     border-bottom-width: 0px !important;      
+  }
+
+  .logoItem a{
+    padding: 0 10px;
   }
   .logoItem.is-active{
     border-bottom-width: 0px !important;
