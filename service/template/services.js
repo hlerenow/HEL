@@ -213,7 +213,8 @@ fn.getArchive=function(req,res,next){
 	});
 
 	hp.add(function(){
-		cm.getAllCatalogs((result)=>{
+		//获取所有的目录信息
+		pim.getAllPost((result)=>{
 			var allPosts=[];
 			if(result.state==200){
 				allPosts=result.opRes;
