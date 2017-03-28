@@ -148,10 +148,11 @@ const until = {
 	},
 	//过滤obj对象的属性，返回一个只包含fieldArry字段属性的对象
 	filterObjFields: function(fieldArry, obj) {
+		debug(obj);
 		let resObj = {};
 		for (let i = 0; i < fieldArry.length; i++) {
 			// if(obj[fieldArry[i]]){
-			resObj[fieldArry[i]] = obj[fieldArry[i]];
+				resObj[fieldArry[i]] = obj[fieldArry[i]];
 			// }
 		}
 

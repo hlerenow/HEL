@@ -29,12 +29,12 @@
 		      type="selection"
 		      width="55">
 		    </el-table-column>
-		    <el-table-column
-		      label="Eid"
+<!-- 		    <el-table-column
+		      label="eid"
 		      width="100"
 		      >
 		      <template scope="scope">{{ scope.row.eid }}</template>
-		    </el-table-column>
+		    </el-table-column> -->
 		    <el-table-column
 		      label="标题"
 		      >

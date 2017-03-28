@@ -12,24 +12,15 @@
 	"catalogTemplate":[
 		{
 			"name":"目录模版一",
-			"path":"catalog1.html",
+			"path":"catalog.html",
 			"dataInject":{				
-				"catalogs":{
-					"type":"catalogs",
-					"name":"allCatalogs"
-
-				},
-				"recentPost":{
-					"type":"recentPost"
-				},
-				"allPost":{
-					"type":"allPost"
-				},
 				"catalogPost":{
-					"type":"catalogPost"
-				},
-				"post":{
-					"type":"post"
+					"type":"catalogPost",
+					"name":"catalogs10",
+					"slug":"default",
+					"start":0,
+					"end":10
+
 				}
 			}
 		}

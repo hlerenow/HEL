@@ -32,7 +32,7 @@ var fn = hPromise.prototype;
 
 		this.dataArry.push(data||{});		
 
-		if(this.options.unsysnc){
+		if(this.options.unsync){
 			debug("异步执行");
 			this.doneCount++;
 			this.checkAllDone();
@@ -51,7 +51,7 @@ var fn = hPromise.prototype;
 	}
 
 	fn.start=function(){
-		if(this.options.unsysnc){
+		if(this.options.unsync){
 			this.doAll();
 			return ;
 		}

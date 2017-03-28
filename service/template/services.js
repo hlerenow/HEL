@@ -9,6 +9,7 @@ var path=require("path");
 	//数据模型
 	bim=new (require(path.join(constVar.modelPath,"template/blogInfoModel"))),
 	pim=new (require(path.join(constVar.modelPath,"template/postInfoModel"))),
+	tid=require(path.join(constVar.modelPath,"template/templateInjectData")),
 	cm=new (require(path.join(constVar.modelPath,"template/catalogModel")));
 
 
@@ -96,19 +97,20 @@ fn.getCatalogInfo=function(req,res,next){
 					path.join(themePath,themeName,"/catalog.html")
 				]);
 			
-			debug(templatePath);
-			if(res.locals.catalog.postList.length>0){							
-				res.render(templatePath,function(err,data){
-					if(err){
-						debug(err);
-						res.send(err);
-					}else{
-						res.send(data);
-					}
-				});
-			}else{
-				next();				
-			}
+
+
+				if(res.locals.catalog.postList){							
+					res.render(templatePath,function(err,data){
+						if(err){
+							debug(err);
+							res.send(err);
+						}else{
+							res.send(data);
+						}
+					});
+				}else{
+					next();				
+				}
 	});
 
 	//执行
