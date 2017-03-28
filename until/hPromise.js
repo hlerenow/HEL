@@ -6,7 +6,7 @@ var path = require("path"),
 
 var hPromise = function(options) {
 	this.options=options||{
-		unsysnc:false
+		unsync:false
 	};
 
 	this.quequ=[];

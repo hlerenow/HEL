@@ -20,14 +20,12 @@
 					<div class="menueTips" v-show="designMenus.length==0">
 						还没有创建菜单哦,快在左侧添加吧！
 					</div>
-					<draggable v-model="myArray" v-show="designMenus.length>0" @end="con">
-					    <transition-group>
+					<draggable v-show="designMenus.length>0" @end="con">
 					        <div v-for="(element,index) in designMenus" :key="index+element.type" class="menue_item">
 					        <!-- <span class="menueName" @click="changeMenueName">{{element.name}}</span> -->
 					        	<input type="text" v-model="element.name">
 					             <i class="el-icon-delete" @click="deleteMenue(element)"></i> <span class="menueType">{{element.type | filteMenueType}}</span>
 					        </div>
-					    </transition-group>
 					</draggable>
 					<div class="menue_btn_submit save">
 						<el-button @click="modifyMenue" >保存</el-button>
@@ -147,6 +145,7 @@
 }
 .menueDesingBox{
 	padding-left: 30px;
+	padding-right: 30px;
 }
 .menue_item{
 	position: relative;

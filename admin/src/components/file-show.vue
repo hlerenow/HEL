@@ -7,7 +7,10 @@
 				<div class="uploaded"><strong>上传于：</strong> {{filterData}}</div>
 				<div class="file-size"><strong>文件大小：</strong> {{filterSize}} </div>		
 				<div class="dimensions"><strong>分辨率：</strong> {{imgObj.width}} × {{imgObj.height}}</div>
-				<div class="filename"><strong>Url:</strong> {{imgObj.url}} </div>				
+				<div class="filename">
+					<strong>Url:</strong> 
+					<input class="fileUrl" type="text" :value="imgObj.url" />
+				</div>				
 
 			</div>
 <!-- 			<div class="settings">
@@ -102,6 +105,7 @@
     	color: #666;
     	border-bottom:1px solid #d8d6d6;
     	padding-bottom: 10px;
+    	overflow: hidden;
 	}
 	.fileShow .details div{
 		margin-bottom: 5px;
@@ -134,5 +138,11 @@
 	.showImgCon video{
 		max-width: 100%;
 		max-height: 100%;
+	}
+	.fileUrl{
+		border: 1px solid #d8d6d6;
+		padding: 2px 10px;
+		margin-left: 5px;
+		width: 200px;		
 	}
 </style>

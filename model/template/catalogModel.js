@@ -2,8 +2,6 @@
  * 这个包主要用来查询 目录 文章列表 以及 文章信息
  * @type {[type]}
  */
-
-
 var path = require("path"),
 	debug = require("debug")("postInfoModel"),
 	constVar = require(path.join(constVarPath)),

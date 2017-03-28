@@ -13,17 +13,25 @@
 		{
 			"name":"目录模版一",
 			"path":"catalog1.html",
-			"dataInject":{
-				"catalogs":[
-					{
-						"type":"catalogs"
-					},
-					{
-						"type":"recentPost",
-						"count":"10"
-					}
-				]
-			}	
+			"dataInject":{				
+				"catalogs":{
+					"type":"catalogs",
+					"name":"allCatalogs"
+
+				},
+				"recentPost":{
+					"type":"recentPost"
+				},
+				"allPost":{
+					"type":"allPost"
+				},
+				"catalogPost":{
+					"type":"catalogPost"
+				},
+				"post":{
+					"type":"post"
+				}
+			}
 		}
 	],
 	"pageTemplate":[

@@ -65,7 +65,7 @@ fn.getCatalogInfo=function(req,res,next){
 		themeName=themeName.replace(/\//ig,"");
 
 	var hp=new hPromise({
-		unsysnc:true
+		unsync:true
 	});
 
 	hp.add(function(){
@@ -178,7 +178,7 @@ fn.getPostInfo=function(req,res,next){
 		themeName=themeName.replace(/\//ig,"");
 
 	var hp=new hPromise({
-		unsysnc:true
+		unsync:true
 	});
 
 	hp.add(function(){
@@ -209,7 +209,7 @@ fn.getArchive=function(req,res,next){
 		themeName=themeName.replace(/\//ig,"");			
 
 	var hp=new hPromise({
-		unsysnc:true
+		unsync:true
 	});
 
 	hp.add(function(){

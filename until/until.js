@@ -221,6 +221,7 @@ const until = {
 
 		return str;
 	},
+	//获取所有的目录模版文件名
 	getCatalogTemplate:function(dirPath,catalogStr){
 
 		var files=fs.readdirSync(dirPath);

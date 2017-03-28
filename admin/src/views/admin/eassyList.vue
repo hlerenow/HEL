@@ -4,13 +4,13 @@
 		<div class="eassysInfo">
 			<a href="">全部（{{eassysInfo.allEassy}}）</a>| <a href="">已发布（{{eassysInfo.pubEassy}}）</a>| <a href="">草稿（{{eassysInfo.draftEassy}}）</a>
 			<div id="search--model">
-				<el-input v-model="searchWord"></el-input>
-				<el-button @click="searchEassyByWords"> 搜索文章</el-button>
+				<el-input size='small' v-model="searchWord"></el-input>
+				<el-button size='small' @click="searchEassyByWords"> 搜索文章</el-button>
 			</div>
 		</div>
 		<div id="eassyActions">
-			<el-button class="deleteMulti" type="danger" @click="deleteMultiEassy">批量删除</el-button>
-			<el-select v-model="searchCatalog" placeholder="请选择">
+			<el-button size='small' class="deleteMulti" type="danger" @click="deleteMultiEassy">批量删除</el-button>
+			<el-select size='small' v-model="searchCatalog" placeholder="请选择">
 				<el-option label="全部目录" value="" check></el-option>
 				<el-option
 				  v-for="item in catalogs.catalogs"
@@ -18,38 +18,51 @@
 				  :value="item.mid">
 				</el-option>
 			</el-select>
-			<el-button @click="filterEassy">筛选</el-button>
+			<el-button size='small' @click="filterEassy">筛选</el-button>
 		</div>
 	  <el-table
+	  		class="eassyListBox"
 	    	:data="eassyList"
-	    	style="width: 100%"
 	   		@selection-change="eassySelectionChange"
 	   		 >
 		    <el-table-column
 		      type="selection"
 		      width="55">
 		    </el-table-column>
-
+		    <el-table-column
+		      label="Eid"
+		      width="100"
+		      >
+		      <template scope="scope">{{ scope.row.eid }}</template>
+		    </el-table-column>
 		    <el-table-column
 		      label="标题"
-		      width="120">
+		      >
 		      <template scope="scope">{{ scope.row.title }}</template>
-		    </el-table-column>
+		    </el-table-column>		  
 
 		    <el-table-column
 		      label=" 作者"
-		      width="120">
+		      >
 		      <template scope="scope">{{ scope.row.nickName }}</template>     
 		    </el-table-column>
 
 		    <el-table-column
+		      label="标签"		     		      
+		      >
+		      <template scope="scope"><span class="eassyTags">{{ scope.row.tags||'-' }}</span></template>
+		    </el-table-column>
+		    
+		    <el-table-column
 		      label="目录"
+		      width="100"
 		      >
 		      <template scope="scope">{{ scope.row.catalogs | catalogFormat }}</template>	      
 		    </el-table-column>	
 
 		    <el-table-column
 		      label="状态"
+		      width="100"
 		      >
 		      <template scope="scope">{{ scope.row.status | statusFormat }}</template>	      
 		    </el-table-column>	    
@@ -63,8 +76,14 @@
 		      label="操作"
 		      >
 		      <template scope="scope">
-		      	<el-button type="info" @click="modifiedEassy(scope.row.eid)">编辑</el-button>
-		      	<el-button type="danger" @click="deleteEassy(scope.row.eid)">删除</el-button>
+				<el-button-group>
+				  <el-button type="success" icon="edit" @click="modifiedEassy(scope.row.eid)"></el-button>
+				  <el-button type="danger" icon="delete" @click="deleteEassy(scope.row.eid)"></el-button>
+				  <el-button type="info" icon="more" @click="showMoreEassyInfo"></el-button>
+
+				</el-button-group>		      
+<!-- 		      	<el-button type="info" @click="modifiedEassy(scope.row.eid)">编辑</el-button>
+		      	<el-button type="danger" @click="deleteEassy(scope.row.eid)">删除</el-button> -->
 		      </template>	      
 		    </el-table-column>
 	  </el-table>
@@ -103,6 +122,9 @@
 			};
 		},
 		methods:{
+			showMoreEassyInfo:function(){
+				alert('功能开发中')
+			},
 			getEassysInfo:function(){
 				var self=this;
 				self.$http.post("eassy/getInfo").
@@ -272,11 +294,6 @@
 		font-size: 14px;
 	}
 
-	#eassyList button{
-		border-radius: 2px;
-		margin-left: 10px;
-
-	}
 	#search--model button{
 		margin:0;
 	}
@@ -294,7 +311,20 @@
 		float: right;
 		margin-top: 15px;
 	}
-	.deleteMulti {
+	#eassyList .deleteMulti {
 		margin-left: 0;
+	}
+	#eassyList .el-table__body-wrapper{
+		font-size: 12px;
+		font-weight: lighter;
+	}
+
+	.eassyListBox{
+		width: 100%;		
+	}
+	.eassyListBox button{
+		margin-left: 10px;	
+		padding: 8px;
+		font-size: 12px;
 	}
 </style>
