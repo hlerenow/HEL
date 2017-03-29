@@ -56,12 +56,14 @@ HEL目前只有一些基本的blog功能，不过这才是刚刚开始。。。
 }
 ```
 
-> config.json 文件里面不要带有注释，上面只是为了解释说明，保存时应该把注释信息去掉
-
 * 在 HEL/public/下面创建两个文件夹，upload和uploadTemp,如果存在就不用创建
+
+* 在 HEL下面创建log文件夹，如果存在就不用创建
 
 * 在 HEL(项目根目录)目录下运行npm install 
 
+
+到此程序的安装配置基本完成,程序的运行 请看 下一篇文档 运行 **HEL**
 
 到此程序的安装配置基本完成,程序的运行 请看 下一篇文档 运行 **HEL**
 
@@ -97,17 +99,23 @@ node app
 ---
 因为nodejs单线程的特性，一旦出错就会导致整个程序奔溃（即使我们对错误做了很多的防范措施）,所以我们需要一个程序来守护我们的程序，当他崩溃时能让，程序快速的重启，这个我们选用的是forever（如果你喜欢pm2，也可自行配置,主要就是修改名package.json 的script值,以及包的安装）
 
+安装全局 forever
+
+```
+npm install forever -g
+
+```
+
 * windows
 
 ```
-set PORT=80
 npm run start
 ```
 
 * linux
 
 ```
- PORT=80 npm run start
+npm run start
 ```
 
 * 关闭程序

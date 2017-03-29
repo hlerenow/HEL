@@ -29,17 +29,23 @@ node app
 ---
 因为nodejs单线程的特性，一旦出错就会导致整个程序奔溃（即使我们对错误做了很多的防范措施）,所以我们需要一个程序来守护我们的程序，当他崩溃时能让，程序快速的重启，这个我们选用的是forever（如果你喜欢pm2，也可自行配置,主要就是修改名package.json 的script值,以及包的安装）
 
+安装全局 forever
+
+```
+npm install forever -g
+
+```
+
 * windows
 
 ```
-set PORT=80
 npm run start
 ```
 
 * linux
 
 ```
- PORT=80 npm run start
+npm run start
 ```
 
 * 关闭程序
