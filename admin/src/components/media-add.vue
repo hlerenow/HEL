@@ -34,12 +34,17 @@
 			fileUpSuccess:function(res,file,files){
 				var self=this;
 				if(res.state!=200){
+					if(res.state==401){
+						this.$router.push({
+							path: "/login"
+						});
+						return ;
+					}
 			        self.$notify({
 			          title: '失败',
 			          message: file.name+" 文件上传失败",
 			          type: 'error',
 			          duration:2000
-
 			        });	
 
 				}else{

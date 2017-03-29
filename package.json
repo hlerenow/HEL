@@ -3,11 +3,9 @@
   "version": "2.0.0",
   "description": "hel 是一款基于nodejs构建的轻量级单用户blog系统，它体积小，界面精简，拒绝臃肿，让使用者感受最原始的写作体验。",
   "main": "app.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "forever start -o out.log  -e ferr.log -w app.js"
+    "start": "forever start -o log/fout.log  -e log/ferr.log  app.js ",
+    "stop":"forever stop app.js"
   },
   "node": ">= 6.0.0",
   "author": "",

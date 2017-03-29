@@ -1,4 +1,31 @@
-	<script type="text/javascript">
-		var allData=<%- JSON.stringify(locals) %>;
-		console.log(allData);
-	</script>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<title>归档页</title>
+</head>
+<body>
+	<h1>
+		归档页		
+	</h1>
+	这里有所有的目录信息，以及文章信息
+	<h2>
+		所有的目录
+	</h2>
+	<ul id="catalogs">
+		<% for(var i in allCatalogs){%>
+			<li><%=allCatalogs[i].name%></li>
+		<%}%>
+	</ul>
+	<h2>所有的文章</h2>
+	<ul id="eassys">
+		<% for(var i in allPosts){%>
+			<li><%=allPosts[i].title%></li>
+		<%}%>
+	</ul>
+</body>
+<script type="text/javascript">
+	var allData=<%- JSON.stringify(locals) %>;
+	console.log(allData);	
+</script>
+</html>

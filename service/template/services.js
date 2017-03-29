@@ -89,8 +89,6 @@ fn.getCatalogInfo=function(req,res,next){
 			
 			debug(template);
 
-			// if(template&&until.isEmptyObj(template))
-			// var postTemplatePath=path.join(themePath,themeName,"/catalog.html");
 
 			var templatePath=until.getExitsPath([
 					path.join(themePath,themeName,template.path+""),
@@ -115,56 +113,6 @@ fn.getCatalogInfo=function(req,res,next){
 
 	//执行
 	hp.start();
-
-
-
-	// function renderView(){
-	// 	//检测所需结果是否都已经拿到，拿到了就渲染视图
-	// 	if(until.objLength(resObj)===2){
-	// 		resObj.pageType="catalog";	
-	// 		// resObj.app=req.app;
-	// 		// var ss=req.app._router.stack;
-	// 		// debug(ss);
-	// 		// ss[ss.length-6].handle=function(res,req,next){
-	// 		// 	debug("哈哈我被修改了");
-	// 		// 	next();
-	// 		// };
-
-	// 		// debug(ss[ss.length-6].handle.toString());
-
-	// 			// ss=ss[ss.length-2].handle.stack;
-
-	// 		// for(var i=0;i<ss.length;i++){
-	// 		// 	debug(ss[i]);	
-	// 		// 	// debug(/^\/?(?=\/|$)/i.toString().toString());	
-
-	// 		// 	// debug(ss[i].regexp.toString()===/^\/?(?=\/|$)/i.toString());
-	// 		// 	// debug("");
-
-	// 		// }
-
-	// 		var postTemplatePath=path.join(themePath,themeName,"/catalog.html");
-	// 		if(fs.existsSync(postTemplatePath)&&resObj.catalogInfo.postList.length>0){
-	// 				// debug(JSON.stringify(resObj));
-								
-	// 				res.render(themePath + themeName + "/catalog", resObj);
-	// 		}else{
-	// 			next();				
-	// 		}
-
-	// 	}	
-	// }
-
-	
-	// //获取目录下的文章信息		
-	// cm.getCatalogPost(
-	// 	req.params.slug,
-	// 	req.params.page,
-	// 	req.app.locals.blogConfig.static.postPerPage,
-	// 	function(result){
-	// 		resObj.catalogInfo=result;
-	// 		renderView();
-	// });
 }
 
 /**

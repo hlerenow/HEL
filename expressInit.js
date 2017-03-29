@@ -25,21 +25,22 @@ var path = require("path"),
 	tpFunc = require(path.join(__dirname, "service/templateFunctions.js"));
 
 function expressInit(app, express) {
-	//环境选择
-	// switch (app.get('env')) {
-	// 	case "development":
-	// 		{
-	// 			app.use(require("morgan")("dev"));
-	// 			break;
-	// 		}
-	// 	case 'production':
-	// 		{
-	// 			app.use(require("express-logger")({
-	// 				path: path.join(constVar.logPath,"/log.txt")
-	// 			}));
-	// 			break;
-	// 		}
-	// }
+	var env=app.get('env').toLowerCase()||"production"
+	// 环境选择
+	switch (env) {
+		case "development":
+			{
+				app.use(require("morgan")("dev"));
+				break;
+			}
+		case 'production':
+			{
+				app.use(require("express-logger")({
+					path: path.join(constVar.logPath,"/expressLog.log")
+				}));
+				break;
+			}
+	}
 	
 	try{
 		app.use(favicon(path.join(constVar.publicPath,"/favicon.ico")));
@@ -57,10 +58,11 @@ function expressInit(app, express) {
 	app.set("view engine", "html");
 	app.set("views", constVar.viewPath);
 
-	app.use(cookieParser("595806119HL"));
+	var sercrt=Math.random().toString(36).substr(3,13);
+	app.use(cookieParser(sercrt));
 
 	app.use(session({
-		secret: "595806119HL",
+		secret: sercrt,
 		cookie: {
 			secure: false
 		},
@@ -96,8 +98,8 @@ function expressInit(app, express) {
 
 	//404 
 	app.all("*", function(req, res, next) {
-		// res.redirect("/");
-		res.send("404 not found");
+		res.redirect("/");
+		// res.send("404 not found");
 	});
 }
 module.exports = exports = expressInit;

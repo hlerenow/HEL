@@ -92,7 +92,9 @@
 					}else{
 						self.$message.error("修改失败！");
 					}
-				})
+				}).catch(function(err){
+
+				});
 			},
 			/**
 			 * 根据目录模版path 获取模版对象

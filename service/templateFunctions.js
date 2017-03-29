@@ -9,7 +9,7 @@ var debug = require("debug")("templateHelper");
  */
 var funcs = {
 	/**
-	 * 返回文章的链接
+	 * 返回某个文章的链接
 	 * @param  {[type]} postId [description]
 	 * @return {[type]}        [description]
 	 */
@@ -18,24 +18,39 @@ var funcs = {
 		return this.blogConfig.static.siteUrl + "/post/" + postId + ".html";
 	},
 	/**
-	 * 返回页面的链接
+	 * 返回页面的链接(暂时没有用)
 	 * @param  {[type]} page [description]
 	 * @return {[type]}      [description]
 	 */
 	getPageLink: function(page) {
 		return this.blogConfig.static.siteUrl + "/index/page/" + page;
 	},
+	/**
+	 * 生成某个目录下第几页的链接
+	 * @param  {[type]} page        [description]
+	 * @param  {[type]} catalogSlug [description]
+	 * @return {[type]}             [description]
+	 */
 	getCatalogPageLink: function(page,catalogSlug) {
 		return this.blogConfig.static.siteUrl + "/catalog/"+catalogSlug+"/" + page;
 	},
+	/**
+	 * 获取某个目录的链接
+	 * @param  {[type]} catalogSlug [description]
+	 * @return {[type]}             [description]
+	 */
 	getCatalogLink: function(catalogSlug) {
 		return this.blogConfig.static.siteUrl + "/catalog/" + catalogSlug ;
 	},
+	/**
+	 * 获取后台地址
+	 * @return {[type]} [description]
+	 */
 	getAdminLink: function() {
 		return this.blogConfig.static.siteUrl + "/admin";
 	},
 	/**
-	 * 格式日期函数,传入一个时间点的秒数
+	 * 格式日期函数,传入一个时间点的秒数，
 	 * @param  {[type]} intTime  [description]
 	 * @param  {[type]} format   [description]
 	 * @param  {[type]} showZero [description]
@@ -81,6 +96,11 @@ var funcs = {
 
 		return str;
 	},
+	/**
+	 * 格式化一一篇文章所属目录
+	 * @param  {[type]} catalogs [description]
+	 * @return {[type]}          [description]
+	 */
 	formatEassyCatalog:function(catalogs){
 		var catalogObj;
 		debug(catalogs);
@@ -106,6 +126,11 @@ var funcs = {
 		return catalogObj;
 
 	},
+	/**
+	 * 格式化一篇文章的所属标签
+	 * @param  {[type]} tags [description]
+	 * @return {[type]}      [description]
+	 */
 	formatTag:function(tags){
 
 		if(tags){
@@ -114,6 +139,12 @@ var funcs = {
 			return [];
 		}
 	},
+	/**
+	 * 返回 from - to 之间的一个随机数
+	 * @param  {[type]} from [description]
+	 * @param  {[type]} to   [description]
+	 * @return {[type]}      [description]
+	 */
 	rand:function(from,to){
 		from=parseInt(from,10);
 		to=parseInt(to, 10);

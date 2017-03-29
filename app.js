@@ -35,27 +35,25 @@ var hp=new hPromise();
 	hp.add(function(){
 		//创建表
 		createMysqlTables(()=>{
-			debug("哈哈");
 			this.next();
 		});		
 	}).then(function(){
-		//bolog的一些全局配置
-			debug("哈哈 2");		
+		//blog的一些全局配置
 		aic(app,function(flage){
 			if(flage){
 				debug("系统设置加载成功");
-				debug(app.locals.blogConfig)		
 			}else{
 				debug("系统设置加载失败");		
 			}
 
 			initExpress(app,express);
 
-			app.set("port",3000);
-
+			var port=parseInt(process.env.PORT)||80;
 			//开启express服务器
-			app.listen(parseInt(app.get("port")),function(){
-				console.log("Express 4.0 on http://localhost:%s",app.get("port"));
+			app.listen(port,function(){
+				console.log("\n	Express 4.0 on http://localhost:%s		\n",port);
+				console.log("	主页 http://localhost:%s				\n",port);
+				console.log("	后台管理页面 http://localhost:%s/admin  \n",port);
 			});	
 		});
 	});

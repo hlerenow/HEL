@@ -12,35 +12,7 @@
 	"catalogTemplate":[
 		{
 			"name":"目录模版一",
-			"path":"catalog.html",
-			"dataInject":{				
-				"catalogPost":{
-					"type":"catalogPost",
-					"name":"catalogs10",
-					"slug":"default",
-					"start":0,
-					"end":10
-
-				}
-			}
+			"path":"catalog.html"
 		}
-	],
-	"pageTemplate":[
-		{
-			"name":"页面模版一",
-			"path":"page-1.html",
-			"dataInject":{
-				"catalogs":[
-					{
-						"type":"catalogs"
-					},
-					{
-						"type":"recentPost",
-						"count":"10"
-					}
-				]
-			}			
-		}
-
 	]
 }

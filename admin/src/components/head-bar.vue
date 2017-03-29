@@ -83,6 +83,8 @@
                 this.allBaseInfo=result.data.opRes;
 
             }
+          }).catch(function(e){
+
           })
       }
     },

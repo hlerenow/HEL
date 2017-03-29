@@ -17,7 +17,7 @@
 					<% 
 						if(post.thumbnail){
 					%>
-						<img src="<%=baseInfo.siteUrl+post.thumbnail %>" alt="" class="eassyThumbnail">
+						<img src="<%=post.thumbnail %>" alt="" class="eassyThumbnail">
 					<%
 						}
 					%>
@@ -63,6 +63,7 @@
 		</div>
 	</body>
 <script type="text/javascript">
+	//演示使用，正常使用时应该删除这段js，这里只是为了显示当前模版注入了哪些信息，便于调试
 	var allData=<%- JSON.stringify(locals) %>;
 	console.log(allData);
 </script>

@@ -36,7 +36,6 @@
 			saveStaticSetting:function(){
 				//后期可以做脏着判断，未修改的值不用更新
 				var self=this;
-				console.log(JSON.stringify(self.options));
 				self.$http.post("option/modify",{options:JSON.stringify(self.options)}).
 				then(function(res){
 					if(res.data.state===200){
@@ -56,6 +55,8 @@
 				}else{
 					self.$message.error("博客设置获取失败 : "+res.data.info);
 				}
+			}).catch(function(e){
+				
 			});
 		}
 

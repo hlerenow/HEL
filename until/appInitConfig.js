@@ -51,7 +51,7 @@ function appInitConfig(app, func) {
 			}
 
 		})		
-	}).then(function(){
+	}).then(function(preData){
 		debug("加载主题文件配置");		
 		//加载当前主题的配置文件
 		var themePathConfig=themePathConfig= path.join(constVar.themePath, app.locals.blogConfig.system.nowTheme, './config.json');
@@ -60,7 +60,7 @@ function appInitConfig(app, func) {
 		}catch(err){
 			app.locals.blogConfig.themeConfig={};
 			console.log("主题配置文件加载失败",err);
-			debug(err);
+			debug(err);	
 		}
 
 		//加载主题帮助函数
@@ -72,7 +72,7 @@ function appInitConfig(app, func) {
 			console.log("主题帮助函数加载失败",e);
 			app.locals.helper={};
 		}
-		this.next();
+		this.next(preData);
 		
 	}).then(function(preData){
 		func(preData);

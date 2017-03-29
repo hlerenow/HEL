@@ -1,5 +1,5 @@
 <template>
-    <el-menu theme="dark" default-active="2" class="el-menu-vertical" @select="handleSelect" :router="true">
+    <el-menu unique-opened theme="dark" default-active="2" class="el-menu-vertical" @select="handleSelect" :router="true">
       <el-submenu index="1">
         <template slot="title"><i class="el-icon-edit"></i>文章</template>
         <el-menu-item index="/main/eassyList">所有文章</el-menu-item>

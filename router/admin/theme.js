@@ -79,6 +79,10 @@ themeRouter.post("/add",function(req,res,next){
 				}).on("close",()=>{
 					debug("解压完成");
 					this.next(files);					
+				}).on("error",()=>{
+					debug("主题解压失败");
+					res.json(stateCode.themeUploadFail());
+					return ;					
 				}));
 				
 			}catch(e){
