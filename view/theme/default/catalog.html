@@ -41,17 +41,22 @@
 
 			<!-- 分页啊 -->
 			<% 
-				var allPost=catalog.catalogInfo.count;
+				var allPost=posts.postCount;
 				var perPage=baseInfo.postPerPage;
 				var allPage=allPost/perPage;
 				if(allPost%perPage>0){
 					allPage++;
 				}
 
-				var maxPage=page+2;
+				var maxPage=page+2,
+					minPage=page-2;
 					maxPage=maxPage>allPage?allPage:maxPage;
-				var minPage=page-2;
-					minPage=minPage<0?1:minPage;
+					minPage=minPage<1?1:minPage;
+
+					if(maxPage-minPage<5&&allPage>4){
+						maxPage=allPage;
+						minPage=1;										
+					}
 			%>
 			<ul class="pages">
 				<% for(let i=minPage;i<=maxPage;i++){
