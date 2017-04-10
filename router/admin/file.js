@@ -108,7 +108,12 @@ fileRouter.post("/delete",function(req,res,next){
 				return;
 			}
 			//删除磁盘文件
-			fs.unlink(path.join(__dirname,"../../public/",result.opRes[0].url), function(err){
+			var fileUrl=result.opRes[0].url;
+
+			var indexPub=fileUrl.indexOf('public');
+			var pathStr=fileUrl.slice(indexPub);
+
+			fs.unlink(path.resolve(constVar.rootPath,pathStr), function(err){
 				// body
 				if(err)
 					debug(err);
@@ -136,7 +141,6 @@ fileRouter.post("/delete",function(req,res,next){
 		});			
 	}
 });
-
 fileRouter.post("/getList",function(req,res,next){
 	let fm=new fileModel;
 	fm.getFileList({page:req.body.page,size:req.body.size},function(result){
