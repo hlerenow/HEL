@@ -4,9 +4,9 @@ HEL是一个轻量级的、单用户的blog系统，它没有wordpress那么强�
 
 测试帐号:admin 密码:123456
 
-后台演示地址 ：http://115.159.197.251/admin
+后台演示地址 ：http://hel.h-five.com/admin
 
-前台演示地址 ：http://115.159.197.251
+前台演示地址 ：http://hel.h-five.com
 
 ### 支持的功能：
 
