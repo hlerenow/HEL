@@ -321,7 +321,7 @@ fn.getEassyList = function(obj, func) {
 	var sql="";
 
 	if(parseInt(obj.catalog)>0){
-		sql+="and c.eid in (select eid from relationships r where r.mid="+this.pool.escape(obj.catalog)+" ) ";
+		sql+="and c.eid in (select nid from relationships r where r.mid="+this.pool.escape(obj.catalog)+" ) ";
 	}
 
 
@@ -335,7 +335,7 @@ fn.getEassyList = function(obj, func) {
 	var eOffset = parseInt(obj.page) * 10 - 10;
 	eOffset=eOffset>0?eOffset:0;
 
-	sql1+=" limit "+eOffset+",10;";
+	sql1+="  order by created limit "+eOffset+",10;";
 
 	//查询查询结果的总条数
 	sql2+=sql;

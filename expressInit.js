@@ -78,15 +78,16 @@ function expressInit(app, express) {
 
 	app.use(compression());
 	
-	app.use("/admin",express.static(path.join(constVar.rootPath,"/admin")));
 
 	app.use("/public",express.static(constVar.publicPath));
+	
 	//挂载主题静态资源
 	app.use("/public",function themeStatic(req,res,next){
 		// debug(path.join(__dirname, "view/theme",app.locals.blogConfig.system.nowTheme,"public"));
 		express.static(path.join(__dirname, "view/theme",app.locals.blogConfig.system.nowTheme,"public"))(req,res,next);
 	});
 
+	app.use("/admin",express.static(path.join(constVar.rootPath,"/admin")));
 	//登录过滤
 	app.use(baseLoginCheck);
 

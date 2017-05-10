@@ -87,11 +87,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-HEL_FW
-
 admin/node_modules
 
 public/upload
-
 public/uploadTemp
+
 config/config.json
