@@ -316,7 +316,7 @@ fn.getEassyList = function(obj, func) {
 
 	var sql1="select c.*,d.nickName from eassy c,users d where d.uid=c.authorId ";
 
-	var sql2="select count(eid) from eassy c,users d where d.uid=c.authorId ";
+	var sql2="select count(eid) as resCount from eassy c,users d where d.uid=c.authorId ";
 
 	var sql="";
 
