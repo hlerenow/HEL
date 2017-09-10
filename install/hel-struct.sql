@@ -143,7 +143,7 @@ CREATE TABLE `options` (
 -- Records of options
 -- ----------------------------
 INSERT INTO `options` VALUES ('1', 'postPerPage', '10', '0', 'static', null, '每页文章显示数');
-INSERT INTO `options` VALUES ('2', 'siteUrl', 'http://localhost:3000', '0', 'static', '您的blog站点地址，如：\"http://www.h-five.com \" ，注意站点地址最后不要跟“/\"，只写域名，不然生成文章连接可能会出错', '站点地址');
+INSERT INTO `options` VALUES ('2', 'siteUrl', 'http://localhost', '0', 'static', '您的blog站点地址，如：\"http://www.h-five.com \" ，注意站点地址最后不要跟“/\"，只写域名，不然生成文章连接可能会出错', '站点地址');
 INSERT INTO `options` VALUES ('3', 'blogname', 'HEL', '0', 'static', null, '博客名称');
 INSERT INTO `options` VALUES ('4', 'adminEmail', '595806119@qq.com', '0', 'static', '用于接收用户注册等信息', '电子邮箱');
 INSERT INTO `options` VALUES ('5', 'dateFormat', 'Y年n月j日', '0', 'static', null, '时间格式');
