@@ -1,1 +1,1 @@
-{"db":{"host":"localhost","dbName":"hel2","user":"root","dbPassword":"595806119","dbPort":"3306"},"crypto":{"hash":"123456"},"isInstall":true}
+{"db":{"host":"localhost","dbName":"hel2","user":"hel-dev","dbPassword":"595806119","dbPort":"3306"},"crypto":{"hash":"leos-leos"},"isInstall":false}

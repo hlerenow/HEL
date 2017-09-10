@@ -88,20 +88,6 @@ gulp.task("webpack",function(){
 	});
 });
 
-// gulp.task("wacth_webpack_node",["webpack",],function(){
-// 	cmd.get("node app",function(data){
-// 		console.log(data);
-// 	});
-// 	gulp.watch(path.join(webpackBulidPath,"src/**/*")).on("change",function(cb){
-// 			clearTimeout(reloadTimerWebpack);
-// 			reloadTimerWebpack=null;
-// 			console.log("wepack 文件改变");
-// 			reloadTimerWebpack=setTimeout(function(){
-// 				console.log("运行webpack");
-// 				cmd.run("gulp webpack");
-// 			},1000);
-// 	});
-// });
 
 gulp.task("default", ["nodemon"],function(){
 	// gulp.watch(path.join(webpackBulidPath,"src/*"),['webpack']);
