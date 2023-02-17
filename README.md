@@ -2,12 +2,6 @@
 
 HEL是一个轻量级的、可定制的单用户blog系统。
 
-测试帐号:admin 密码:123456
-
-后台演示地址 ：<del>http://hel.h-five.com/admin</del> （暂不能访问，服务器到期）
-
-前台演示地址 ：<del>http://hel.h-five.com</del> （暂不能访问，服务器到期）
-
 ### 支持的功能：
 
 1. 文章的发布、修改、删除
